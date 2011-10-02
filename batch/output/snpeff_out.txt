@@ -1,0 +1,734 @@
+# Chromo	Position	Reference	Change	Change type	Homozygous	Quality	Coverage	Warnings	Gene_ID	Gene_name	Bio_type	Trancript_ID	Exon_ID	Exon_Rank	Effect	old_AA/new_AA	Old_codon/New_codon	Codon_Num(CDS)	CDS_size	Codons around	AAs around	Custom_interval_ID
+1	69428	T	G	SNP	Hom	11013.71			uc001aal.1	uc001aal.1		uc001aal.1	uc001aal.1.exon_1	1	NON_SYNONYMOUS_CODING	F/C	TTT/TGT	113	918			
+1	69511	A	G	SNP	Hom	102008.95			uc001aal.1	uc001aal.1		uc001aal.1	uc001aal.1.exon_1	1	NON_SYNONYMOUS_CODING	T/A	ACA/GCA	141	918			
+1	865628	G	A	SNP	Hom	995.42			uc001abv.1	uc001abv.1		uc001abv.1	uc001abv.1.exon_3	3	NON_SYNONYMOUS_CODING	G/S	GGT/AGT	56	429			
+1	865628	G	A	SNP	Hom	995.42			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_3	3	NON_SYNONYMOUS_CODING	G/S	GGT/AGT	56	2046			
+1	865694	C	T	SNP	Hom	180.01			uc001abv.1	uc001abv.1		uc001abv.1	uc001abv.1.exon_3	3	NON_SYNONYMOUS_CODING	H/Y	CAC/TAC	78	429			
+1	865694	C	T	SNP	Hom	180.01			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_3	3	NON_SYNONYMOUS_CODING	H/Y	CAC/TAC	78	2046			
+1	865738	A	G	SNP	Hom	146.47			uc001abv.1	uc001abv.1		uc001abv.1			INTRON				429			
+1	865738	A	G	SNP	Hom	146.47			uc001abw.1	uc001abw.1		uc001abw.1			INTRON				2046			
+1	866422	C	T	SNP	Hom	2705.95			uc001abv.1	uc001abv.1		uc001abv.1	uc001abv.1.exon_4	4	SYNONYMOUS_CODING	V/V	GTC/GTT	86	429			
+1	866422	C	T	SNP	Hom	2705.95			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_4	4	SYNONYMOUS_CODING	V/V	GTC/GTT	86	2046			
+1	866422	C	T	SNP	Hom	2705.95			uc001abx.1	uc001abx.1		uc001abx.1			UPSTREAM: 4730 bases							
+1	871215	C	G	SNP	Hom	9206.45			uc001abv.1	uc001abv.1		uc001abv.1	uc001abv.1.exon_5	5	SYNONYMOUS_CODING	P/P	CCC/CCG	123	429			
+1	871215	C	G	SNP	Hom	9206.45			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_5	5	SYNONYMOUS_CODING	P/P	CCC/CCG	123	2046			
+1	871215	C	G	SNP	Hom	9206.45			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_1	1	SYNONYMOUS_CODING	P/P	CCC/CCG	2	1635			
+1	874665	G	A	SNP	Hom	1446.25			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_7	7	SYNONYMOUS_CODING	L/L	CTG/CTA	177	2046			
+1	874665	G	A	SNP	Hom	1446.25			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_3	3	SYNONYMOUS_CODING	L/L	CTG/CTA	56	1635			
+1	874665	G	A	SNP	Hom	1446.25			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 82 bases							
+1	874665	G	A	SNP	Hom	1446.25			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 82 bases							
+1	874665	G	A	SNP	Hom	1446.25			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 82 bases							
+1	874665	G	A	SNP	Hom	1446.25			uc001abv.1	uc001abv.1		uc001abv.1			DOWNSTREAM: 3389 bases							
+1	874714	C	T	SNP	Hom	381.25			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_7	7	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	194	2046			
+1	874714	C	T	SNP	Hom	381.25			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_3	3	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	73	1635			
+1	874714	C	T	SNP	Hom	381.25			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 131 bases							
+1	874714	C	T	SNP	Hom	381.25			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 131 bases							
+1	874714	C	T	SNP	Hom	381.25			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 131 bases							
+1	874714	C	T	SNP	Hom	381.25			uc001abv.1	uc001abv.1		uc001abv.1			DOWNSTREAM: 3438 bases							
+1	874734	C	T	SNP	Hom	223.4			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_7	7	SYNONYMOUS_CODING	S/S	AGC/AGT	200	2046			
+1	874734	C	T	SNP	Hom	223.4			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_3	3	SYNONYMOUS_CODING	S/S	AGC/AGT	79	1635			
+1	874734	C	T	SNP	Hom	223.4			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 151 bases							
+1	874734	C	T	SNP	Hom	223.4			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 151 bases							
+1	874734	C	T	SNP	Hom	223.4			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 151 bases							
+1	874734	C	T	SNP	Hom	223.4			uc001abv.1	uc001abv.1		uc001abv.1			DOWNSTREAM: 3458 bases							
+1	876642	C	T	SNP	Hom	272.06			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_8	8	SYNONYMOUS_CODING	H/H	CAC/CAT	275	2046			
+1	876642	C	T	SNP	Hom	272.06			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_4	4	SYNONYMOUS_CODING	H/H	CAC/CAT	138	1635			
+1	876642	C	T	SNP	Hom	272.06			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 2059 bases							
+1	876642	C	T	SNP	Hom	272.06			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 2059 bases							
+1	876642	C	T	SNP	Hom	272.06			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 2059 bases							
+1	877831	T	C	SNP	Hom	8522.82			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_10	10	NON_SYNONYMOUS_CODING	W/R	TGG/CGG	343	2046			
+1	877831	T	C	SNP	Hom	8522.82			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_6	6	NON_SYNONYMOUS_CODING	W/R	TGG/CGG	206	1635			
+1	877831	T	C	SNP	Hom	8522.82			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3248 bases							
+1	877831	T	C	SNP	Hom	8522.82			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3248 bases							
+1	877831	T	C	SNP	Hom	8522.82			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3248 bases							
+1	878314	G	C	SNP	Hom	1056.94			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_11	11	SYNONYMOUS_CODING	G/G	GGG/GGC	480	2046			
+1	878314	G	C	SNP	Hom	1056.94			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_7	7	SYNONYMOUS_CODING	G/G	GGG/GGC	343	1635			
+1	878314	G	C	SNP	Hom	1056.94			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3731 bases							
+1	878314	G	C	SNP	Hom	1056.94			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3731 bases							
+1	878314	G	C	SNP	Hom	1056.94			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3731 bases							
+1	878331	C	T	SNP	Hom	377.5			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_11	11	NON_SYNONYMOUS_CODING	P/L	CCG/CTG	486	2046			
+1	878331	C	T	SNP	Hom	377.5			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_7	7	NON_SYNONYMOUS_CODING	P/L	CCG/CTG	349	1635			
+1	878331	C	T	SNP	Hom	377.5			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3748 bases							
+1	878331	C	T	SNP	Hom	377.5			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3748 bases							
+1	878331	C	T	SNP	Hom	377.5			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3748 bases							
+1	878371	G	A	SNP	Hom	337.56			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_11	11	SYNONYMOUS_CODING	K/K	AAG/AAA	499	2046			
+1	878371	G	A	SNP	Hom	337.56			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_7	7	SYNONYMOUS_CODING	K/K	AAG/AAA	362	1635			
+1	878371	G	A	SNP	Hom	337.56			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3788 bases							
+1	878371	G	A	SNP	Hom	337.56			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3788 bases							
+1	878371	G	A	SNP	Hom	337.56			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3788 bases							
+1	878415	C	T	SNP	Hom	97.32			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_11	11	NON_SYNONYMOUS_CODING	A/V	GCC/GTC	514	2046			
+1	878415	C	T	SNP	Hom	97.32			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_7	7	NON_SYNONYMOUS_CODING	A/V	GCC/GTC	377	1635			
+1	878415	C	T	SNP	Hom	97.32			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3832 bases							
+1	878415	C	T	SNP	Hom	97.32			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3832 bases							
+1	878415	C	T	SNP	Hom	97.32			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3832 bases							
+1	878447	C	T	SNP	Hom	49.2			uc001abw.1	uc001abw.1		uc001abw.1			INTRON				2046			
+1	878447	C	T	SNP	Hom	49.2			uc001abx.1	uc001abx.1		uc001abx.1			INTRON				1635			
+1	878447	C	T	SNP	Hom	49.2			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 3864 bases							
+1	878447	C	T	SNP	Hom	49.2			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 3864 bases							
+1	878447	C	T	SNP	Hom	49.2			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 3864 bases							
+1	878664	G	A	SNP	Hom	583.35			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_12	12	SYNONYMOUS_CODING	E/E	GAG/GAA	532	2046			
+1	878664	G	A	SNP	Hom	583.35			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_8	8	SYNONYMOUS_CODING	E/E	GAG/GAA	395	1635			
+1	878664	G	A	SNP	Hom	583.35			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4081 bases							
+1	878664	G	A	SNP	Hom	583.35			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4081 bases							
+1	878664	G	A	SNP	Hom	583.35			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4081 bases							
+1	878764	G	C	SNP	Hom	888.74			uc001abw.1	uc001abw.1		uc001abw.1			INTRON				2046			
+1	878764	G	C	SNP	Hom	888.74			uc001abx.1	uc001abx.1		uc001abx.1			INTRON				1635			
+1	878764	G	C	SNP	Hom	888.74			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4181 bases							
+1	878764	G	C	SNP	Hom	888.74			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4181 bases							
+1	878764	G	C	SNP	Hom	888.74			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4181 bases							
+1	879276	A	G	SNP	Hom	3001.82			uc001abw.1	uc001abw.1		uc001abw.1			INTRON				2046			
+1	879276	A	G	SNP	Hom	3001.82			uc001abx.1	uc001abx.1		uc001abx.1			INTRON				1635			
+1	879276	A	G	SNP	Hom	3001.82			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4693 bases							
+1	879276	A	G	SNP	Hom	3001.82			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4693 bases							
+1	879276	A	G	SNP	Hom	3001.82			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4693 bases							
+1	879317	C	T	SNP	Hom	35028.06			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_14	14	SYNONYMOUS_CODING	Y/Y	TAC/TAT	610	2046			
+1	879317	C	T	SNP	Hom	35028.06			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_10	10	SYNONYMOUS_CODING	Y/Y	TAC/TAT	473	1635			
+1	879317	C	T	SNP	Hom	35028.06			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4734 bases							
+1	879317	C	T	SNP	Hom	35028.06			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4734 bases							
+1	879317	C	T	SNP	Hom	35028.06			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4734 bases							
+1	879431	T	C	SNP	Hom	5917.51			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_14	14	SYNONYMOUS_CODING	Y/Y	TAT/TAC	648	2046			
+1	879431	T	C	SNP	Hom	5917.51			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_10	10	SYNONYMOUS_CODING	Y/Y	TAT/TAC	511	1635			
+1	879431	T	C	SNP	Hom	5917.51			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4848 bases							
+1	879431	T	C	SNP	Hom	5917.51			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4848 bases							
+1	879431	T	C	SNP	Hom	5917.51			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4848 bases							
+1	879437	G	C	SNP	Hom	2761.96			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_14	14	SYNONYMOUS_CODING	G/G	GGG/GGC	650	2046			
+1	879437	G	C	SNP	Hom	2761.96			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_10	10	SYNONYMOUS_CODING	G/G	GGG/GGC	513	1635			
+1	879437	G	C	SNP	Hom	2761.96			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4854 bases							
+1	879437	G	C	SNP	Hom	2761.96			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4854 bases							
+1	879437	G	C	SNP	Hom	2761.96			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4854 bases							
+1	879481	G	C	SNP	Hom	2947.99			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_14	14	NON_SYNONYMOUS_CODING	G/A	GGG/GCG	665	2046			
+1	879481	G	C	SNP	Hom	2947.99			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_10	10	NON_SYNONYMOUS_CODING	G/A	GGG/GCG	528	1635			
+1	879481	G	C	SNP	Hom	2947.99			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4898 bases							
+1	879481	G	C	SNP	Hom	2947.99			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4898 bases							
+1	879481	G	C	SNP	Hom	2947.99			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4898 bases							
+1	879576	C	T	SNP	Hom	4055.17			uc001abw.1	uc001abw.1		uc001abw.1	uc001abw.1.exon_14	14	UTR_3_PRIME: 43 bases from transcript end							
+1	879576	C	T	SNP	Hom	4055.17			uc001abx.1	uc001abx.1		uc001abx.1	uc001abx.1.exon_10	10	UTR_3_PRIME: 43 bases from transcript end							
+1	879576	C	T	SNP	Hom	4055.17			uc009vjq.2	uc009vjq.2		uc009vjq.2			DOWNSTREAM: 4993 bases							
+1	879576	C	T	SNP	Hom	4055.17			uc001aby.3	uc001aby.3		uc001aby.3			DOWNSTREAM: 4993 bases							
+1	879576	C	T	SNP	Hom	4055.17			uc001abz.3	uc001abz.3		uc001abz.3			DOWNSTREAM: 4993 bases							
+1	880119	C	G	SNP	Hom	246.14			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_16	17	SYNONYMOUS_CODING	G/G	GGG/GGC	537	1656			
+1	880119	C	G	SNP	Hom	246.14			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_18	19	SYNONYMOUS_CODING	G/G	GGG/GGC	740	2265			
+1	880119	C	G	SNP	Hom	246.14			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_18	19	SYNONYMOUS_CODING	G/G	GGG/GGC	735	2250			
+1	880119	C	G	SNP	Hom	246.14			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 158 bases							
+1	880119	C	G	SNP	Hom	246.14			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 158 bases							
+1	880390	C	A	SNP	Hom	25161.64			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	880390	C	A	SNP	Hom	25161.64			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	880390	C	A	SNP	Hom	25161.64			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	880390	C	A	SNP	Hom	25161.64			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 429 bases							
+1	880390	C	A	SNP	Hom	25161.64			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 429 bases							
+1	880483	A	G	SNP	Hom	315.05			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_15	16	SYNONYMOUS_CODING	D/D	GAT/GAC	496	1656			
+1	880483	A	G	SNP	Hom	315.05			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_17	18	SYNONYMOUS_CODING	D/D	GAT/GAC	699	2265			
+1	880483	A	G	SNP	Hom	315.05			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_17	18	SYNONYMOUS_CODING	D/D	GAT/GAC	699	2250			
+1	880483	A	G	SNP	Hom	315.05			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 522 bases							
+1	880483	A	G	SNP	Hom	315.05			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 522 bases							
+1	880953	G	A	SNP	Hom	1678.15			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_14	15	SYNONYMOUS_CODING	D/D	GAC/GAT	463	1656			
+1	880953	G	A	SNP	Hom	1678.15			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_16	17	SYNONYMOUS_CODING	D/D	GAC/GAT	666	2265			
+1	880953	G	A	SNP	Hom	1678.15			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_16	17	SYNONYMOUS_CODING	D/D	GAC/GAT	666	2250			
+1	880953	G	A	SNP	Hom	1678.15			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 992 bases							
+1	880953	G	A	SNP	Hom	1678.15			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 992 bases							
+1	881068	G	A	SNP	Hom	2461.58			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	881068	G	A	SNP	Hom	2461.58			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	881068	G	A	SNP	Hom	2461.58			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	881068	G	A	SNP	Hom	2461.58			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 1107 bases							
+1	881068	G	A	SNP	Hom	2461.58			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 1107 bases							
+1	881070	G	A	SNP	Hom	3112.58			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	881070	G	A	SNP	Hom	3112.58			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	881070	G	A	SNP	Hom	3112.58			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	881070	G	A	SNP	Hom	3112.58			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 1109 bases							
+1	881070	G	A	SNP	Hom	3112.58			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 1109 bases							
+1	881627	G	A	SNP	Hom	62870.54			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_13	14	SYNONYMOUS_CODING	L/L	CTG/TTG	412	1656			
+1	881627	G	A	SNP	Hom	62870.54			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_15	16	SYNONYMOUS_CODING	L/L	CTG/TTG	615	2265			
+1	881627	G	A	SNP	Hom	62870.54			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_15	16	SYNONYMOUS_CODING	L/L	CTG/TTG	615	2250			
+1	881627	G	A	SNP	Hom	62870.54			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 1666 bases							
+1	881627	G	A	SNP	Hom	62870.54			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 1666 bases							
+1	881734	T	C	SNP	Hom	16265.94			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	881734	T	C	SNP	Hom	16265.94			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	881734	T	C	SNP	Hom	16265.94			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	881734	T	C	SNP	Hom	16265.94			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 1773 bases							
+1	881734	T	C	SNP	Hom	16265.94			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 1773 bases							
+1	881918	G	A	SNP	Hom	5500.16			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_12	13	NON_SYNONYMOUS_CODING	S/L	TCG/TTG	353	1656			
+1	881918	G	A	SNP	Hom	5500.16			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_14	15	NON_SYNONYMOUS_CODING	S/L	TCG/TTG	556	2265			
+1	881918	G	A	SNP	Hom	5500.16			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_14	15	NON_SYNONYMOUS_CODING	S/L	TCG/TTG	556	2250			
+1	881918	G	A	SNP	Hom	5500.16			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 1957 bases							
+1	881918	G	A	SNP	Hom	5500.16			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 1957 bases							
+1	883625	A	G	SNP	Hom	32542.89			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	883625	A	G	SNP	Hom	32542.89			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	883625	A	G	SNP	Hom	32542.89			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	883625	A	G	SNP	Hom	32542.89			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 3664 bases							
+1	883625	A	G	SNP	Hom	32542.89			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 3664 bases							
+1	883918	G	A	SNP	Hom	700.06			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_10	11	SYNONYMOUS_CODING	S/S	TCC/TCT	300	1656			
+1	883918	G	A	SNP	Hom	700.06			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_12	13	SYNONYMOUS_CODING	S/S	TCC/TCT	503	2265			
+1	883918	G	A	SNP	Hom	700.06			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_12	13	SYNONYMOUS_CODING	S/S	TCC/TCT	503	2250			
+1	883918	G	A	SNP	Hom	700.06			uc001abx.1	uc001abx.1		uc001abx.1			DOWNSTREAM: 3957 bases							
+1	883918	G	A	SNP	Hom	700.06			uc001abw.1	uc001abw.1		uc001abw.1			DOWNSTREAM: 3957 bases							
+1	886477	G	A	SNP	Hom	1207.11			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	886477	G	A	SNP	Hom	1207.11			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	886477	G	A	SNP	Hom	1207.11			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	886492	C	T	SNP	Hom	248.32			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	886492	C	T	SNP	Hom	248.32			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	886492	C	T	SNP	Hom	248.32			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	887436	G	A	SNP	Hom	1191.38			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_8	9	SYNONYMOUS_CODING	S/S	AGC/AGT	222	1656			
+1	887436	G	A	SNP	Hom	1191.38			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_10	11	SYNONYMOUS_CODING	S/S	AGC/AGT	425	2265			
+1	887436	G	A	SNP	Hom	1191.38			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_10	11	SYNONYMOUS_CODING	S/S	AGC/AGT	425	2250			
+1	887537	C	T	SNP	Hom	10879.25			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	887537	C	T	SNP	Hom	10879.25			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	887537	C	T	SNP	Hom	10879.25			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	887560	A	C	SNP	Hom	156381.71			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	887560	A	C	SNP	Hom	156381.71			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	887560	A	C	SNP	Hom	156381.71			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	887799	C	T	SNP	Hom	499.84			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_7	8	NON_SYNONYMOUS_CODING	R/H	CGC/CAC	192	1656			
+1	887799	C	T	SNP	Hom	499.84			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_9	10	NON_SYNONYMOUS_CODING	R/H	CGC/CAC	395	2265			
+1	887799	C	T	SNP	Hom	499.84			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_9	10	NON_SYNONYMOUS_CODING	R/H	CGC/CAC	395	2250			
+1	887801	A	G	SNP	Hom	167300.36			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_7	8	SYNONYMOUS_CODING	T/T	ACT/ACC	191	1656			
+1	887801	A	G	SNP	Hom	167300.36			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_9	10	SYNONYMOUS_CODING	T/T	ACT/ACC	394	2265			
+1	887801	A	G	SNP	Hom	167300.36			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_9	10	SYNONYMOUS_CODING	T/T	ACT/ACC	394	2250			
+1	888639	T	C	SNP	Hom	159329.68			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_6	7	SYNONYMOUS_CODING	E/E	GAA/GAG	103	1656			
+1	888639	T	C	SNP	Hom	159329.68			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_8	9	SYNONYMOUS_CODING	E/E	GAA/GAG	306	2265			
+1	888639	T	C	SNP	Hom	159329.68			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_8	9	SYNONYMOUS_CODING	E/E	GAA/GAG	306	2250			
+1	888659	T	C	SNP	Hom	124572.27			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_6	7	NON_SYNONYMOUS_CODING	I/V	ATC/GTC	97	1656			
+1	888659	T	C	SNP	Hom	124572.27			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_8	9	NON_SYNONYMOUS_CODING	I/V	ATC/GTC	300	2265			
+1	888659	T	C	SNP	Hom	124572.27			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_8	9	NON_SYNONYMOUS_CODING	I/V	ATC/GTC	300	2250			
+1	888659	T	C	SNP	Hom	124572.27			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 9 bases							
+1	889131	A	G	SNP	Hom	781.48			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	889131	A	G	SNP	Hom	781.48			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	889131	A	G	SNP	Hom	781.48			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	889131	A	G	SNP	Hom	781.48			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 481 bases							
+1	889158	G	C	SNP	Hom	115292.58			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	889158	G	C	SNP	Hom	115292.58			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	889158	G	C	SNP	Hom	115292.58			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	889158	G	C	SNP	Hom	115292.58			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 508 bases							
+1	889159	A	C	SNP	Hom	118739.08			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	889159	A	C	SNP	Hom	118739.08			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	889159	A	C	SNP	Hom	118739.08			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	889159	A	C	SNP	Hom	118739.08			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 509 bases							
+1	889215	C	T	SNP	Hom	482.47			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_5	6	NON_SYNONYMOUS_CODING	V/M	GTG/ATG	76	1656			
+1	889215	C	T	SNP	Hom	482.47			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_7	8	NON_SYNONYMOUS_CODING	V/M	GTG/ATG	279	2265			
+1	889215	C	T	SNP	Hom	482.47			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_7	8	NON_SYNONYMOUS_CODING	V/M	GTG/ATG	279	2250			
+1	889215	C	T	SNP	Hom	482.47			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 565 bases							
+1	889238	G	A	SNP	Hom	9345.75			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_5	6	NON_SYNONYMOUS_CODING	A/V	GCG/GTG	68	1656			
+1	889238	G	A	SNP	Hom	9345.75			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_7	8	NON_SYNONYMOUS_CODING	A/V	GCG/GTG	271	2265			
+1	889238	G	A	SNP	Hom	9345.75			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_7	8	NON_SYNONYMOUS_CODING	A/V	GCG/GTG	271	2250			
+1	889238	G	A	SNP	Hom	9345.75			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 588 bases							
+1	889286	G	A	SNP	Hom	324.41			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	889286	G	A	SNP	Hom	324.41			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	889286	G	A	SNP	Hom	324.41			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	889286	G	A	SNP	Hom	324.41			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 636 bases							
+1	889403	T	A	SNP	Hom	2132.35			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_4	5	NON_SYNONYMOUS_CODING	Y/F	TAC/TTC	50	1656			
+1	889403	T	A	SNP	Hom	2132.35			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_6	7	NON_SYNONYMOUS_CODING	Y/F	TAC/TTC	253	2265			
+1	889403	T	A	SNP	Hom	2132.35			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_6	7	NON_SYNONYMOUS_CODING	Y/F	TAC/TTC	253	2250			
+1	889403	T	A	SNP	Hom	2132.35			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 753 bases							
+1	889513	G	A	SNP	Hom	571.32			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_4	5	SYNONYMOUS_CODING	L/L	CTC/CTT	13	1656			
+1	889513	G	A	SNP	Hom	571.32			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	889513	G	A	SNP	Hom	571.32			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	889513	G	A	SNP	Hom	571.32			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 863 bases							
+1	891256	C	A	SNP	Hom	191.07			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	891256	C	A	SNP	Hom	191.07			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	891256	C	A	SNP	Hom	191.07			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	891256	C	A	SNP	Hom	191.07			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 2606 bases							
+1	891256	C	A	SNP	Hom	191.07			uc001aca.1	uc001aca.1		uc001aca.1			UPSTREAM: 4711 bases							
+1	891591	C	T	SNP	Hom	1524.91			uc001aby.3	uc001aby.3		uc001aby.3	uc001aby.3.exon_2	3	UTR_5_PRIME: 558 bases from TSS							
+1	891591	C	T	SNP	Hom	1524.91			uc009vjq.2	uc009vjq.2		uc009vjq.2	uc009vjq.2.exon_4	5	NON_SYNONYMOUS_CODING	R/H	CGC/CAC	164	2265			
+1	891591	C	T	SNP	Hom	1524.91			uc001abz.3	uc001abz.3		uc001abz.3	uc001abz.3.exon_4	5	NON_SYNONYMOUS_CODING	R/H	CGC/CAC	164	2250			
+1	891591	C	T	SNP	Hom	1524.91			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 2941 bases							
+1	891591	C	T	SNP	Hom	1524.91			uc001aca.1	uc001aca.1		uc001aca.1			UPSTREAM: 4376 bases							
+1	892460	G	C	SNP	Hom	161865.33			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	892460	G	C	SNP	Hom	161865.33			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	892460	G	C	SNP	Hom	161865.33			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	892460	G	C	SNP	Hom	161865.33			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 3810 bases							
+1	892460	G	C	SNP	Hom	161865.33			uc001aca.1	uc001aca.1		uc001aca.1			UPSTREAM: 3507 bases							
+1	892460	G	C	SNP	Hom	161865.33			uc001acb.1	uc001acb.1		uc001acb.1			UPSTREAM: 4369 bases							
+1	892460	G	C	SNP	Hom	161865.33			uc010nya.1	uc010nya.1		uc010nya.1			UPSTREAM: 4549 bases							
+1	892471	G	A	SNP	Hom	16643.7			uc001aby.3	uc001aby.3		uc001aby.3			INTRON				1656			
+1	892471	G	A	SNP	Hom	16643.7			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	892471	G	A	SNP	Hom	16643.7			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	892471	G	A	SNP	Hom	16643.7			uc009vjr.1	uc009vjr.1		uc009vjr.1			DOWNSTREAM: 3821 bases							
+1	892471	G	A	SNP	Hom	16643.7			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 4990 bases							
+1	892471	G	A	SNP	Hom	16643.7			uc001aca.1	uc001aca.1		uc001aca.1			UPSTREAM: 3496 bases							
+1	892471	G	A	SNP	Hom	16643.7			uc001acb.1	uc001acb.1		uc001acb.1			UPSTREAM: 4358 bases							
+1	892471	G	A	SNP	Hom	16643.7			uc010nya.1	uc010nya.1		uc010nya.1			UPSTREAM: 4538 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc009vjq.2	uc009vjq.2		uc009vjq.2			INTRON				2265			
+1	894573	G	A	SNP	Hom	51413.28			uc001abz.3	uc001abz.3		uc001abz.3			INTRON				2250			
+1	894573	G	A	SNP	Hom	51413.28			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 2888 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 3162 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 4346 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc001aca.1	uc001aca.1		uc001aca.1			UPSTREAM: 1394 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc001acb.1	uc001acb.1		uc001acb.1			UPSTREAM: 2256 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc010nya.1	uc010nya.1		uc010nya.1			UPSTREAM: 2436 bases							
+1	894573	G	A	SNP	Hom	51413.28			uc009vjr.1	uc009vjr.1		uc009vjr.1			INTRON				477			
+1	896950	C	A	SNP	Hom	13346.08			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 511 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 785 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1969 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2730 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2730 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2730 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	896950	C	A	SNP	Hom	13346.08			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_1	1	UTR_5_PRIME: 64 bases from TSS							
+1	896950	C	A	SNP	Hom	13346.08			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4927 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4927 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4927 bases							
+1	896950	C	A	SNP	Hom	13346.08			uc010nya.1	uc010nya.1		uc010nya.1			UPSTREAM: 59 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 328 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 602 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1786 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2547 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2547 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2547 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	897133	G	A	SNP	Hom	2283.61			uc001acb.1	uc001acb.1		uc001acb.1			INTRON				564			
+1	897133	G	A	SNP	Hom	2283.61			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4744 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4744 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4744 bases							
+1	897133	G	A	SNP	Hom	2283.61			uc010nya.1	uc010nya.1		uc010nya.1			INTRON				564			
+1	897149	G	A	SNP	Hom	428.1			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 312 bases							
+1	897149	G	A	SNP	Hom	428.1			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 586 bases							
+1	897149	G	A	SNP	Hom	428.1			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1770 bases							
+1	897149	G	A	SNP	Hom	428.1			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2531 bases							
+1	897149	G	A	SNP	Hom	428.1			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2531 bases							
+1	897149	G	A	SNP	Hom	428.1			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2531 bases							
+1	897149	G	A	SNP	Hom	428.1			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	897149	G	A	SNP	Hom	428.1			uc001acb.1	uc001acb.1		uc001acb.1			INTRON				564			
+1	897149	G	A	SNP	Hom	428.1			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4728 bases							
+1	897149	G	A	SNP	Hom	428.1			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4728 bases							
+1	897149	G	A	SNP	Hom	428.1			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4728 bases							
+1	897149	G	A	SNP	Hom	428.1			uc010nya.1	uc010nya.1		uc010nya.1			INTRON				564			
+1	897325	G	C	SNP	Hom	328107.18			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 136 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 410 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1594 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2355 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2355 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2355 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_4	4	SYNONYMOUS_CODING	A/A	GCG/GCC	203	1929			
+1	897325	G	C	SNP	Hom	328107.18			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_2	2	SYNONYMOUS_CODING	A/A	GCG/GCC	79	564			
+1	897325	G	C	SNP	Hom	328107.18			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4552 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4552 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4552 bases							
+1	897325	G	C	SNP	Hom	328107.18			uc010nya.1	uc010nya.1		uc010nya.1	uc010nya.1.exon_2	2	SYNONYMOUS_CODING	A/A	GCG/GCC	79	564			
+1	897337	C	T	SNP	Hom	1724.09			uc001acc.1	uc001acc.1		uc001acc.1			UPSTREAM: 124 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 398 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1582 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2343 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2343 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2343 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_4	4	SYNONYMOUS_CODING	S/S	AGC/AGT	207	1929			
+1	897337	C	T	SNP	Hom	1724.09			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_2	2	SYNONYMOUS_CODING	S/S	AGC/AGT	83	564			
+1	897337	C	T	SNP	Hom	1724.09			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4540 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4540 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4540 bases							
+1	897337	C	T	SNP	Hom	1724.09			uc010nya.1	uc010nya.1		uc010nya.1	uc010nya.1.exon_2	2	SYNONYMOUS_CODING	S/S	AGC/AGT	83	564			
+1	897469	C	A	SNP	Hom	115.49			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 266 bases							
+1	897469	C	A	SNP	Hom	115.49			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1450 bases							
+1	897469	C	A	SNP	Hom	115.49			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 2211 bases							
+1	897469	C	A	SNP	Hom	115.49			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 2211 bases							
+1	897469	C	A	SNP	Hom	115.49			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 2211 bases							
+1	897469	C	A	SNP	Hom	115.49			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	897469	C	A	SNP	Hom	115.49			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_2	2	SYNONYMOUS_CODING	P/P	CCC/CCA	127	564			
+1	897469	C	A	SNP	Hom	115.49			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4408 bases							
+1	897469	C	A	SNP	Hom	115.49			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4408 bases							
+1	897469	C	A	SNP	Hom	115.49			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4408 bases							
+1	897469	C	A	SNP	Hom	115.49			uc010nya.1	uc010nya.1		uc010nya.1	uc010nya.1.exon_2	2	SYNONYMOUS_CODING	P/P	CCC/CCA	127	564			
+1	897469	C	A	SNP	Hom	115.49			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_1	1	SYNONYMOUS_CODING	P/P	CCC/CCA	3	2003			
+1	897730	C	T	SNP	Hom	20556.51			uc010nyb.1	uc010nyb.1		uc010nyb.1			UPSTREAM: 5 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1189 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1950 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1950 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1950 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	897730	C	T	SNP	Hom	20556.51			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_2	2	UTR_3_PRIME: 78 bases from transcript end							
+1	897730	C	T	SNP	Hom	20556.51			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4147 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4147 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4147 bases							
+1	897730	C	T	SNP	Hom	20556.51			uc010nya.1	uc010nya.1		uc010nya.1	uc010nya.1.exon_2	2	UTR_3_PRIME: 78 bases from transcript end							
+1	897730	C	T	SNP	Hom	20556.51			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_1	1	SYNONYMOUS_CODING	L/L	CTC/CTT	90	2003			
+1	897738	C	T	SNP	Hom	17118.15			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 1181 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1942 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1942 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1942 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_5	5	SYNONYMOUS_CODING	L/L	CTG/TTG	239	1929			
+1	897738	C	T	SNP	Hom	17118.15			uc001acb.1	uc001acb.1		uc001acb.1	uc001acb.1.exon_2	2	UTR_3_PRIME: 86 bases from transcript end							
+1	897738	C	T	SNP	Hom	17118.15			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 4139 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 4139 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 4139 bases							
+1	897738	C	T	SNP	Hom	17118.15			uc010nya.1	uc010nya.1		uc010nya.1	uc010nya.1.exon_2	2	UTR_3_PRIME: 86 bases from transcript end							
+1	897738	C	T	SNP	Hom	17118.15			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_1	1	NON_SYNONYMOUS_CODING	S/F	TCT/TTT	93	2003			
+1	897738	C	T	SNP	Hom	17118.15			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_1	1	START_GAINED: TTG, UTR_5_PRIME: 116 bases from TSS							
+1	898466	C	T	SNP	Hom	791.95			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 453 bases							
+1	898466	C	T	SNP	Hom	791.95			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1214 bases							
+1	898466	C	T	SNP	Hom	791.95			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1214 bases							
+1	898466	C	T	SNP	Hom	791.95			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1214 bases							
+1	898466	C	T	SNP	Hom	791.95			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	898466	C	T	SNP	Hom	791.95			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3411 bases							
+1	898466	C	T	SNP	Hom	791.95			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3411 bases							
+1	898466	C	T	SNP	Hom	791.95			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3411 bases							
+1	898466	C	T	SNP	Hom	791.95			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	898466	C	T	SNP	Hom	791.95			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 608 bases							
+1	898466	C	T	SNP	Hom	791.95			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 608 bases							
+1	898466	C	T	SNP	Hom	791.95			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	NON_SYNONYMOUS_CODING	P/L	CCC/CTC	89	492			
+1	898467	C	T	SNP	Hom	1781.09			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 452 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1213 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1213 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1213 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	898467	C	T	SNP	Hom	1781.09			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3410 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3410 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3410 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	898467	C	T	SNP	Hom	1781.09			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 609 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 609 bases							
+1	898467	C	T	SNP	Hom	1781.09			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	SYNONYMOUS_CODING	P/P	CCC/CCT	89	492			
+1	898511	C	A	SNP	Hom	190.07			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 408 bases							
+1	898511	C	A	SNP	Hom	190.07			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1169 bases							
+1	898511	C	A	SNP	Hom	190.07			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1169 bases							
+1	898511	C	A	SNP	Hom	190.07			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1169 bases							
+1	898511	C	A	SNP	Hom	190.07			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_7	7	SYNONYMOUS_CODING	I/I	ATC/ATA	355	1929			
+1	898511	C	A	SNP	Hom	190.07			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3366 bases							
+1	898511	C	A	SNP	Hom	190.07			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3366 bases							
+1	898511	C	A	SNP	Hom	190.07			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3366 bases							
+1	898511	C	A	SNP	Hom	190.07			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_3	3	NON_SYNONYMOUS_CODING	P/T	CCA/ACA	210	2003			
+1	898511	C	A	SNP	Hom	190.07			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 653 bases							
+1	898511	C	A	SNP	Hom	190.07			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 653 bases							
+1	898511	C	A	SNP	Hom	190.07			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	NON_SYNONYMOUS_CODING	S/Y	TCC/TAC	104	492			
+1	898535	C	T	SNP	Hom	427.67			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 384 bases							
+1	898535	C	T	SNP	Hom	427.67			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 1145 bases							
+1	898535	C	T	SNP	Hom	427.67			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 1145 bases							
+1	898535	C	T	SNP	Hom	427.67			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 1145 bases							
+1	898535	C	T	SNP	Hom	427.67			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_7	7	SYNONYMOUS_CODING	D/D	GAC/GAT	363	1929			
+1	898535	C	T	SNP	Hom	427.67			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3342 bases							
+1	898535	C	T	SNP	Hom	427.67			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3342 bases							
+1	898535	C	T	SNP	Hom	427.67			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3342 bases							
+1	898535	C	T	SNP	Hom	427.67			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_3	3	NON_SYNONYMOUS_CODING	H/Y	CAC/TAC	218	2003			
+1	898535	C	T	SNP	Hom	427.67			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 677 bases							
+1	898535	C	T	SNP	Hom	427.67			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 677 bases							
+1	898535	C	T	SNP	Hom	427.67			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	NON_SYNONYMOUS_CODING	T/I	ACA/ATA	112	492			
+1	898855	C	T	SNP	Hom	715.98			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 64 bases							
+1	898855	C	T	SNP	Hom	715.98			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 825 bases							
+1	898855	C	T	SNP	Hom	715.98			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 825 bases							
+1	898855	C	T	SNP	Hom	715.98			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 825 bases							
+1	898855	C	T	SNP	Hom	715.98			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_8	8	SYNONYMOUS_CODING	G/G	GGC/GGT	442	1929			
+1	898855	C	T	SNP	Hom	715.98			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3022 bases							
+1	898855	C	T	SNP	Hom	715.98			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3022 bases							
+1	898855	C	T	SNP	Hom	715.98			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3022 bases							
+1	898855	C	T	SNP	Hom	715.98			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_4	4	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	297	2003			
+1	898855	C	T	SNP	Hom	715.98			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 997 bases							
+1	898855	C	T	SNP	Hom	715.98			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 997 bases							
+1	898855	C	T	SNP	Hom	715.98			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	UTR_3_PRIME: 163 bases from transcript end							
+1	898873	C	T	SNP	Hom	538.87			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 46 bases							
+1	898873	C	T	SNP	Hom	538.87			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 807 bases							
+1	898873	C	T	SNP	Hom	538.87			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 807 bases							
+1	898873	C	T	SNP	Hom	538.87			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 807 bases							
+1	898873	C	T	SNP	Hom	538.87			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_8	8	SYNONYMOUS_CODING	S/S	TCC/TCT	448	1929			
+1	898873	C	T	SNP	Hom	538.87			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 3004 bases							
+1	898873	C	T	SNP	Hom	538.87			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 3004 bases							
+1	898873	C	T	SNP	Hom	538.87			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 3004 bases							
+1	898873	C	T	SNP	Hom	538.87			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_4	4	SYNONYMOUS_CODING	L/L	CTG/TTG	303	2003			
+1	898873	C	T	SNP	Hom	538.87			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 1015 bases							
+1	898873	C	T	SNP	Hom	538.87			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 1015 bases							
+1	898873	C	T	SNP	Hom	538.87			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	UTR_3_PRIME: 181 bases from transcript end							
+1	898914	G	A	SNP	Hom	487.4			uc001aby.3	uc001aby.3		uc001aby.3			UPSTREAM: 5 bases							
+1	898914	G	A	SNP	Hom	487.4			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 766 bases							
+1	898914	G	A	SNP	Hom	487.4			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 766 bases							
+1	898914	G	A	SNP	Hom	487.4			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 766 bases							
+1	898914	G	A	SNP	Hom	487.4			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	898914	G	A	SNP	Hom	487.4			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 2963 bases							
+1	898914	G	A	SNP	Hom	487.4			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 2963 bases							
+1	898914	G	A	SNP	Hom	487.4			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 2963 bases							
+1	898914	G	A	SNP	Hom	487.4			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	898914	G	A	SNP	Hom	487.4			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 1056 bases							
+1	898914	G	A	SNP	Hom	487.4			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 1056 bases							
+1	898914	G	A	SNP	Hom	487.4			uc010nyb.1	uc010nyb.1		uc010nyb.1	uc010nyb.1.exon_3	3	UTR_3_PRIME: 222 bases from transcript end							
+1	899255	C	T	SNP	Hom	2044.77			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 425 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 425 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 425 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	899255	C	T	SNP	Hom	2044.77			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 2622 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 2622 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 2622 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	899255	C	T	SNP	Hom	2044.77			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 1397 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 1397 bases							
+1	899255	C	T	SNP	Hom	2044.77			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 26 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc009vjr.1	uc009vjr.1		uc009vjr.1			UPSTREAM: 398 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc009vjq.2	uc009vjq.2		uc009vjq.2			UPSTREAM: 398 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc001abz.3	uc001abz.3		uc001abz.3			UPSTREAM: 398 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	899282	C	T	SNP	Hom	2490.03			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 2595 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 2595 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 2595 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	899282	C	T	SNP	Hom	2490.03			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 1424 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 1424 bases							
+1	899282	C	T	SNP	Hom	2490.03			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 53 bases							
+1	900298	C	G	SNP	Hom	292.95			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	900298	C	G	SNP	Hom	292.95			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1579 bases							
+1	900298	C	G	SNP	Hom	292.95			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1579 bases							
+1	900298	C	G	SNP	Hom	292.95			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1579 bases							
+1	900298	C	G	SNP	Hom	292.95			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	900298	C	G	SNP	Hom	292.95			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2440 bases							
+1	900298	C	G	SNP	Hom	292.95			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2440 bases							
+1	900298	C	G	SNP	Hom	292.95			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1069 bases							
+1	900319	G	A	SNP	Hom	583.13			uc001aca.1	uc001aca.1		uc001aca.1			INTRON				1929			
+1	900319	G	A	SNP	Hom	583.13			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1558 bases							
+1	900319	G	A	SNP	Hom	583.13			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1558 bases							
+1	900319	G	A	SNP	Hom	583.13			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1558 bases							
+1	900319	G	A	SNP	Hom	583.13			uc001acc.1	uc001acc.1		uc001acc.1			INTRON				2003			
+1	900319	G	A	SNP	Hom	583.13			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2461 bases							
+1	900319	G	A	SNP	Hom	583.13			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2461 bases							
+1	900319	G	A	SNP	Hom	583.13			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1090 bases							
+1	900349	G	A	SNP	Hom	395.39			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_12	12	SYNONYMOUS_CODING	T/T	ACG/ACA	569	1929			
+1	900349	G	A	SNP	Hom	395.39			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1528 bases							
+1	900349	G	A	SNP	Hom	395.39			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1528 bases							
+1	900349	G	A	SNP	Hom	395.39			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1528 bases							
+1	900349	G	A	SNP	Hom	395.39			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_8	8	SYNONYMOUS_CODING	T/T	ACG/ACA	419	2003			
+1	900349	G	A	SNP	Hom	395.39			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2491 bases							
+1	900349	G	A	SNP	Hom	395.39			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2491 bases							
+1	900349	G	A	SNP	Hom	395.39			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1120 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_12	12	SYNONYMOUS_CODING	N/N	AAC/AAT	585	1929			
+1	900397	C	T	SNP	Hom	3100.84			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1480 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1480 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1480 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_8	8	SYNONYMOUS_CODING	N/N	AAC/AAT	435	2003			
+1	900397	C	T	SNP	Hom	3100.84			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2539 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2539 bases							
+1	900397	C	T	SNP	Hom	3100.84			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1168 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_12	12	SYNONYMOUS_CODING	E/E	GAG/GAA	595	1929			
+1	900427	G	A	SNP	Hom	17103.26			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1450 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1450 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1450 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_8	8	SYNONYMOUS_CODING	E/E	GAG/GAA	445	2003			
+1	900427	G	A	SNP	Hom	17103.26			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2569 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2569 bases							
+1	900427	G	A	SNP	Hom	17103.26			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1198 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc001aca.1	uc001aca.1		uc001aca.1	uc001aca.1.exon_12	12	SYNONYMOUS_CODING	V/V	GTG/GTC	621	1929			
+1	900505	G	C	SNP	Hom	49629.49			uc001acd.2	uc001acd.2		uc001acd.2			UPSTREAM: 1372 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc001ace.2	uc001ace.2		uc001ace.2			UPSTREAM: 1372 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc001acf.2	uc001acf.2		uc001acf.2			UPSTREAM: 1372 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc001acc.1	uc001acc.1		uc001acc.1	uc001acc.1.exon_8	8	SYNONYMOUS_CODING	V/V	GTG/GTC	471	2003			
+1	900505	G	C	SNP	Hom	49629.49			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 2647 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 2647 bases							
+1	900505	G	C	SNP	Hom	49629.49			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 1276 bases							
+1	902025	C	T	SNP	Hom	1100.22			uc001acc.1	uc001acc.1		uc001acc.1			DOWNSTREAM: 930 bases							
+1	902025	C	T	SNP	Hom	1100.22			uc001aca.1	uc001aca.1		uc001aca.1			DOWNSTREAM: 930 bases							
+1	902025	C	T	SNP	Hom	1100.22			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	902025	C	T	SNP	Hom	1100.22			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	902025	C	T	SNP	Hom	1100.22			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	902025	C	T	SNP	Hom	1100.22			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 4167 bases							
+1	902025	C	T	SNP	Hom	1100.22			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 4167 bases							
+1	902025	C	T	SNP	Hom	1100.22			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 2796 bases							
+1	902108	C	T	SNP	Hom	294.51			uc001acc.1	uc001acc.1		uc001acc.1			DOWNSTREAM: 1013 bases							
+1	902108	C	T	SNP	Hom	294.51			uc001aca.1	uc001aca.1		uc001aca.1			DOWNSTREAM: 1013 bases							
+1	902108	C	T	SNP	Hom	294.51			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_2	2	SYNONYMOUS_CODING	A/A	GCC/GCT	36	1836			
+1	902108	C	T	SNP	Hom	294.51			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_2	2	SYNONYMOUS_CODING	A/A	GCC/GCT	36	1992			
+1	902108	C	T	SNP	Hom	294.51			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_2	2	SYNONYMOUS_CODING	A/A	GCC/GCT	36	1731			
+1	902108	C	T	SNP	Hom	294.51			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 4250 bases							
+1	902108	C	T	SNP	Hom	294.51			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 4250 bases							
+1	902108	C	T	SNP	Hom	294.51			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 2879 bases							
+1	902128	C	T	SNP	Hom	289.32			uc001acc.1	uc001acc.1		uc001acc.1			DOWNSTREAM: 1033 bases							
+1	902128	C	T	SNP	Hom	289.32			uc001aca.1	uc001aca.1		uc001aca.1			DOWNSTREAM: 1033 bases							
+1	902128	C	T	SNP	Hom	289.32			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_2	2	NON_SYNONYMOUS_CODING	A/V	GCT/GTT	43	1836			
+1	902128	C	T	SNP	Hom	289.32			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_2	2	NON_SYNONYMOUS_CODING	A/V	GCT/GTT	43	1992			
+1	902128	C	T	SNP	Hom	289.32			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_2	2	NON_SYNONYMOUS_CODING	A/V	GCT/GTT	43	1731			
+1	902128	C	T	SNP	Hom	289.32			uc001acb.1	uc001acb.1		uc001acb.1			DOWNSTREAM: 4270 bases							
+1	902128	C	T	SNP	Hom	289.32			uc010nya.1	uc010nya.1		uc010nya.1			DOWNSTREAM: 4270 bases							
+1	902128	C	T	SNP	Hom	289.32			uc010nyb.1	uc010nyb.1		uc010nyb.1			DOWNSTREAM: 2899 bases							
+1	905775	A	G	SNP	Hom	729.22			uc001acc.1	uc001acc.1		uc001acc.1			DOWNSTREAM: 4680 bases							
+1	905775	A	G	SNP	Hom	729.22			uc001aca.1	uc001aca.1		uc001aca.1			DOWNSTREAM: 4680 bases							
+1	905775	A	G	SNP	Hom	729.22			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_3	3	NON_SYNONYMOUS_CODING	K/R	AAG/AGG	101	1836			
+1	905775	A	G	SNP	Hom	729.22			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_3	3	NON_SYNONYMOUS_CODING	K/R	AAG/AGG	101	1992			
+1	905775	A	G	SNP	Hom	729.22			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_3	3	NON_SYNONYMOUS_CODING	K/R	AAG/AGG	101	1731			
+1	905775	A	G	SNP	Hom	729.22			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 197 bases							
+1	905775	A	G	SNP	Hom	729.22			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 197 bases							
+1	906077	G	C	SNP	Hom	92.64			uc001acc.1	uc001acc.1		uc001acc.1			DOWNSTREAM: 4982 bases							
+1	906077	G	C	SNP	Hom	92.64			uc001aca.1	uc001aca.1		uc001aca.1			DOWNSTREAM: 4982 bases							
+1	906077	G	C	SNP	Hom	92.64			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_5	5	SYNONYMOUS_CODING	P/P	CCG/CCC	141	1836			
+1	906077	G	C	SNP	Hom	92.64			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_5	5	SYNONYMOUS_CODING	P/P	CCG/CCC	141	1992			
+1	906077	G	C	SNP	Hom	92.64			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_5	5	SYNONYMOUS_CODING	P/P	CCG/CCC	141	1731			
+1	906077	G	C	SNP	Hom	92.64			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 499 bases							
+1	906077	G	C	SNP	Hom	92.64			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 499 bases							
+1	906300	G	A	SNP	Hom	1034.63			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_6	6	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	176	1836			
+1	906300	G	A	SNP	Hom	1034.63			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_5	5	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	216	1992			
+1	906300	G	A	SNP	Hom	1034.63			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_6	6	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	176	1731			
+1	906300	G	A	SNP	Hom	1034.63			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 722 bases							
+1	906300	G	A	SNP	Hom	1034.63			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 722 bases							
+1	906410	C	G	SNP	Hom	110.34			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	906410	C	G	SNP	Hom	110.34			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	906410	C	G	SNP	Hom	110.34			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	906410	C	G	SNP	Hom	110.34			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 832 bases							
+1	906410	C	G	SNP	Hom	110.34			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 832 bases							
+1	906428	C	T	SNP	Hom	196.23			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	906428	C	T	SNP	Hom	196.23			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	906428	C	T	SNP	Hom	196.23			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	906428	C	T	SNP	Hom	196.23			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 850 bases							
+1	906428	C	T	SNP	Hom	196.23			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 850 bases							
+1	906717	G	A	SNP	Hom	318.27			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_8	8	NON_SYNONYMOUS_CODING	R/Q	CGG/CAG	241	1836			
+1	906717	G	A	SNP	Hom	318.27			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_7	7	NON_SYNONYMOUS_CODING	R/Q	CGG/CAG	293	1992			
+1	906717	G	A	SNP	Hom	318.27			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_8	8	NON_SYNONYMOUS_CODING	R/Q	CGG/CAG	253	1731			
+1	906717	G	A	SNP	Hom	318.27			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 1139 bases							
+1	906717	G	A	SNP	Hom	318.27			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 1139 bases							
+1	907475	C	T	SNP	Hom	1503.03			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_9	9	SYNONYMOUS_CODING	A/A	GCC/GCT	270	1836			
+1	907475	C	T	SNP	Hom	1503.03			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_8	8	SYNONYMOUS_CODING	A/A	GCC/GCT	322	1992			
+1	907475	C	T	SNP	Hom	1503.03			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_9	9	SYNONYMOUS_CODING	A/A	GCC/GCT	282	1731			
+1	907475	C	T	SNP	Hom	1503.03			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 1897 bases							
+1	907475	C	T	SNP	Hom	1503.03			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 1897 bases							
+1	907622	G	C	SNP	Hom	10401.87			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	907622	G	C	SNP	Hom	10401.87			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	907622	G	C	SNP	Hom	10401.87			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	907622	G	C	SNP	Hom	10401.87			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 2044 bases							
+1	907622	G	C	SNP	Hom	10401.87			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 2044 bases							
+1	907774	G	A	SNP	Hom	351.22			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_10	10	SYNONYMOUS_CODING	L/L	CTG/CTA	324	1836			
+1	907774	G	A	SNP	Hom	351.22			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_9	9	SYNONYMOUS_CODING	L/L	CTG/CTA	376	1992			
+1	907774	G	A	SNP	Hom	351.22			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_10	10	SYNONYMOUS_CODING	L/L	CTG/CTA	336	1731			
+1	907774	G	A	SNP	Hom	351.22			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 2196 bases							
+1	907774	G	A	SNP	Hom	351.22			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 2196 bases							
+1	907816	A	G	SNP	Hom	235.66			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	907816	A	G	SNP	Hom	235.66			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	907816	A	G	SNP	Hom	235.66			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	907816	A	G	SNP	Hom	235.66			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 2238 bases							
+1	907816	A	G	SNP	Hom	235.66			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 2238 bases							
+1	908414	C	T	SNP	Hom	2626.97			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	908414	C	T	SNP	Hom	2626.97			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	908414	C	T	SNP	Hom	2626.97			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	908414	C	T	SNP	Hom	2626.97			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 2836 bases							
+1	908414	C	T	SNP	Hom	2626.97			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 2836 bases							
+1	908750	G	A	SNP	Hom	333.29			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	908750	G	A	SNP	Hom	333.29			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	908750	G	A	SNP	Hom	333.29			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	908750	G	A	SNP	Hom	333.29			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3172 bases							
+1	908750	G	A	SNP	Hom	333.29			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3172 bases							
+1	908846	C	T	SNP	Hom	2014.37			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	908846	C	T	SNP	Hom	2014.37			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	908846	C	T	SNP	Hom	2014.37			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	908846	C	T	SNP	Hom	2014.37			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3268 bases							
+1	908846	C	T	SNP	Hom	2014.37			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3268 bases							
+1	908968	C	T	SNP	Hom	2157.55			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_13	13	NON_SYNONYMOUS_CODING	T/I	ACA/ATA	461	1836			
+1	908968	C	T	SNP	Hom	2157.55			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_12	12	NON_SYNONYMOUS_CODING	T/I	ACA/ATA	513	1992			
+1	908968	C	T	SNP	Hom	2157.55			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_12	12	NON_SYNONYMOUS_CODING	T/I	ACA/ATA	426	1731			
+1	908968	C	T	SNP	Hom	2157.55			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3390 bases							
+1	908968	C	T	SNP	Hom	2157.55			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3390 bases							
+1	909006	C	T	SNP	Hom	7557.13			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_13	13	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	474	1836			
+1	909006	C	T	SNP	Hom	7557.13			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_12	12	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	526	1992			
+1	909006	C	T	SNP	Hom	7557.13			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_12	12	NON_SYNONYMOUS_CODING	R/W	CGG/TGG	439	1731			
+1	909006	C	T	SNP	Hom	7557.13			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3428 bases							
+1	909006	C	T	SNP	Hom	7557.13			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3428 bases							
+1	909059	C	A	SNP	Hom	1214.43			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	909059	C	A	SNP	Hom	1214.43			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	909059	C	A	SNP	Hom	1214.43			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	909059	C	A	SNP	Hom	1214.43			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3481 bases							
+1	909059	C	A	SNP	Hom	1214.43			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3481 bases							
+1	909073	C	T	SNP	Hom	71853.22			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	909073	C	T	SNP	Hom	71853.22			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	909073	C	T	SNP	Hom	71853.22			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	909073	C	T	SNP	Hom	71853.22			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3495 bases							
+1	909073	C	T	SNP	Hom	71853.22			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3495 bases							
+1	909221	T	C	SNP	Hom	1766.56			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	S/S	AGT/AGC	481	1836			
+1	909221	T	C	SNP	Hom	1766.56			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	S/S	AGT/AGC	533	1992			
+1	909221	T	C	SNP	Hom	1766.56			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	S/S	AGT/AGC	446	1731			
+1	909221	T	C	SNP	Hom	1766.56			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3643 bases							
+1	909221	T	C	SNP	Hom	1766.56			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3643 bases							
+1	909222	G	A	SNP	Hom	1033.17			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	482	1836			
+1	909222	G	A	SNP	Hom	1033.17			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	534	1992			
+1	909222	G	A	SNP	Hom	1033.17			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	NON_SYNONYMOUS_CODING	A/T	GCC/ACC	447	1731			
+1	909222	G	A	SNP	Hom	1033.17			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3644 bases							
+1	909222	G	A	SNP	Hom	1033.17			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3644 bases							
+1	909238	G	C	SNP	Hom	117040.66			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	NON_SYNONYMOUS_CODING	R/P	CGT/CCT	487	1836			
+1	909238	G	C	SNP	Hom	117040.66			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	NON_SYNONYMOUS_CODING	R/P	CGT/CCT	539	1992			
+1	909238	G	C	SNP	Hom	117040.66			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	NON_SYNONYMOUS_CODING	R/P	CGT/CCT	452	1731			
+1	909238	G	C	SNP	Hom	117040.66			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3660 bases							
+1	909238	G	C	SNP	Hom	117040.66			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3660 bases							
+1	909242	A	G	SNP	Hom	9288.48			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	G/G	GGA/GGG	488	1836			
+1	909242	A	G	SNP	Hom	9288.48			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	G/G	GGA/GGG	540	1992			
+1	909242	A	G	SNP	Hom	9288.48			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	G/G	GGA/GGG	453	1731			
+1	909242	A	G	SNP	Hom	9288.48			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3664 bases							
+1	909242	A	G	SNP	Hom	9288.48			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3664 bases							
+1	909309	T	C	SNP	Hom	30191.08			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	NON_SYNONYMOUS_CODING	S/P	TCC/CCC	511	1836			
+1	909309	T	C	SNP	Hom	30191.08			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	NON_SYNONYMOUS_CODING	S/P	TCC/CCC	563	1992			
+1	909309	T	C	SNP	Hom	30191.08			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	NON_SYNONYMOUS_CODING	S/P	TCC/CCC	476	1731			
+1	909309	T	C	SNP	Hom	30191.08			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3731 bases							
+1	909309	T	C	SNP	Hom	30191.08			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3731 bases							
+1	909320	C	T	SNP	Hom	784.6			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	P/P	CCC/CCT	514	1836			
+1	909320	C	T	SNP	Hom	784.6			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	P/P	CCC/CCT	566	1992			
+1	909320	C	T	SNP	Hom	784.6			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	P/P	CCC/CCT	479	1731			
+1	909320	C	T	SNP	Hom	784.6			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3742 bases							
+1	909320	C	T	SNP	Hom	784.6			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3742 bases							
+1	909326	C	T	SNP	Hom	5824.95			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	G/G	GGC/GGT	516	1836			
+1	909326	C	T	SNP	Hom	5824.95			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	G/G	GGC/GGT	568	1992			
+1	909326	C	T	SNP	Hom	5824.95			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	G/G	GGC/GGT	481	1731			
+1	909326	C	T	SNP	Hom	5824.95			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3748 bases							
+1	909326	C	T	SNP	Hom	5824.95			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3748 bases							
+1	909363	A	C	SNP	Hom	724.27			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	R/R	AGA/CGA	529	1836			
+1	909363	A	C	SNP	Hom	724.27			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	R/R	AGA/CGA	581	1992			
+1	909363	A	C	SNP	Hom	724.27			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	R/R	AGA/CGA	494	1731			
+1	909363	A	C	SNP	Hom	724.27			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3785 bases							
+1	909363	A	C	SNP	Hom	724.27			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3785 bases							
+1	909411	C	A	SNP	Hom	125.17			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	NON_SYNONYMOUS_CODING	P/T	CCC/ACC	545	1836			
+1	909411	C	A	SNP	Hom	125.17			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	NON_SYNONYMOUS_CODING	P/T	CCC/ACC	597	1992			
+1	909411	C	A	SNP	Hom	125.17			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	NON_SYNONYMOUS_CODING	P/T	CCC/ACC	510	1731			
+1	909411	C	A	SNP	Hom	125.17			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3833 bases							
+1	909411	C	A	SNP	Hom	125.17			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3833 bases							
+1	909419	C	T	SNP	Hom	4812.78			uc001acd.2	uc001acd.2		uc001acd.2	uc001acd.2.exon_14	14	SYNONYMOUS_CODING	D/D	GAC/GAT	547	1836			
+1	909419	C	T	SNP	Hom	4812.78			uc001ace.2	uc001ace.2		uc001ace.2	uc001ace.2.exon_13	13	SYNONYMOUS_CODING	D/D	GAC/GAT	599	1992			
+1	909419	C	T	SNP	Hom	4812.78			uc001acf.2	uc001acf.2		uc001acf.2	uc001acf.2.exon_13	13	SYNONYMOUS_CODING	D/D	GAC/GAT	512	1731			
+1	909419	C	T	SNP	Hom	4812.78			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 3841 bases							
+1	909419	C	T	SNP	Hom	4812.78			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 3841 bases							
+1	909768	A	G	SNP	Hom	460040.66			uc001acd.2	uc001acd.2		uc001acd.2			INTRON				1836			
+1	909768	A	G	SNP	Hom	460040.66			uc001ace.2	uc001ace.2		uc001ace.2			INTRON				1992			
+1	909768	A	G	SNP	Hom	460040.66			uc001acf.2	uc001acf.2		uc001acf.2			INTRON				1731			
+1	909768	A	G	SNP	Hom	460040.66			uc001ach.2	uc001ach.2		uc001ach.2			DOWNSTREAM: 4190 bases							
+1	909768	A	G	SNP	Hom	460040.66			uc001acg.2	uc001acg.2		uc001acg.2			DOWNSTREAM: 4190 bases							
+1	935046	G	A	SNP	Hom	5520.19			uc001aci.2	uc001aci.2		uc001aci.2			INTRON				666			
+1	935046	G	A	SNP	Hom	5520.19			uc010nyc.1	uc010nyc.1		uc010nyc.1			INTRON				744			
+1	935123	G	A	SNP	Hom	1128.87			uc001aci.2	uc001aci.2		uc001aci.2	uc001aci.2.exon_1	2	SYNONYMOUS_CODING	N/N	AAC/AAT	51	666			
+1	935123	G	A	SNP	Hom	1128.87			uc010nyc.1	uc010nyc.1		uc010nyc.1	uc010nyc.1.exon_0	1	SYNONYMOUS_CODING	N/N	AAC/AAT	77	744			
+1	935188	G	A	SNP	Hom	166.38			uc001aci.2	uc001aci.2		uc001aci.2			INTRON				666			
+1	935188	G	A	SNP	Hom	166.38			uc010nyc.1	uc010nyc.1		uc010nyc.1	uc010nyc.1.exon_0	1	STOP_GAINED	Q/*	CAG/TAG	56	744			
+1	935189	A	G	SNP	Hom	174.87			uc001aci.2	uc001aci.2		uc001aci.2			INTRON				666			
+1	935189	A	G	SNP	Hom	174.87			uc010nyc.1	uc010nyc.1		uc010nyc.1	uc010nyc.1.exon_0	1	SYNONYMOUS_CODING	T/T	ACT/ACC	55	744			
+1	935222	C	A	SNP	Hom	24301.73			uc001aci.2	uc001aci.2		uc001aci.2			INTRON				666			
+1	935222	C	A	SNP	Hom	24301.73			uc010nyc.1	uc010nyc.1		uc010nyc.1	uc010nyc.1.exon_0	1	NON_SYNONYMOUS_CODING	R/S	AGG/AGT	44	744			
+1	935398	G	A	SNP	Hom	59.01			uc001aci.2	uc001aci.2		uc001aci.2	uc001aci.2.exon_0	1	UTR_5_PRIME: 45 bases from TSS							
+1	935398	G	A	SNP	Hom	59.01			uc010nyc.1	uc010nyc.1		uc010nyc.1	uc010nyc.1.exon_0	1	UTR_5_PRIME: 45 bases from TSS							
+1	948921	T	C	SNP	Hom	195650.49			uc001acj.3	uc001acj.3		uc001acj.3	uc001acj.3.exon_1	1	UTR_5_PRIME: 33 bases from TSS							
+1	949608	G	A	SNP	Hom	91634.46			uc001acj.3	uc001acj.3		uc001acj.3	uc001acj.3.exon_2	2	NON_SYNONYMOUS_CODING	S/N	AGC/AAC	83	498			
+1	949654	A	G	SNP	Hom	275596.3			uc001acj.3	uc001acj.3		uc001acj.3	uc001acj.3.exon_2	2	SYNONYMOUS_CODING	V/V	GTA/GTG	98	498			
+1	949831	C	T	SNP	Hom	2933.62			uc001acj.3	uc001acj.3		uc001acj.3	uc001acj.3.exon_2	2	SYNONYMOUS_CODING	G/G	GGC/GGT	157	498			
+1	949889	G	A	SNP	Hom	1263.37			uc001acj.3	uc001acj.3		uc001acj.3	uc001acj.3.exon_2	2	UTR_3_PRIME: 31 bases from transcript end							
+1	955597	G	T	SNP	Hom	110.67			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_1	1	SYNONYMOUS_CODING	P/P	CCG/CCT	15	6138			
+1	957531	C	T	SNP	Hom	1108.23			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	957568	A	G	SNP	Hom	1758.74			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	957640	C	T	SNP	Hom	8440.61			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_2	2	SYNONYMOUS_CODING	D/D	GAC/GAT	87	6138			
+1	976514	C	A	SNP	Hom	1059.96			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	976625	C	T	SNP	Hom	36.84			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_5	5	NON_SYNONYMOUS_CODING	T/M	ACG/ATG	267	6138			
+1	976963	A	G	SNP	Hom	942.56			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_6	6	NON_SYNONYMOUS_CODING	Q/R	CAG/CGG	353	6138			
+1	977028	G	T	SNP	Hom	509.58			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_6	6	NON_SYNONYMOUS_CODING	A/S	GCC/TCC	375	6138			
+1	977294	G	A	SNP	Hom	1056.94			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	977323	C	T	SNP	Hom	550.55			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	977330	T	C	SNP	Hom	157610.35			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	977346	G	A	SNP	Hom	271.03			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_7	7	SYNONYMOUS_CODING	P/P	CCG/CCA	396	6138			
+1	977350	C	G	SNP	Hom	906.83			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_7	7	NON_SYNONYMOUS_CODING	P/A	CCC/GCC	398	6138			
+1	977570	G	A	SNP	Hom	35701.68			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	978762	G	A	SNP	Hom	89.97			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_8	8	NON_SYNONYMOUS_CODING	G/S	GGC/AGC	510	6138			
+1	979042	C	T	SNP	Hom	1369.9			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_9	9	SYNONYMOUS_CODING	S/S	AGC/AGT	576	6138			
+1	979437	C	T	SNP	Hom	477.16			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	979514	C	G	SNP	Hom	8062.08			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_11	11	SYNONYMOUS_CODING	G/G	GGC/GGG	675	6138			
+1	979552	G	A	SNP	Hom	1695.77			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_11	11	NON_SYNONYMOUS_CODING	R/Q	CGG/CAG	688	6138			
+1	979556	G	A	SNP	Hom	2678.15			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_11	11	SYNONYMOUS_CODING	Q/Q	CAG/CAA	689	6138			
+1	979690	G	A	SNP	Hom	1774.98			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	979720	G	A	SNP	Hom	1555.89			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_12	12	NON_SYNONYMOUS_CODING	G/S	GGC/AGC	719	6138			
+1	979748	A	T	SNP	Hom	6378.46			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_12	12	NON_SYNONYMOUS_CODING	E/V	GAG/GTG	728	6138			
+1	980773	C	T	SNP	Hom	2553.16			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_14	14	SYNONYMOUS_CODING	G/G	GGC/GGT	802	6138			
+1	980824	G	C	SNP	Hom	1661.34			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_14	14	SYNONYMOUS_CODING	G/G	GGG/GGC	819	6138			
+1	980948	C	T	SNP	Hom	1650.22			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	981087	A	G	SNP	Hom	197067.93			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	981131	A	G	SNP	Hom	6060.12			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_15	15	NON_SYNONYMOUS_CODING	Q/R	CAA/CGA	852	6138			
+1	981345	C	T	SNP	Hom	351.4			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_16	16	SYNONYMOUS_CODING	D/D	GAC/GAT	894	6138			
+1	981896	A	G	SNP	Hom	606.1			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_18	18	NON_SYNONYMOUS_CODING	T/A	ACC/GCC	1011	6138			
+1	981931	A	G	SNP	Hom	71908.88			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_18	18	SYNONYMOUS_CODING	S/S	TCA/TCG	1022	6138			
+1	982722	A	G	SNP	Hom	905			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_20	20	NON_SYNONYMOUS_CODING	Q/R	CAG/CGG	1135	6138			
+1	982783	T	C	SNP	Hom	1065.62			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_20	20	SYNONYMOUS_CODING	A/A	GCT/GCC	1155	6138			
+1	982844	G	C	SNP	Hom	20905.56			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	982941	T	C	SNP	Hom	235215.16			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	982994	T	C	SNP	Hom	335488.39			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_21	21	SYNONYMOUS_CODING	F/F	TTT/TTC	1186	6138			
+1	983006	C	T	SNP	Hom	9000.79			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_21	21	SYNONYMOUS_CODING	R/R	CGC/CGT	1190	6138			
+1	983341	C	T	SNP	Hom	136.53			uc001ack.1	uc001ack.1		uc001ack.1			INTRON				6138			
+1	983507	G	A	SNP	Hom	49.5			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_23	23	SYNONYMOUS_CODING	P/P	CCG/CCA	1289	6138			
+1	984302	T	C	SNP	Hom	10364.65			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_24	24	SYNONYMOUS_CODING	T/T	ACT/ACC	1387	6138			
+1	984640	G	A	SNP	Hom	240.99			uc001ack.1	uc001ack.1		uc001ack.1	uc001ack.1.exon_25	25	SYNONYMOUS_CODING	A/A	GCG/GCA	1441	6138			
+Nodes:        tcc-5-45
