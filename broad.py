@@ -28,6 +28,8 @@ CALL_MAP = {"GT" : 0,
             "GQ" : 3,
             "PL" : 4}
 
+
+
 #in Broad file, there can be multiple variations @ the same position
 #they get smashed into same column, delimited by ','
 #each family can only have one variant at the locus
@@ -150,6 +152,9 @@ def separateSNPSandINDELS( filter_non_passes = True ) :
     fin.close()
     print lines_written
 
+def sanitizePatientName( family_name ) :
+    return family_name.replace('/','|')
+
 #orig_filename = broad vcf file
 #outdir: where the output is going
 #cols_to_use: Which data are we going to include about each call?
@@ -177,18 +182,22 @@ def pickOutFamilies( orig_filename, outdir,family_groups, \
     fouts = {}
     groupIXs = {}
     for group in family_groups :
-        safe_group = group.replace('/','-')
+        safe_group = sanitizePatientName( group )
         fouts[group] = open( "%s/%s.vcf" % (outdir,safe_group), 'wb' )
         groupIXs[group] = []
 
     (columns,headers) = getColumnsAndHeaders( fin )
+
     header_string = "\n".join(headers)
 
     for i in range( len(columns) ) :
         for group in family_groups :
             family_names = family_groups[group]
+            print columns[i], family_names
             if columns[i] in family_names :
                 groupIXs[group].append( i )
+
+    print groupIXs
 
     #print headers
     for group in family_groups :
@@ -222,7 +231,8 @@ def pickOutFamilies( orig_filename, outdir,family_groups, \
 
 def breakIntoFamilyFiles( orig_filename, outdir ) :
     fin = open( orig_filename )
-    patients = getPatients( fin )
+    #raise back to upper...
+    patients = [p.upper() for p in getPatients( fin )]
     family_groups = {}
     for patient in patients :
         family_groups[patient] = (patient)
@@ -257,7 +267,7 @@ def getColumnsAndHeaders( broad_fh, toFind = "CHROM" ) :
 
 def getPatients( broad_fh ) :
     columns = getColumnsAndHeaders(broad_fh)[0]
-    return [p.lower() for p in columns[CALL_START:]]
+    return [sanitizePatientName(p) for p in columns[CALL_START:]]
 
 #strip of transcript means to ignore num part of: 'att_1, att_2, etc'
 #will throw an exception if all values are not the same
@@ -338,11 +348,11 @@ def isCovered( call_splt, coverage_thresh=8 ) :
         return int( call_splt[ CALL_MAP["DP"] ] ) > coverage_thresh
 
 if __name__ == "__main__" :
-    #breakIntoFamilyFiles( globes.INDEL_FILE, \
-                          #outdir = "%s/raw_data/indels_by_fam" \
-                                    #% (globes.DATA_DIR) )
+    breakIntoFamilyFiles( globes.INDEL_FILE, \
+                          outdir = "%s/raw_data/indels_by_fam" \
+                                    % (globes.DATA_DIR) )
 
-    separateSNPSandINDELS()
+    #separateSNPSandINDELS()
 
 #def pickOutFamilies( orig_filename, outdir,family_groups, \
                      #callToString = lambda x:x,\

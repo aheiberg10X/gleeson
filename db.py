@@ -23,15 +23,14 @@ def catch(func) :
     def inner(*args, **kwargs) :
         try :
             return func(*args, **kwargs)
-        except SQLError as mse:
+        except SQLError, (mse):
             print mse
             assert False
     return inner
 
 class Conn :
-    def __init__(self, switch="localhost") :
+    def __init__(self, switch="gleeson-closet") :
         self.connection = self.quickConnect( switch )
-        print self.connection
         self.cur = self.connection.cursor()
 
     def quickConnect( self, switch ) :
@@ -46,7 +45,6 @@ class Conn :
                             "pHuc7h35", \
                             "gleeson"] \
                       }
-        print connections[switch]
         return self.connect( *connections[switch] )
 
         #@catch
@@ -101,7 +99,6 @@ class Conn :
                 for row in rows : yield row
             else :
                 if no_stop :
-                    print "yielding endOfIteration"
                     while True : yield endOfIteration
                 else :
                     raise StopIteration
@@ -133,8 +130,10 @@ class Conn :
                    % (table, columns, values)
 
         try :
+            #if table != 'Calls' :
+                #print ins
             self.cur.execute( ins )
-        except Exception as e :
+        except Exception, (e) :
             exc = refineException( repr(e), ins )
             if not( type(exc) == SQLDuplicate and skip_dupes ) :
                 raise exc
@@ -146,7 +145,7 @@ class Conn :
         update = '''update %s set %s where id = %d''' % (table,string,eyeD)
         try :
             self.cur.execute( update )
-        except Exception as e :
+        except Exception, (e) :
             raise SQLError( e, update )
 
     def wipe(self, table) :

@@ -148,8 +148,8 @@ class SeattleAnnotator(Annotator) :
                 match = False
                 for iso in variant.isoforms :
                     k = "gene_id"
-                    #if k in iso.fields :
-                        #message.append("iso_gene_id: %d" % iso.fields[k] )
+                    if k in iso.fields :
+                        message.append("iso_gene_id: %d" % iso.fields[k] )
                     if k in iso.fields and iso.fields[k] == gene_id :
                         iso.fields["ss_functionGVS"] = out_splt[indexOf["functionGVS"]]
                         iso.fields["ss_polyPhen"] = out_splt[indexOf["polyPhen"] ]

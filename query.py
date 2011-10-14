@@ -1,17 +1,18 @@
 import db
 import csv
-import json
+import simplejson as json
 import sys
 import os.path
+import broad
+import globes
+#configname = sys.argv[1]
+#(head,tail) = os.path.split(configname)
+#(filename,ext) = os.path.splitext(tail)
 
-configname = sys.argv[1]
-(head,tail) = os.path.split(configname)
-(filename,ext) = os.path.splitext(tail)
 
-
-f = open( configname )
-params = json.loads( f.read() )
-f.close()
+#f = open( configname )
+#params = json.loads( f.read() )
+#f.close()
 #params = {"interval" : "Genes", \
           #"include_atleast" : 2, \
           #"include_genotype" : "Hom", \
@@ -50,7 +51,7 @@ def genQ1( params ) :
     v = params["interval"]
     template = "inner join %s as gi on gi.var_id = c.var_id"
     if v == "Genes" : interval_table = template % "GeneIntervals"
-    elif v == "Exon" : interval_table = template % "ExonIntervals"
+    elif v == "Exons" : interval_table = template % "ExonIntervals"
     else : interval_table = "join VariantIntervalPlaceholder as gi"
 
     v = params["include_atleast"]
@@ -146,17 +147,22 @@ dcols ={0 : 'tiv1.int_id', \
         32 : 'i.codon_total'}
 
 def genQ2( params ) :
+    if params['interval'] != 'Variants' :
+        group_level = "int_id"
+    else :
+        group_level = "var_id"
+    print "gl: %s" % group_level
     return \
     '''select %s from TempIntVars tiv1 inner join
-         (select int_id
+         (select %s
           from TempIntVars tiv2
-          group by int_id
-          having sum(weight) <= -%s) as t on tiv1.int_id = t.int_id
+          group by %s
+          having sum(weight) <= -%s) as t on tiv1.%s = t.%s
          inner join Variants as v on v.id = tiv1.var_id
          inner join Isoforms as i on i.var_id = v.id
          left join Genes as g on g.ucsc_id = tiv1.name
     where %s''' \
-    % (', '.join( dcols.values() ), params["include_atleast"], params["variant_restrictions"]) 
+    % (', '.join( dcols.values() ), group_level, group_level, params["include_atleast"], group_level, group_level, params["variant_restrictions"]) 
 
 int_cols = ["Interval Name","int_id"]
 var_cols = ["Var ID", \
@@ -169,9 +175,15 @@ var_cols = ["Var ID", \
             "Mut AA"]
 iso_cols = []
 
+def callString( calls_row ) :
+    GT = broad.encodeGT( int(calls_row[2]) )
+    dp_gq = [str(t) for t in calls_row[3:5]]
+
+    return ':'.join( [GT] + dp_gq )
+
 def getPatients( conn, var_id, where_clause="" ) :
     q = '''
-    select var_id, pat_id, name, GT
+    select c.*, p.name
     from Calls as c inner join Patients as p on c.pat_id = p.id
     where c.var_id = %d %s''' % (var_id, where_clause)
     noinfs, homs, hets = [],[],[]
@@ -180,52 +192,116 @@ def getPatients( conn, var_id, where_clause="" ) :
               2 : homs}
     r = conn.iterateQuery( q )
     for row in r :
-        (var_id,pat_id,name,GT) = row
-        lookup[int(GT)].append( (pat_id,name) )
+        call_row = row[:-1]
+        call_string = callString(call_row)
+        GT = row[2]
+        lookup[int(GT)].append( (call_row[1],row[-1],call_string) )
 
     return (noinfs,hets,homs)
 
-def readableCols( cols ) :
+#TODO
+#need some kind of general rollup function here
+
+
+def makeColsReadable( cols ) :
     return [c.split('.')[1] for c in cols]
 
 def makeReport(params) :
-    if not params : return "makeReport: no params"
+    try :
+        conn = db.Conn()
+        r = conn.cur.execute( q0 )
+        q1 = genQ1(params)
+        q2 = genQ2(params)
+        print "<br /><br />Q1: %s" % q1
+        print "<br /><br />Q2: %s" % q2
+        
+        r = conn.cur.execute( q1 )
+        r = conn.iterateQuery( q2)
+        reportname = '../../html/reports/%s.tsv' % params["filename"]
+        returnname = '../../reports/%s.tsv' % params["filename"]
+        freport = csv.writer( open(reportname,'wb'), \
+                    delimiter='\t', \
+                    quoting=csv.QUOTE_MINIMAL )
+        prev_int_id = -1
+        prev_var_id = -1
 
-    conn = db.Conn()
-    r = conn.cur.execute( q0 )
-    q1 = genQ1(params)
-    print q1
-    r = conn.cur.execute( q1 )
-    r = conn.iterateQuery( genQ2(params) )
-    reportname = 'reports/%s.tsv' % filename
-    freport = csv.writer( open(reportname,'wb'), \
-                delimiter='\t', \
-                quoting=csv.QUOTE_MINIMAL )
-    prev_int_id = -1
-    prev_var_id = -1
-    for row in r :
-        int_id, int_name = row[:2]
-        var_id = row[2]
-        #print int_id, var_id
-        if int_id != prev_int_id :
-            freport.writerow( [] )
-            freport.writerow( [int_id,int_name] )
-            freport.writerow( ['',''] + readableCols(dcols.values())[2:] + ['Hom Shares','Het Shares'])
-            prev_int_id = int_id
+        #this is duplicating call)_restrictions in genQ1... can do better
+        where_clause = ' and c.DP >= %s and c.GQ >= %s' % (params['call_depth'], params['call_qual'])
+        freport.writerow( makeColsReadable(dcols.values()) + ['Hom Shares','Het Shares'])
+        for row in r :
+            var_id = row[2]
+            (noinfs,hets,homs) = ['; '.join([str(t[1]) for t in p]) for p in getPatients( conn, var_id, where_clause )]
+            freport.writerow( list(row) + [homs, hets] )
 
-        #if var_id != prev_var_id :
-        where_clause = ' and c.DP >= %s' % params['call_depth']
-        (noinfs,hets,homs) = ['; '.join([str(t[1]) for t in p]) for p in getPatients( conn, var_id, where_clause )]
-        freport.writerow( ['',''] + list(row[2:]) + [homs, hets]  )
-        prev_var_id = var_id
-    return reportname 
+
+            ###OLD PRETTY(IER) PRINTING CODE
+            #int_id, int_name = row[:2]
+            #var_id = row[2]
+            ##print int_id, var_id
+            #if int_id != prev_int_id :
+                #freport.writerow( [] )
+                #freport.writerow( [int_id,int_name] )
+                #freport.writerow( ['',''] + makeColsReadable(dcols.values())[2:] + ['Hom Shares','Het Shares'])
+                #prev_int_id = int_id
+#
+            ##if var_id != prev_var_id :
+            #freport.writerow( ['',''] + list(row[2:]) + [homs, hets]  )
+            #prev_var_id = var_id
+        return returnname
+    except Exception, (e) :
+        print "<br /><br />%s" % str(e)
+
+def indelReport() :
+    outdir = globes.OUT_DIR
+    conn = db.Conn("localhost")
+    conn2 = db.Conn("localhost")
+    print "connetions made"
+    vcols = conn2.getColumns('Variants')
+    icols = conn2.getColumns('Isoforms')
+
+    query = '''select name from Patients'''
+    #the general report
+    fout = open("%s/indelReport.tsv" % (outdir),'w')
+    freport = csv.writer( fout, \
+                          delimiter='\t', \
+                          quoting=csv.QUOTE_MINIMAL )
+    freport.writerow( vcols + icols + ["Homs","Hets"] ) 
+    #the per family reports
+    fouts = {}
+    for r in conn.iterateQuery( query ) :
+        patient = broad.sanitizeFamilyName( r[0] )
+        filename = '%s/%s_indels.tsv' % (outdir,patient)
+        fouts[patient]=csv.writer( open(filename, 'wb'),\
+                                   delimiter='\t', \
+                                   quoting=csv.QUOTE_MINIMAL )
+        fouts[patient].writerow( vcols + icols + ["GT:DP:GQ", "Hom Shares"] ) 
+
+    query = '''select v.*, i.*
+               from Variants as v inner join Isoforms as i on v.id = i.var_id
+               where v.id < 1000'''
+
+    for r in conn.iterateQuery( query ) :
+        var_id = r[0]
+        (noinfs,hets,homs) = getPatients( conn, var_id )
+        for ix,(pat_id,pat,call) in enumerate(homs) :
+            pat = broad.sanitizeFamilyName( pat )
+            other_shares = '; '.join([p[1] for p in homs if p[1] != pat])
+            fouts[pat].writerow( list(r) + [call,other_shares] )
+
+        hom_names = [t[1] for t in homs]
+        het_names = [t[1] for t in hets]
+        (hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)] 
+        freport.writerow( list(r)+[hom_string,het_string] )
+
+    fout.close()
 
 if __name__ == '__main__' :
-    print genQ1(params)
+    indelReport()
+    #print genQ1(params)
     #printNewColsDict()
     
     #conn = db.Conn()
     #(noinfs,hets,homs) = getPatients( conn, 1 )
     #print homs
 
-    makeReport()
+    #makeReport()

@@ -1,5 +1,10 @@
+template = '''Report variants in <interval> with >= <include_atleast> <include_genotype> belonging to someone in <group>, excluding those genes with <exclude_genotype> calls belonging to someone in <exclude_group>.
 
-template = '''Template:
+Calls should have depth >= <call_depth> and qual >= <call_qual>
+
+Only count variants where <variant_restrictions>'''
+
+detail = '''Template:
 
 Report variants in <interval> with >= <include_atleast> <include_genotype> belonging to someone in <group>, excluding those genes with <exclude_genotype> calls belonging to someone in <exclude_group>.
 

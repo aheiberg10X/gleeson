@@ -202,16 +202,15 @@ class SNPEffAnnotator(Annotator) :
         switch = dargs['switch'].lower()
         if switch == 'snp' : 
             skipper = globes.dontStop
-            self.comp = self.varListSNPComparator
         elif switch == 'indel' :
             skipper = self.skipSNPS
             self.allow_unmatched = True
-            self.comp = self.varListINDELComparator
         else : assert False
         self.iterator = globes.splitIterator(dargs['file'], \
                                              burn=3, \
                                              skipper=skipper, \
                                              stopper=globes.tritonStop)
+        self.comp = self.varListINDELComparator
         self.eqfunc = self.varListIntegrator
         self.ltfunc = doNothing
         self.gtfunc = doNothing
@@ -225,6 +224,6 @@ class SNPEffAnnotator(Annotator) :
             self.eqfunc = self.sqlIntegrator
 
 if __name__=='__main__' :
-    effAnn = SNPEffAnnotator()
-    effAnn.run( globes.INDEL_FILE )
+    #effAnn = SNPEffAnnotator()
+    ##effAnn.run( globes.INDEL_FILE )
     pass

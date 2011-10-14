@@ -1,20 +1,18 @@
 from plateII import PlateII
 from plateI import PlateI
 from frazer import Frazer
-from pilot import Pilot
 
 import os
 import re
 
-sources = {"Pilot" : 1,\
+sources = {"PilotPlate" : 1,\
            "PlateI" : 2,\
            "PlateII" : 4, \
            "Frazer" : 8 }
 
 #output root
-plate = Pilot()
-#ROOT_DIR = "/projects/gleeson-lab/BroadData"
-ROOT_DIR = "/home/Gleeson/variant_filtering"
+plate = PlateI()
+ROOT_DIR = "/home/andrew/gleeson"
 PLATE_NAME = plate.folder
 SOURCE = sources[PLATE_NAME]
 DATA_DIR = "%s/%s/" % (ROOT_DIR,PLATE_NAME)
@@ -98,8 +96,6 @@ def compareHelper( a,b ) :
 base_order = ['a','c','g','t','n']
 def compareVariants( chr1,pos1,ref1,mut1, \
                      chr2,pos2,ref2,mut2 ) :
-    #print 'comparingVariants',chr1,pos1,ref1,mut1,chr2,pos2,ref2,mut2
-
     chr1,chr2 = chromNum(chr1), chromNum(chr2)
     pos1,pos2 = int(pos1),int(pos2)
     ref1,ref2 = ref1.lower(),ref2.lower()

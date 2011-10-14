@@ -105,8 +105,7 @@ def insertVariantList( ) :
     #siftAnn.register(dargs)
 
     ssAnn = seattle.SeattleAnnotator()
-    dargs = {'file' : "%s/seattle/output/SeattleSeqAnnotation131.pilot_full_indels.vcf.216816932058.txt" % globes.INT_DIR, \
-             'dbconn' : dbconn, \
+    dargs = {'file' : "%s/seattle/output/SeattleSeqAnnotation131.Ciliopathies_Whole_Exome_Gleeson_Indels_20110526_INDELS.vcf.216474182240.txt" % globes.INT_DIR,             'dbconn' : dbconn, \
              'switch' : switch}
     ssAnn.register(dargs)
 
@@ -278,12 +277,14 @@ def insertVariantList_old( varList ) :
     print "calls_avoided: ", calls_avoided
 
 if __name__ == "__main__" :
-    #varList = snp.SNPList( frazer1 )
+    varList = snp.SNPList( globes.SNP_FILE )
+    populatePatients( varList.patients )
+#varList = snp.SNPList( frazer1 )
     #effAnn = snpeff.SNPEffAnnotator( frazer1 )
     #effAnn.run()    
     #updateWithAnnotations()
     ####reset()
-    insertVariantList( )
+    #insertVariantList( )
     #Walker2Test()
     #makeEmptyGene( db.Conn() )
 
