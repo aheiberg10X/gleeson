@@ -1,5 +1,4 @@
 import globes
-import indel
 
 import re
 import os

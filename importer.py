@@ -1,38 +1,33 @@
 from collimator import Collimator
-import variant2
+import variant
 import globes
-from seattle2 import SeattleAnnotator
+from seattle import SeattleAnnotator
 import db
 from math import log
 import broad
 from plates import PlateI, PlateII, PlateIII, CIDR
 #### HIStory ##########
-#plateI SNPS, have to be recalled thought :(, also no ref_aa/mut_aa
 
-#plateII SNPs  
-#plateII INDELs
+#PlateII indels
+
+#CIDR Indels
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
 dry_run = False
 switch = 'snp'
-globes.plate = CIDR()
-ss_file = "%s/SeattleSeqAnnotation131.allcidrsnps.vcf.218621577750.tsv" % globes.INT_DIR
+plate = CIDR()
 
 ############# /CONFIGURE  ####################################3
-
-if switch == 'indel' :
-    var_file = globes.INDEL_FILE
-else :
-    var_file = globes.SNP_FILE
 
 conn2 = db.Conn("localhost",dry_run=dry_run)
 
 variant_cols = conn2.getColumns("Variants")
 call_cols = conn2.getColumns("Calls")
-call_cols_tograb = call_cols[2:]
+call_cols_tograb = call_cols[3:]
 iso_cols = conn2.getColumns("Isoforms")
 iso_cols_tograb = iso_cols[2:]
+plate_id = plate.getPlateID()
 
 #make patient name->id lookup
 results = conn2.query( '''select id,name from Patients''' )
@@ -40,8 +35,8 @@ patients_dbix = {}
 for (ID,name) in results :
     patients_dbix[name] = int(ID)
 
-varSource = variant2.VariantList( var_file )
-seattleSource = SeattleAnnotator( ss_file, switch)
+varSource = variant.VariantList( plate.varFile(switch) )
+seattleSource = SeattleAnnotator( plate.seattleFile(switch), switch )
 sources = [varSource, seattleSource]
 
 inserted_count = 0
@@ -51,7 +46,7 @@ def comparator(a,b) :
     return globes.compareVariants( a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3] )
 
 def targetCreator() :
-    return variant2.Variant([],[])
+    return variant.Variant([],[])
 
 def getVariantID( var_tuple ) :
     query = "select id from Variants as v where v.chrom = %s and v.pos = %s and v.ref = '%s' and v.mut = '%s'" \
@@ -85,20 +80,18 @@ def seattleToDatabase( conn, seattleSource ) :
             print "Seattle Row: %s has no matching variant in the Variants table" % str(out_splt)
             assert False
 
-
 def insertVariant(conn, variant) :
     variant_dbix = conn.getNextID("Variants")
     values = variant.getFields( variant_cols )
     pos = variant.getPosition()[1]
     values[0] = variant_dbix
-    values[11] = globes.SOURCE
+    values[11] = plate_id
     if switch == 'indel': tipe = 2
     else : tipe = 1
     values[12] = tipe
     #print variant_cols
     #print values
-    if not dry_run :
-        conn.insert( 'Variants', values, variant_cols )
+    conn.insert( 'Variants', values, variant_cols )
 
     #print len(variant.isoforms), len(variant.base_calls)
 
@@ -106,35 +99,31 @@ def insertVariant(conn, variant) :
     for iso in variant.isoforms :
         iso.fields['gene_id'] = geneIDFromAccession( conn, iso.fields["accession"] )
         values = [variant_dbix] + iso.getFields( iso_cols_tograb )
-        if not dry_run :
-            conn.insert( "Isoforms", values, iso_cols[1:] )
+        conn.insert( "Isoforms", values, iso_cols[1:] )
 
     #now do the calls
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [variant_dbix, pat_dbix] + \
+        values = [variant_dbix, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
-        if not dry_run :
-            conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
+        conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
 
 def addToCalls(conn, vid, variant) :
-    place = int(log(globes.SOURCE,2))
+    place = int(log(plate_id,2))
     #merge qual,filter,AF (or do AF separately across global pop?)
     #nah just leave and use the first one, can worry about merging later
     #if these columns turn out to be useful
-    src = conn.queryScalar("select source from Variants where id=%d" % vid, int)
+    src = conn.queryScalar("select plate from Variants where id=%d" % vid, int)
     if not src >> place & 0x00000001 :
-        #update the source column if this variant is from a novel source
-        update = "update Variants set source = source+%d where id=%d" % (globes.SOURCE, vid)
-        if not dry_run :
-            conn.cur.execute( update )
+        #update the plate column if this variant is from a novel plate
+        update = "update Variants set plate = plate+%d where id=%d" % (plate_id, vid)
+        conn.cur.execute( update )
 
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [vid, pat_dbix] + \
+        values = [vid, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
-        if not dry_run :
-            conn.insert( 'Calls', values, call_cols, skip_dupes=True )
+        conn.insert( 'Calls', values, call_cols, skip_dupes=True )
 
 @db.catch
 def populatePatients( conn, patient_names ) :
@@ -144,10 +133,16 @@ def populatePatients( conn, patient_names ) :
         pid = conn.queryScalar(query,int)
         if not pid :
             patient = broad.sanitizePatientName( patient )
-            conn.insert( "Patients", [patient_dbix,patient], ["id","name"] )
+            conn.insert( "Patients", [patient_dbix,patient,plate_id], ["id","name","plate"] )
             patients_dbix[patient] = patient_dbix
         else :
-            pass #update pid
+            place = int(log(plate_id,2))
+            src = conn.queryScalar("select plate from Patients where id=%d" % pid, int)
+            if not src >> place & 0x00000001 :
+                #update the plate column if this variant is from a novel plate
+                update = "update Patients set plate = plate+%d where id=%d" % (plate_id, pid)
+                conn.cur.execute( update )
+        
         patient_dbix += 1
 
 def lookupPatientID( call ) :

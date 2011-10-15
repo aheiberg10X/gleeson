@@ -1,39 +1,16 @@
-from plates import PlateI, PlateII, PlateIII, CIDR
 import os
 import re
 
-sources = {"PilotPlate" : 1,\
+
+#names should match up with self.name of plates.py
+plates = {"Pilot" : 1,\
            "PlateI" : 2,\
            "PlateII" : 4, \
-           "Frazer" : 8 }
+           "PlateIII" : 8, \
+           "CIDR" : 16, \
+           "Frazer" : 32 }
 
-#output root
-plate = PlateII()
 ROOT_DIR = "/home/andrew/gleeson"
-PLATE_NAME = plate.folder
-SOURCE = sources[PLATE_NAME]
-DATA_DIR = "%s/%s/" % (ROOT_DIR,PLATE_NAME)
-INT_DIR = "%s/intermediate_data" % DATA_DIR
-OUT_DIR = "%s/output" % DATA_DIR
-
-SNP_FILE = DATA_DIR + "raw_data/" + plate.snpfile
-#SNP_FILE = DATA_DIR + "raw_data/SNPS_SUBSET.vcf"
-
-INDEL_FILE = DATA_DIR + "raw_data/" + plate.indelfile
-BROAD_FILE = DATA_DIR + "raw_data/" + plate.broadfile
-FAMILIES = plate.families
-
-SIFT_HOME = os.getenv("SIFT_HOME","/home/Gleeson/variant_filtering/bin/sift4.0.3b")
-SIFT_BIN = "%s/bin" % SIFT_HOME
-SIFT_INPUT = "%s/intermediate_data/sift/input/" % DATA_DIR
-SIFT_OUTPUT = "%s/intermediate_data/sift/output/" % DATA_DIR
-
-PLINK_HOME = os.getenv("PLINK_HOME","/projects/gleeson-lab/bin/plink-1.07-x86_64")
-
-BATCH_DIR = "/home/aheiberg/andrew/batch"
-
-DEBUG = True
-SPLICE_BUFFER = 5
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'
 #Once we reach there stop iteratin through the file

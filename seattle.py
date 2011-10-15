@@ -1,9 +1,6 @@
 import globes
-import indel
 import broad
-from annotator import Annotator,doNothing
 import db
-import importer
 from variant import Isoform
 from collimator import Source
 
