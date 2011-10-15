@@ -5,14 +5,28 @@ from seattle2 import SeattleAnnotator
 import db
 from math import log
 import broad
+from plates import PlateI, PlateII, PlateIII, CIDR
 #### HIStory ##########
+#plateI SNPS, have to be recalled thought :(, also no ref_aa/mut_aa
+
+#plateII SNPs  
+#plateII INDELs
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
 dry_run = False
 switch = 'snp'
+globes.plate = CIDR()
+ss_file = "%s/SeattleSeqAnnotation131.allcidrsnps.vcf.218621577750.tsv" % globes.INT_DIR
 
-conn2 = db.Conn("localhost")
+############# /CONFIGURE  ####################################3
+
+if switch == 'indel' :
+    var_file = globes.INDEL_FILE
+else :
+    var_file = globes.SNP_FILE
+
+conn2 = db.Conn("localhost",dry_run=dry_run)
 
 variant_cols = conn2.getColumns("Variants")
 call_cols = conn2.getColumns("Calls")
@@ -26,11 +40,10 @@ patients_dbix = {}
 for (ID,name) in results :
     patients_dbix[name] = int(ID)
 
-varSource = variant2.VariantList( globes.SNP_FILE )
-seattleSource = SeattleAnnotator( "%s/seattle/output/SeattleSeqAnnotation131.Broad_WES_Data_GVS.218386164983_SNPS.tsv" % globes.INT_DIR, switch)
+varSource = variant2.VariantList( var_file )
+seattleSource = SeattleAnnotator( ss_file, switch)
 sources = [varSource, seattleSource]
 
-############# /CONFIGURE  ####################################3
 inserted_count = 0
 updated_count = 0
 
@@ -40,20 +53,38 @@ def comparator(a,b) :
 def targetCreator() :
     return variant2.Variant([],[])
 
-def toDatabase( conn, variant ) :
+def getVariantID( var_tuple ) :
+    query = "select id from Variants as v where v.chrom = %s and v.pos = %s and v.ref = '%s' and v.mut = '%s'" \
+            % (var_tuple[0],var_tuple[1],var_tuple[2],var_tuple[3])
+    return conn.queryScalar( query, int )
+
+def variantToDatabase( conn, variant ) :
     global inserted_count, updated_count
     keys = ["chrom","pos","ref","mut"]
     values = [variant.fields[k] for k in keys]
-    query = "select id from Variants as v where v.chrom = %s and v.pos = %s and v.ref = '%s' and v.mut = '%s'" \
-            % (values[0],values[1],values[2],values[3])
-    #print query
-    vid = conn.queryScalar( query, int )
+    vid = getVariantID( values )
     if not vid :
         inserted_count += 1
         insertVariant( conn, variant )
     else :
         updated_count += 1
         addToCalls( conn, vid, variant )
+
+#quick hack to fix fill in the ref_aa/mut_aa columns
+def seattleToDatabase( conn, seattleSource ) :
+    count = 0
+    for out_splt in seattleSource.iterate(fast_forward=0) :
+        if count % 1000 == 0 : print "%d updated" % count
+        count += 1
+        vid = getVariantID( seattleSource.getPosition( out_splt ) )
+        if vid :
+            aas = out_splt[11].split(',')
+            if len(aas) == 2 :
+                conn.update('Variants',aas,['ref_aa','mut_aa'], vid)
+        else :
+            print "Seattle Row: %s has no matching variant in the Variants table" % str(out_splt)
+            assert False
+
 
 def insertVariant(conn, variant) :
     variant_dbix = conn.getNextID("Variants")
@@ -85,7 +116,6 @@ def insertVariant(conn, variant) :
                  call.getFields( call_cols_tograb )
         if not dry_run :
             conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
-
 
 def addToCalls(conn, vid, variant) :
     place = int(log(globes.SOURCE,2))
@@ -146,12 +176,14 @@ def geneIDFromAccession( conn, accession ) :
 
 
 if __name__ == '__main__' :
-    conn = db.Conn("localhost")
+    conn = db.Conn("localhost",dry_run=dry_run)
+    #seattleToDatabase( conn, seattleSource )    
+    
     populatePatients( conn, varSource.patients )
     c = Collimator( sources, comparator, targetCreator )
     for i,v in enumerate(c) :
         if i % 1000 == 0 : print "%d variants processed" % i
-        toDatabase( conn, v )
+        variantToDatabase( conn, v )
 
     print "inserted", inserted_count
     print "updated", updated_count

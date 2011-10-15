@@ -259,15 +259,16 @@ def indelReport() :
     vcols = conn2.getColumns('Variants')
     icols = conn2.getColumns('Isoforms')
 
-    query = '''select name from Patients'''
     #the general report
     fout = open("%s/indelReport.tsv" % (outdir),'w')
     freport = csv.writer( fout, \
                           delimiter='\t', \
                           quoting=csv.QUOTE_MINIMAL )
-    freport.writerow( vcols + icols + ["Homs","Hets"] ) 
+    freport.writerow( vcols + icols + ["Homs","Hets"] )
+
     #the per family reports
     fouts = {}
+    query = '''select name from Patients'''
     for r in conn.iterateQuery( query ) :
         patient = broad.sanitizeFamilyName( r[0] )
         filename = '%s/%s_indels.tsv' % (outdir,patient)
@@ -290,7 +291,7 @@ def indelReport() :
 
         hom_names = [t[1] for t in homs]
         het_names = [t[1] for t in hets]
-        (hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)] 
+        (hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)]
         freport.writerow( list(r)+[hom_string,het_string] )
 
     fout.close()

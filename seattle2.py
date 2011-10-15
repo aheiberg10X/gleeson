@@ -12,7 +12,7 @@ from collimator import Source
 #######################################################################
 cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","cDNAPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
 #no cDNA
-cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
+#cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
 
 indexOf = {}
 for i,col in enumerate(cols) :
@@ -20,12 +20,10 @@ for i,col in enumerate(cols) :
 
 class SeattleAnnotator(Source) :
     def __init__(self, file, switch) :
+        self.file = file
         self.switch = switch
         self.indexOf = indexOf
-        self.iterator = globes.splitIterator( file, \
-                                              burn=1, \
-                                              stopper=self.stopper )
-
+        self.iterator = self.iterate()  
         self.allow_unmatched = False
         self.group_repeats = True
 
@@ -41,27 +39,39 @@ class SeattleAnnotator(Source) :
                         "ss_cDNAPosition", \
                         "ss_AfricanHapMapFreq","ss_EuropeanHapMapFreq",\
                         "ss_AsianHapMapFreq"]
+    def iterate(self, fast_forward = 0) :
+        count = 0
+        for row in  globes.splitIterator( self.file, \
+                                          burn=1, \
+                                          stopper=self.stopper ) :
+            if count < fast_forward :
+                count += 1
+                continue
+            else : yield row
 
     def getPosition( self, out_splt ) :
         if self.switch == 'snp' :
-            keys = ["chromosome","position","referenceBase","sampleGenotype"]
-            (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
-            #keys = ["chromosome","position","referenceBase","sampleAlleles"]
-            #(chrom2,pos2,ref2,als) = [out_splt[self.indexOf[k]] for k in keys]
-            #sp = als.split('/')
-            #print "sp:",sp
-            #print "ref2: ", ref2
-            #if len(sp) == 2 :
-                #(a1,a2) = sp
-                #if a1 == ref2 : mut2 = a2
-                #elif a2 == ref2 : mut2 = a1
-                #else : assert "Have a problem" == "with figuring out mut2"
-            #elif len(sp) == 1 :
-                #mut2 = sp[0]
-            #else :
-                #assert "length of sampleAllelels" == "not == 2 or 1"
+            #if it was called with parsed input, there will be only one thing in
+            #the sampleGenotype column, rather than info for everyone
+            if len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
+                keys = ["chromosome","position","referenceBase","sampleGenotype"]
+                (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
+            #otherwise it is easier to use sampleAlleles
+            else :
+                keys = ["chromosome","position","referenceBase","sampleAlleles"]
+                (chrom2,pos2,ref2,als) = [out_splt[self.indexOf[k]] for k in keys]
+                sp = als.split('/')
+                if len(sp) == 2 :
+                    (a1,a2) = sp
+                    if a1 == ref2 : mut2 = a2
+                    elif a2 == ref2 : mut2 = a1
+                    else : assert "Have a problem" == "with figuring out mut2"
+                elif len(sp) == 1 :
+                    mut2 = sp[0]
+                else :
+                    assert "length of sampleAllelels" == "not == 2 or 1"
 
-
+        #what is going on with the *'s, exactly?
         elif self.switch == 'indel' :
             keys = ['chromosome','position','referenceBase','sampleGenotype']
             (chrom2,pos2,ref2,sg) = [out_splt[self.indexOf[k]] for k in keys]
@@ -104,7 +114,7 @@ class SeattleAnnotator(Source) :
         #it's the best we can do
         if mut2 == 'N' : mut2 = '*'
         #print "returning: ", chrom2, pos2, ref2, mut2
-        return (chrom2,pos2,ref2,mut2)
+        return (globes.chromNum(chrom2),pos2,ref2,mut2)
     
     def nullify( self, value ) :
         if value == 'NA' or value == 'unknown' : 
@@ -119,6 +129,10 @@ class SeattleAnnotator(Source) :
         #remember there may be multiple corresponding to different isoforms
         for (c,dbc) in zip(self.cols,self.db_cols) :
             variant.fields[c] = self.nullify( out_splts[0][indexOf[c]] )
+        aas = out_splts[0][indexOf["aminoAcids"]].split(',')
+        if len(aas) == 2 :
+            variant.fields["ref_aa"] = aas[0]
+            variant.fields["mut_aa"] = aas[1]
 
         #make variant.isoforms out of each splt
         for out_splt in out_splts :

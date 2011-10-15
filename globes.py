@@ -1,7 +1,4 @@
-from plateII import PlateII
-from plateI import PlateI
-from frazer import Frazer
-
+from plates import PlateI, PlateII, PlateIII, CIDR
 import os
 import re
 
@@ -11,7 +8,7 @@ sources = {"PilotPlate" : 1,\
            "Frazer" : 8 }
 
 #output root
-plate = PlateI()
+plate = PlateII()
 ROOT_DIR = "/home/andrew/gleeson"
 PLATE_NAME = plate.folder
 SOURCE = sources[PLATE_NAME]

@@ -1,37 +1,24 @@
 import MySQLdb
+import warnings
 
 endOfIteration = -1
 
-def refineException( message, query ) :
-    if "integrity" in message.lower() :
-        return SQLDuplicate(message,query)
-    else :
-        return SQLError(message,query)
-
-class SQLError(Exception) :
-    def __init__(self, e, query) :
-        self.error = e
-        self.query = query
-    def __str__(self) :
-        return "\nError: %s\n----------------\nQuery: %s\n" \
-                % (repr(self.error), self.query)
-
-class SQLDuplicate(SQLError) :
-     pass
-
-def catch(func) :
-    def inner(*args, **kwargs) :
-        try :
-            return func(*args, **kwargs)
-        except SQLError, (mse):
-            print mse
-            assert False
-    return inner
+#allow MySQLdb.Warning to be raise Exceptions, rather than printing to stdout
+#this lets us log
+warnings.simplefilter("error", MySQLdb.Warning) 
 
 class Conn :
-    def __init__(self, switch="gleeson-closet") :
+    #if dry_run : print out PUT queries without executing
+    def __init__(self, switch, warning_file="warning.txt", dry_run=False) :
         self.connection = self.quickConnect( switch )
         self.cur = self.connection.cursor()
+        self.fwarning = open(warning_file,'wb')
+        self.dry_run = dry_run
+
+    def __del__(self) :
+        self.fwarning.close()
+        self.cur.close()
+        self.connection.close()
 
     def quickConnect( self, switch ) :
         connections = {"gleeson-closet" : \
@@ -47,19 +34,63 @@ class Conn :
                       }
         return self.connect( *connections[switch] )
 
-        #@catch
     def connect( self, host, user, password, db ) :
         return MySQLdb.connect( host=host, \
                                 user=user, \
                                 passwd=password, \
                                 db=db )
-    #@catch
+
+    #there are two classes of database interactions:
+    #GETs (queries/reads) and PUTs (updates/inserts/deletes/writes)
+    def get(self, query ) :
+        self.cur.execute(query)
+
+    def put( self, query ) :
+        try :
+            if self.dry_run :
+                print query
+            else :
+                self.cur.execute( query )
+        except Exception, (e) :
+            exc = refineException( repr(e), query )
+            if type(exc) == SQLWarning :
+                string = "Warning: %s \n Query: %s\n\n\n" % (exc.error, exc.query)
+                self.fwarning.write( string )
+                print string
+
+            else :
+                raise exc
+
     def getColumns(self,table) :
-        self.cur.execute("SHOW COLUMNS FROM %s" % table)
-        rs = self.cur.fetchall()
+        rs = self.query("SHOW COLUMNS FROM %s" % table)
         return [r[0] for r in rs]
 
-    #@catch
+    def query(self,query) :
+        self.get( query )
+        return self.cur.fetchall()
+
+    def iterateQuery(self, query, size=10000, no_stop=False) :
+        self.get( query )
+
+        goon = True
+        while goon :
+            rows = self.cur.fetchmany( size )
+            # print "iSQL: new set of %d rows" % len(rows)
+            goon = len(rows) > 0
+            if goon :
+                for row in rows : yield row
+            else :
+                if no_stop :
+                    while True : yield endOfIteration
+                else :
+                    raise StopIteration
+
+    def queryToFile(self, query, fname ) :
+        fout = open(fname,'wb')
+        for row in self.iterateQuery(query) :
+            fout.write( '%s\n' % '\t'.join([str(t) for t in row]) )
+        fout.close()
+
     def queryScalar( self, query, cast ) :
         try :
             q = self.query(query)
@@ -79,6 +110,7 @@ class Conn :
         else : return nid+1
 
     #should never return a StopIteration
+    #DEPRECATED?
     def iterate( self, table, cols=['*'], order_by=[] ) :
         columns = ','.join(cols)
         order_clause = ""
@@ -86,33 +118,6 @@ class Conn :
             order_clause = "ORDER BY %s" % ','.join(order_by)
         query =  "select %s from %s %s" % (columns,table,order_clause)
         return self.iterateQuery( query, no_stop = True )
-
-    def iterateQuery(self, query, size=10000, no_stop=False) :
-        self.cur.execute( query )
-
-        goon = True
-        while goon :
-            rows = self.cur.fetchmany( size )
-            # print "iSQL: new set of %d rows" % len(rows)
-            goon = len(rows) > 0
-            if goon :
-                for row in rows : yield row
-            else :
-                if no_stop :
-                    while True : yield endOfIteration
-                else :
-                    raise StopIteration
-
-    #@catch
-    def query(self,query) :
-        self.cur.execute( query )
-        return self.cur.fetchall()
-
-    def queryToFile(self, query, fname ) :
-        fout = open(fname,'wb')
-        for row in self.query(query) :
-            fout.write( '%s\n' % '\t'.join([str(t) for t in row]) )
-        fout.close()
 
     def sanitizeValue( self, value ):
         #quote wrap everything except NULL
@@ -128,31 +133,64 @@ class Conn :
             columns = ','.join(['`%s`' % c for c in columns])
             ins = "INSERT INTO gleeson.%s (%s) VALUES( %s );" \
                    % (table, columns, values)
-
         try :
-            #if table != 'Calls' :
-                #print ins
-            self.cur.execute( ins )
-        except Exception, (e) :
-            exc = refineException( repr(e), ins )
-            if not( type(exc) == SQLDuplicate and skip_dupes ) :
-                raise exc
+            self.put(ins)
+        except SQLDuplicate, (e) :
+            if skip_dupes : pass
+            else : raise e
 
-    def update( self, table, values, columns, eyeD ) :
+    def update( self, table, values, columns, eyeD) :
         values = map( self.sanitizeValue, values )
         eqpairs = ["%s = %s" % (c,v) for (c,v) in zip(columns,values)]
         string = ', '.join(eqpairs)
         update = '''update %s set %s where id = %d''' % (table,string,eyeD)
-        try :
-            self.cur.execute( update )
-        except Exception, (e) :
-            raise SQLError( e, update )
+        self.put( update )
 
     def wipe(self, table) :
-        self.cur.execute("delete from %s" % table)
+        self.put("delete from %s" % table)
 
-    def close(self) :
-        self.cursor.close()
+#######################################################################################
+###############      Exception Handling   #############################################
+#######################################################################################
+
+#If an Exception is caught doing a SQL operation, we refine it to figure out
+#what is actually going wrong
+def refineException( message, query ) :
+    if "integrity" in message.lower() :
+        return SQLDuplicate(message,query)
+    elif "warning" in message.lower() :
+        return SQLWarning(message,query)
+    else :
+        return SQLError(message,query)
+
+#the general, unrefined Error
+class SQLError(Exception) :
+    def __init__(self, e, query) :
+        self.error = e
+        self.query = query
+    def __str__(self) :
+        return "\nError: %s\n----------------\nQuery: %s\n" \
+                % (repr(self.error), self.query)
+
+#If we are doing a duplicate insertion
+class SQLDuplicate(SQLError) :
+     pass
+
+#for warnings
+class SQLWarning(SQLError) :
+    pass
+
+#the db modules internal functions can throw some variation of SQLError
+#this decorator lets external functions easily catch these errors
+def catch(func) :
+    def inner(*args, **kwargs) :
+        try :
+            return func(*args, **kwargs)
+        except SQLError, (mse):
+            print mse
+            assert False
+    return inner
+
 
 if __name__=='__main__' :
     dbc = Conn()
@@ -160,19 +198,3 @@ if __name__=='__main__' :
     r = dbc.query( "select name,description from Genes where id = 0" )
     if not r[0][0] : print "whoopie"
 
-    #c.execute("""
-#INSERT INTO  `gleeson`.`Variants` (
-#`id` ,
-#`chr` ,
-#`pos` ,
-#`dbSNP` ,
-#`ref` ,
-#`alt` ,
-#`qual` ,
-#`filter` ,
-#`info` ,
-#`source`
-#)
-#VALUES (
-#'78',  'dsf',  '45',  '234',  't',  'h',  '23',  'we',  'erf',  'erf'
-#);""")
