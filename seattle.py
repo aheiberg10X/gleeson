@@ -5,24 +5,33 @@ from annotator import Annotator,doNothing
 import db
 import importer
 from variant import Isoform
+from collimator import Source
 
 #######################################################################
 ##############    SeattleSeq   ########################################
 #######################################################################
 cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","cDNAPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
+#no cDNA
+#cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
 
 indexOf = {}
 for i,col in enumerate(cols) :
     indexOf[col] = i
 
-class SeattleAnnotator(Annotator) :
-    def __init__(self) :
-        Annotator.__init__(self,'seattle')
+class SeattleAnnotator(Source) :
+    def __init__(self, file, switch) :
+        self.file = file
+        self.switch = switch
         self.indexOf = indexOf
+        self.iterator = self.iterate()  
+        self.allow_unmatched = False
+        self.group_repeats = True
+
+        #want this? cDNAPosition
         self.cols = ["accession", "functionGVS", "polyPhen", \
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
-                     "distanceToSplice", "cDNAPosition", "AfricanHapMapFreq", \
-                     "EuropeanHapMapFreq", "AsianHapMapFreq"]
+                     "distanceToSplice", "AfricanHapMapFreq", \
+                     "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
         self.db_cols = ["accession","ss_functionGVS","ss_polyPhen",\
                         "ss_granthamScore","ss_scorePhastCons",\
@@ -30,27 +39,39 @@ class SeattleAnnotator(Annotator) :
                         "ss_cDNAPosition", \
                         "ss_AfricanHapMapFreq","ss_EuropeanHapMapFreq",\
                         "ss_AsianHapMapFreq"]
-
-    def parse( self, varList ) : pass
-
-    def run( self ) : pass
+    def iterate(self, fast_forward = 0) :
+        count = 0
+        for row in  globes.splitIterator( self.file, \
+                                          burn=1, \
+                                          stopper=self.stopper ) :
+            if count < fast_forward :
+                count += 1
+                continue
+            else : yield row
 
     def getPosition( self, out_splt ) :
         if self.switch == 'snp' :
-            keys = ["chromosome","position","referenceBase","sampleAlleles"]
-            (chrom2,pos2,ref2,als) = [out_splt[self.indexOf[k]] for k in keys]
-            sp = als.split('/')
-            if len(sp) == 2 :
-                (a1,a2) = sp
-                if a1 == ref2 : mut2 = a2
-                elif a2 == ref2 : mut2 = a1
-                else : assert "Have a problem" == "with figuring out mut2"
-            elif len(sp) == 1 :
-                mut2 = sp[0]
+            #if it was called with parsed input, there will be only one thing in
+            #the sampleGenotype column, rather than info for everyone
+            if len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
+                keys = ["chromosome","position","referenceBase","sampleGenotype"]
+                (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
+            #otherwise it is easier to use sampleAlleles
             else :
-                assert "length of sampleAllelels" == "not == 2 or 1"
+                keys = ["chromosome","position","referenceBase","sampleAlleles"]
+                (chrom2,pos2,ref2,als) = [out_splt[self.indexOf[k]] for k in keys]
+                sp = als.split('/')
+                if len(sp) == 2 :
+                    (a1,a2) = sp
+                    if a1 == ref2 : mut2 = a2
+                    elif a2 == ref2 : mut2 = a1
+                    else : assert "Have a problem" == "with figuring out mut2"
+                elif len(sp) == 1 :
+                    mut2 = sp[0]
+                else :
+                    assert "length of sampleAllelels" == "not == 2 or 1"
 
-
+        #what is going on with the *'s, exactly?
         elif self.switch == 'indel' :
             keys = ['chromosome','position','referenceBase','sampleGenotype']
             (chrom2,pos2,ref2,sg) = [out_splt[self.indexOf[k]] for k in keys]
@@ -93,169 +114,47 @@ class SeattleAnnotator(Annotator) :
         #it's the best we can do
         if mut2 == 'N' : mut2 = '*'
         #print "returning: ", chrom2, pos2, ref2, mut2
-        return (chrom2,pos2,ref2,mut2)
-
-
-    def sqlComparator( self, sqlrow, out_splt ) :
-        (chrom1,pos1,ref1,mut1) = [sqlrow[i] for i in range(1,5)]
-        (chrom2,pos2,ref2,mut2) = self.getPosition( out_splt )
-        return globes.compareVariants( chrom1,pos1,ref1,mut1,\
-                                       chrom2,pos2,ref2,mut2 )
-
+        return (globes.chromNum(chrom2),pos2,ref2,mut2)
+    
     def nullify( self, value ) :
         if value == 'NA' or value == 'unknown' : 
             return ''
         else : return value
 
-    @db.catch
-    def sqlIntegrator( self, sqlrow, out_splt ) :
-        (eyeD,chrom,pos,ref,mut,gene_id) = sqlrow
-        values = [ self.nullify( out_splt[self.indexOf[c]] ) for c in self.cols]
+    def eqkey( self, out_splt ) :
+        return self.getPosition( out_splt )
 
-        #self.conn.update("Genes", [values[0]], [self.db_cols[0]], gene_id)
-        self.conn.update("Variants", values[1:], self.db_cols[1:], eyeD)
+    def integrator( self, variant, out_splts ) :
+        #get the variant field information from the first out_splt
+        #remember there may be multiple corresponding to different isoforms
+        for (c,dbc) in zip(self.cols,self.db_cols) :
+            variant.fields[c] = self.nullify( out_splts[0][indexOf[c]] )
+        aas = out_splts[0][indexOf["aminoAcids"]].split(',')
+        if len(aas) == 2 :
+            variant.fields["ref_aa"] = aas[0]
+            variant.fields["mut_aa"] = aas[1]
 
+        #make variant.isoforms out of each splt
+        for out_splt in out_splts :
+            pp = out_splt[indexOf["proteinPosition"]]
+            pos,tot = -1,-1
+            if not pp == '' and not pp == 'NA':
+                splt = pp.split('/')
+                pos,tot = int(splt[0]), int(splt[1])
 
-    def varListComparator( self, variant, out_splt ) :
-        #print "is seattle's varListComparator even being called?"
-        (chrom1,pos1,ref1,mut1) = variant.getPosition()
-        (chrom2,pos2,ref2,mut2) = self.getPosition( out_splt )
-        #print chrom1,pos1,ref1,mut1,chrom2,pos2,ref2,mut2
-        return globes.compareVariants( chrom1,pos1,ref1,mut1, \
-                                       chrom2,pos2,ref2,mut2 )
-
-    def varListIntegrator( self, variant, out_splt ) :
-        pp = out_splt[indexOf["proteinPosition"]]
-        pos,tot = -1,-1
-        if not pp == '' and not pp == 'NA':
-            splt = pp.split('/')
-            pos,tot = int(splt[0]), int(splt[1])
-
-        accession = out_splt[indexOf["accession"]]
-        unmatched_gene_ids = []
-        message = []
-        if accession and not accession == 'none' :
-            query = "select id from Genes where refseq = '%s'" % accession
-            gene_ids = self.conn.query( query )
-            if not gene_ids :
-                gid = importer.makeEmptyGene( self.conn, 'refseq', accession )
-                unmatched_gene_ids.append( gid )
-                #create a gene, append to unmatched_gene_ids
-                message.append("Accession: %s is missing from Genes table, created a new Gene entry for it, id: %d" % (accession,gid))
-
-            for gene_id in [int(row[0]) for row in gene_ids] :
-                gene_id = int(gene_id)
-                match = False
-                for iso in variant.isoforms :
-                    k = "gene_id"
-                    if k in iso.fields :
-                        message.append("iso_gene_id: %d" % iso.fields[k] )
-                    if k in iso.fields and iso.fields[k] == gene_id :
-                        iso.fields["ss_functionGVS"] = out_splt[indexOf["functionGVS"]]
-                        iso.fields["ss_polyPhen"] = out_splt[indexOf["polyPhen"] ]
-                        match = True
-                if not match :
-                    for iso in variant.isoforms :
-
-                        if iso.getFields(["codon_pos"])[0] == pos and \
-                           iso.getFields(["codon_total"])[0] == tot : 
-                            message.append("Accession: %s has gene_ids, this one: %s doesn't match %s but does match the codon_pos: %d and codon_total: %d. This situtation current treated as unmatched." % (accession,gene_id,str(iso),pos,tot) )
-
-                    unmatched_gene_ids.append( gene_id )
-        else :
-            unmatched_gene_ids.append(-1)
-
-        for gene_id in unmatched_gene_ids :
             iso = Isoform()
-            iso.fields["gene_id"] = gene_id
-            dbcols = ["ss_functionGVS","ss_polyPhen", \
-                      "codon_pos","codon_total"]
-
+            iso.fields["accession"] = out_splt[indexOf["accession"]]
             iso.fields["ss_functionGVS"] = out_splt[indexOf["functionGVS"]]
             iso.fields["ss_polyPhen"] = out_splt[indexOf["polyPhen"]]
             iso.fields["codon_pos"] = pos
             iso.fields["codon_total"] = tot
             variant.isoforms.append(iso)
 
-
-        for (c,dbc) in zip(self.cols,self.db_cols) :
-            variant.fields[dbc] = self.nullify( out_splt[indexOf[c]] )
-
-        return "| \t |".join(message)
+        return variant
 
     def stopper( self, splt ) :
         return len(splt) == 1
 
-    def register( self, dargs ) :
-        self.switch = dargs['switch'].lower()
-        self.iterator = globes.splitIterator( dargs["file"], \
-                                              burn=1, \
-                                              stopper=self.stopper )
-
-        #the default interaction will be with a varList
-        self.comp = self.varListComparator
-        self.eqfunc = self.varListIntegrator
-        self.ltfunc = doNothing
-        self.gtfunc = doNothing
-        self.allow_unmatched = True
-        self.conn = dargs["dbconn"]
-
-        k = 'target'
-        if k in dargs and dargs[k] == "sql" :
-            self.comp = self.sqlComparator
-            self.eqfunc = self.sqlIntegrator
-
-#TODO: finish
-def filterGERP( SNPList, seattle_seq_annotations_filename, opts=['n',-10] ) :
-    fin = open( seattle_seq_annotations_filename, 'rb' )
-    header = fin.readline()
-    newSNPList = []
-
-    #options
-    exclude_slice_utr_snps = (opts[0].lower() == 'y')
-    GERP_lower_thresh = opts[1]
-
-    indexOf = {"inDBSNP" :     0,
-               "chrom" :       1,
-               "pos" :         2,
-               "ref" :         3,
-               "sampGT" :      4,
-               "sampAlleles" :  5,
-               "dbSNPAlleles" : 6,
-               "transcript" :   7,
-
-              }
-    printColumnWarning( seattle_seq_annotations_filename, indexOf )
-
-    #are we asserting: len(SNPList) == (num lines in file) ?
-    for j in range( len(SNPList) ) :
-        if entrySameAsLast( SNPList, j ) :
-            pass#fill some shit in
-        else :
-            line = fin.readline().strip()
-            splt = line.split("\t")
-
-def uniqueWrapper( splt ) :
-    calls = splt[len(broad.COLUMN_MAP)-1:]
-    patients = range( len(calls) )
-    (unique,message) = indel.indelUniqueToDisease( patients, calls )
-    return unique
-
-def checkCoverage( call ) :
-    call_splt = broad.splitCall( call )
-    if broad.isCovered( call_splt, thresh = 5 ) :
-        return call
-    else :
-        return "./."
-
-#take the file genreated here and put through SeattleSeq
-def parseIndels( indelList ) :
-    groups = {"indel_input" : globes.FAMILIES}
-    out = "%s/seattle/input" % (globes.INT_DIR, )
-    broad.pickOutFamilies( globes.INDEL_FILE, out, \
-                           groups,\
-                           lineFilter = uniqueWrapper, \
-                           callToString = checkCoverage)
 
 #take the data back from seattle seq and separate 
 def separateOutputToFamilies() :

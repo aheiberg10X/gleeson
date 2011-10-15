@@ -1,4 +1,0 @@
-iso_gene_id: 25| 	 |iso_gene_id: 23| 	 |iso_gene_id: 24| 	 |iso_gene_id: 25| 	 |iso_gene_id: 23| 	 |iso_gene_id: 24
-Accession: CCDS2.2 is missing from Genes table, created a new Gene entry for it, id: 43469
-iso_gene_id: 23| 	 |iso_gene_id: 24| 	 |iso_gene_id: 3877| 	 |iso_gene_id: 3878| 	 |iso_gene_id: 3876| 	 |iso_gene_id: 25| 	 |iso_gene_id: 23| 	 |iso_gene_id: 24| 	 |iso_gene_id: 3877| 	 |iso_gene_id: 3878| 	 |iso_gene_id: 3876| 	 |iso_gene_id: 25
-Accession: CCDS2.2 is missing from Genes table, created a new Gene entry for it, id: 43470
