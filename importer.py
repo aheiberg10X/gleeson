@@ -14,9 +14,9 @@ from plates import PlateI, PlateII, PlateIII, CIDR
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
-dry_run = False
-switch = 'snp'
-plate = CIDR()
+dry_run = False 
+switch = 'indel'
+plate = PlateII()
 
 ############# /CONFIGURE  ####################################3
 
@@ -28,6 +28,7 @@ call_cols_tograb = call_cols[3:]
 iso_cols = conn2.getColumns("Isoforms")
 iso_cols_tograb = iso_cols[2:]
 plate_id = plate.getPlateID()
+plate_contrib = 2^plate_id
 
 #make patient name->id lookup
 results = conn2.query( '''select id,name from Patients''' )
@@ -104,24 +105,35 @@ def insertVariant(conn, variant) :
     #now do the calls
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [variant_dbix, pat_dbix, plate_id] + \
+        values = [variant_dbix, pat_dbix, plate_contrib] + \
                  call.getFields( call_cols_tograb )
         conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
 
+##RETHINKING THE WHOLE UNIQUE SUM THING
+##IF WE WANT ALL THE VARS CORRESPONDING TO Plate1 out,
+##it will be slow to test all possible sums that have 2 bit set
+##rather just select distinct(plate) from Calls where var_id = X
+#multi_plate is from the 'plate' column of either Variants, Patients 
+#Let P be the set of plates which have this Var/Pat in their data
+#Then multi_plate_sum is SUM{x E P}(2^x)
+#Return true iff plate_id contributed to this sum
+def presentIn( multi_plate_sum, plateID ) :
+    return (multi_plate_sum >> plateID) & 0x1
+
 def addToCalls(conn, vid, variant) :
-    place = int(log(plate_id,2))
     #merge qual,filter,AF (or do AF separately across global pop?)
     #nah just leave and use the first one, can worry about merging later
     #if these columns turn out to be useful
     src = conn.queryScalar("select plate from Variants where id=%d" % vid, int)
-    if not src >> place & 0x00000001 :
+    if not presentIn( src, plate_id ) :
         #update the plate column if this variant is from a novel plate
-        update = "update Variants set plate = plate+%d where id=%d" % (plate_id, vid)
+        update = "update Variants set plate = plate+%d where id=%d" \
+                  % (plate_contrib, vid)
         conn.cur.execute( update )
 
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [vid, pat_dbix, plate_id] + \
+        values = [vid, pat_dbix, plate_contrib] + \
                  call.getFields( call_cols_tograb )
         conn.insert( 'Calls', values, call_cols, skip_dupes=True )
 
@@ -136,11 +148,11 @@ def populatePatients( conn, patient_names ) :
             conn.insert( "Patients", [patient_dbix,patient,plate_id], ["id","name","plate"] )
             patients_dbix[patient] = patient_dbix
         else :
-            place = int(log(plate_id,2))
             src = conn.queryScalar("select plate from Patients where id=%d" % pid, int)
-            if not src >> place & 0x00000001 :
+            if not presentIn( src, plate_id ) :
                 #update the plate column if this variant is from a novel plate
-                update = "update Patients set plate = plate+%d where id=%d" % (plate_id, pid)
+                update = "update Patients set plate = plate+%d where id=%d" \
+                          % ( plate_contrib, pid)
                 conn.cur.execute( update )
         
         patient_dbix += 1

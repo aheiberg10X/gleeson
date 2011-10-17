@@ -3,14 +3,15 @@ import re
 
 
 #names should match up with self.name of plates.py
-plates = {"Pilot" : 1,\
-           "PlateI" : 2,\
-           "PlateII" : 4, \
-           "PlateIII" : 8, \
-           "CIDR" : 16, \
-           "Frazer" : 32 }
+plates = {"Pilot" : 0,\
+           "PlateI" : 1,\
+           "PlateII" : 2, \
+           "PlateIII" : 3, \
+           "CIDR" : 4, \
+           "Frazer" : 5 }
 
 ROOT_DIR = "/home/andrew/gleeson"
+OUT_DIR = "%s/output" % ROOT_DIR
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'
 #Once we reach there stop iteratin through the file

@@ -44,9 +44,8 @@ def makeMultiCallsSpecific( multi_calls, variant_ix ) :
         call_splt = splitCall(call)
         GT = convertGT( call_splt, variant_ix )
         if isMutated( GT ) : someone_has_variant = True
-        if GT == -1 :
-            call_splt[ indexOf["GT"] ] = "0/0"
-            call = ':'.join( call_splt )
+        call_splt[ indexOf["GT"] ] = encodeGT(GT)
+        call = ':'.join( call_splt )
         calls_for_variation.append( call )
 
     if someone_has_variant : return calls_for_variation
@@ -56,11 +55,11 @@ def makeMultiCallsSpecific( multi_calls, variant_ix ) :
 #the variant to be of low quality or otherwise suspicious, it marks it something
 #that != 'PASS'
 def separateSNPSandINDELS( filter_non_passes = True ) :
-    fin = open( globes.BROAD_FILE )
+    fin = open( "%s/PlateII/Ciliopathies_Whole_Exome_Gleeson_Indels_20110526.vcf" % globes.ROOT_DIR ) 
     #fin = open( '%s/raw_data/SUBSET.vcf' % (globes.DATA_DIR) )
-    fsnp = open( globes.SNP_FILE, 'wb' )
-    findel = open( globes.INDEL_FILE, 'wb' )
-    fnotrepped = open( "%s/raw_data/not_repped.tsv" % (globes.DATA_DIR), 'wb' )
+    fsnp = open( "%s/PlateII/plateII_snps.vcf" % globes.ROOT_DIR, 'wb' )
+    findel = open( "%s/PlateII/plateII_indels.vcf" % globes.ROOT_DIR, 'wb' )
+    fnotrepped = open( "%s/PlateII/not_repped.tsv" % (globes.ROOT_DIR), 'wb' )
 
     indexOf = COLUMN_MAP
 
@@ -334,6 +333,7 @@ def encodeGT( gt, variant_ix=1 ) :
     elif gt == 3 : return '0/0'
     elif gt == 2 : return '%d/%d' % (variant_ix, variant_ix)
     elif gt == 1 : return '0/%d' % variant_ix
+    elif gt == -1 : return '0/0'
     else : raise Exception("GT must be 0,1,2,3, not %d" % gt)
 
 def isMutated( gt ) :
@@ -347,11 +347,11 @@ def isCovered( call_splt, coverage_thresh=8 ) :
         return int( call_splt[ CALL_MAP["DP"] ] ) > coverage_thresh
 
 if __name__ == "__main__" :
-    breakIntoFamilyFiles( globes.INDEL_FILE, \
-                          outdir = "%s/raw_data/indels_by_fam" \
-                                    % (globes.DATA_DIR) )
+    #breakIntoFamilyFiles( globes.INDEL_FILE, \
+                          #outdir = "%s/raw_data/indels_by_fam" \
+                                    #% (globes.DATA_DIR) )
 
-    #separateSNPSandINDELS()
+    separateSNPSandINDELS()
 
 #def pickOutFamilies( orig_filename, outdir,family_groups, \
                      #callToString = lambda x:x,\

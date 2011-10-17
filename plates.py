@@ -17,7 +17,7 @@ class Plate :
             return "%s/%s" % (self.data_dir, self.seattle_indel_file)
 
     def getPlateID( self ) :
-        return globes.plates[self.name]
+        return 2^globes.plates[self.name]
 
 class Pilot(Plate) :
     def __init__(self) :
@@ -34,8 +34,8 @@ class PlateII(Plate) :
     def __init__(self) :
         self.name = "PlateII"
         Plate.__init__(self)
-        self.snpfile = "Ciliopathies_Whole_Exome_Gleeson_Indels_20110526_SNPS.vcf"
-        self.indelfile = "Ciliopathies_Whole_Exome_Gleeson_Indels_20110526_INDELS.vcf"
+        self.snpfile = "plateII_snps.vcf"
+        self.indelfile = "plateII_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation131.Ciliopathies_Whole_Exome_Gleeson_Indels_20110526_SNPS.vcf.gz.218613238491.tsv"
         self.seattle_indel_file = "SeattleSeqAnnotation131.Ciliopathies_Whole_Exome_Gleeson_Indels_20110526_INDELS.vcf.216474182240.tsv"
         self.families = []

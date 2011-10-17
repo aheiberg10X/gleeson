@@ -176,8 +176,8 @@ var_cols = ["Var ID", \
 iso_cols = []
 
 def callString( calls_row ) :
-    GT = broad.encodeGT( int(calls_row[2]) )
-    dp_gq = [str(t) for t in calls_row[3:5]]
+    GT = broad.encodeGT( int(calls_row[3]) )
+    dp_gq = [str(t) for t in calls_row[4:6]]
 
     return ':'.join( [GT] + dp_gq )
 
@@ -194,7 +194,7 @@ def getPatients( conn, var_id, where_clause="" ) :
     for row in r :
         call_row = row[:-1]
         call_string = callString(call_row)
-        GT = row[2]
+        GT = row[3]
         lookup[int(GT)].append( (call_row[1],row[-1],call_string) )
 
     return (noinfs,hets,homs)
@@ -251,53 +251,93 @@ def makeReport(params) :
     except Exception, (e) :
         print "<br /><br />%s" % str(e)
 
-def indelReport() :
+def familyReports() :
+    plate_id = globes.plates["CIDR"]
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
     conn2 = db.Conn("localhost")
     print "connetions made"
     vcols = conn2.getColumns('Variants')
+    vcols = ["id", "chrom","pos","ref","mut","ref_aa","mut_aa","qual",
+             "filter","AF","granthamScore","scorePhastCons",
+             "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
+             "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+
     icols = conn2.getColumns('Isoforms')
 
     #the general report
-    fout = open("%s/indelReport.tsv" % (outdir),'w')
-    freport = csv.writer( fout, \
-                          delimiter='\t', \
-                          quoting=csv.QUOTE_MINIMAL )
-    freport.writerow( vcols + icols + ["Homs","Hets"] )
+    #fout = open("%s/indelReport.tsv" % (outdir),'w')
+    #freport = csv.writer( fout, \
+                          #delimiter='\t', \
+                          #quoting=csv.QUOTE_MINIMAL )
+    #freport.writerow( vcols + icols + ["Homs","Hets"] )
 
     #the per family reports
     fouts = {}
-    query = '''select name from Patients'''
+
+    #if we want to restrict attention to a certain plate of patients
+    query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
+    string = []
+    for row in conn.iterateQuery( query ) :
+        string.append("id=%d" % row[0])
+    string = ' or '.join(string)
+    query = '''select name from Patients where %s''' % string
+
     for r in conn.iterateQuery( query ) :
-        patient = broad.sanitizeFamilyName( r[0] )
-        filename = '%s/%s_indels.tsv' % (outdir,patient)
+        patient = broad.sanitizePatientName( r[0] )
+        filename = '%s/%s_variants.tsv' % (outdir,patient)
         fouts[patient]=csv.writer( open(filename, 'wb'),\
                                    delimiter='\t', \
                                    quoting=csv.QUOTE_MINIMAL )
-        fouts[patient].writerow( vcols + icols + ["GT:DP:GQ", "Hom Shares"] ) 
+        #print header
+        fouts[patient].writerow( ["GT:DP:GQ"] + vcols[1:] + icols + [ "Hom Shares","Het Shares"] )
 
-    query = '''select v.*, i.*
+        #what are the interesting variants
+        vcols_string = ', '.join(["v.%s" % c for c in vcols])
+        query = '''select %s, i.*
                from Variants as v inner join Isoforms as i on v.id = i.var_id
-               where v.id < 1000'''
+               where v.dbSNP = '.' and (ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')  and v.AF < 0.3''' % vcols_string
 
     for r in conn.iterateQuery( query ) :
         var_id = r[0]
-        (noinfs,hets,homs) = getPatients( conn, var_id )
+        #only look at patients meeting these call reqs
+        where = " and c.DP >= 8"
+        (noinfs,hets,homs) = getPatients( conn, var_id, where )
+        hom_pats = '; '.join([p[1] for p in homs])
+        het_pats = '; '.join([p[1] for p in hets])
         for ix,(pat_id,pat,call) in enumerate(homs) :
-            pat = broad.sanitizeFamilyName( pat )
-            other_shares = '; '.join([p[1] for p in homs if p[1] != pat])
-            fouts[pat].writerow( list(r) + [call,other_shares] )
+            pat = broad.sanitizePatientName( pat )
+            hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
+            fouts[pat].writerow( [call] + list(r[1:]) + [hom_shares,het_pats] )
 
-        hom_names = [t[1] for t in homs]
-        het_names = [t[1] for t in hets]
-        (hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)]
-        freport.writerow( list(r)+[hom_string,het_string] )
+        for ix,(pat_id,pat,call) in enumerate(hets) :
+            pat = broad.sanitizePatientName( pat )
+            het_shares = het_pats[:ix] + het_pats[ix+1:]
+            fouts[pat].writerow( [call] + list(r[1:]) + [hom_pats,het_shares] )
 
-    fout.close()
+
+        #hom_names = [t[1] for t in homs]
+        #het_names = [t[1] for t in hets]
+        #(hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)]
+        #freport.writerow( list(r)+[hom_string,het_string] )
+
+    #fout.close()
+
+def updateAF(conn) :
+    query = "select count(*) from Patients"
+    num_pats = conn.queryScalar( query, int )
+    query = '''update Variants, (select var_id, sum(GT)/%d as newAF
+                                 from Calls
+                                 group by var_id) as t
+               set AF = t.newAF
+               where id = t.var_id''' % (2*num_pats)
+    conn.put( query )
 
 if __name__ == '__main__' :
-    indelReport()
+    familyReport()
+    #conn = db.Conn("localhost", dry_run=False)
+    #updateAF(conn)
+    
     #print genQ1(params)
     #printNewColsDict()
     
@@ -306,3 +346,13 @@ if __name__ == '__main__' :
     #print homs
 
     #makeReport()
+
+
+    #delete from Isoforms where var_id in (select id from Variants where type = 2);# 53994 row(s) affected.
+
+
+    #delete from Calls where var_id in (select id from Variants where type = 2);# 991508 row(s) affected.
+
+
+    #delete from Variants where type = 2# 35200 row(s) affected.
+
