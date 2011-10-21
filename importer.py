@@ -1,22 +1,28 @@
-from collimator import Collimator
+from collimator import Collimator, Source
 import variant
 import globes
 from seattle import SeattleAnnotator
 import db
 from math import log
 import broad
-from plates import PlateI, PlateII, PlateIII, CIDR
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
 #### HIStory ##########
 
+#PlateI snps
+
 #PlateII indels
+#PlateII snps
 
 #CIDR Indels
+#CIDR snps
+
+#plateIII snps
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
-dry_run = False 
+dry_run = False
 switch = 'indel'
-plate = PlateII()
+plate = PlateI()
 
 ############# /CONFIGURE  ####################################3
 
@@ -36,8 +42,11 @@ patients_dbix = {}
 for (ID,name) in results :
     patients_dbix[name] = int(ID)
 
-varSource = variant.VariantList( plate.varFile(switch) )
-seattleSource = SeattleAnnotator( plate.seattleFile(switch), switch )
+#for plateI snps can fast-forward 380000
+ff = 0
+varSource = variant.VariantList( plate.varFile(switch), fast_forward = ff )
+ff = 0
+seattleSource = SeattleAnnotator( plate.seattleFile(switch), switch, fast_forward = ff )
 sources = [varSource, seattleSource]
 
 inserted_count = 0
@@ -181,11 +190,49 @@ def geneIDFromAccession( conn, accession ) :
 
     return gid
 
+def insertMissingVariants(conn) :
+    query = '''
+   SELECT id,chrom,pos,ref,mut
+   FROM (
+
+       SELECT var_id
+       FROM Calls AS c
+       INNER JOIN Variants AS v ON c.var_id = v.id
+       WHERE c.plate = 3
+       AND TYPE =1
+       GROUP BY var_id
+   ) AS t inner join Variants as v on t.var_id = v.id
+   ORDER BY chrom,pos,ref,mut
+   '''
+
+    rows = conn.query( query )
+    print len(rows)
+    it = iter(rows)
+    def eqkey( it ) :
+        return [int(it[1]), int(it[2]), it[3], it[4]]
+
+    def integrator( target, it ) :
+        return target
+
+    def absentHandler( ae ) :
+        print str(ae)
+        if ae.ix == 2 :
+            variantToDatabase( conn, ae.missed_target )
+        else :
+            assert False
+
+
+    dbSource = Source( it, eqkey, integrator, allow_absent = False )
+
+    c = Collimator( [varSource,seattleSource,dbSource], comparator, targetCreator, absentHandler = absentHandler )
+    for i,v in enumerate(c) :
+        if i % 5000 == 0 : print i
+        pass #waiting for dbSource to be absent, this will trigger absentHandler
 
 if __name__ == '__main__' :
     conn = db.Conn("localhost",dry_run=dry_run)
-    #seattleToDatabase( conn, seattleSource )    
-    
+    #insertMissingVariants(conn)
+
     populatePatients( conn, varSource.patients )
     c = Collimator( sources, comparator, targetCreator )
     for i,v in enumerate(c) :
@@ -194,3 +241,22 @@ if __name__ == '__main__' :
 
     print "inserted", inserted_count
     print "updated", updated_count
+
+    ##Check that all variants showing up in the DB
+    ##They are, but some calls are not being added
+    ##Consider: two plates share the same patient and get the same variant
+    ##attempt insert to calls, but since pk is var_id, pat_id, will be skipped
+    ##therefore have extended pk to include plate
+    #varSource = variant.VariantList( plate.varFile(switch), fast_forward = ff )
+    #count = 0
+    #for v in varSource.iterator :
+        #if count % 1000 ==0 :print count
+        #(chrom,pos,ref,mut) = varSource.eqkey( v )
+        #chrom = globes.chromNum(chrom)
+        #vid = conn.queryScalar( "select id from Variants where chrom='%s' and pos='%s' and ref='%s' and mut='%s'" % (chrom,pos,ref,mut), int )
+        #if not vid :
+            #print vid, count, chrom, pos, ref, mut
+            #assert False
+        #count += 1
+    #print "count",count
+

@@ -49,6 +49,7 @@ class Conn :
         try :
             if self.dry_run :
                 print query
+                pass
             else :
                 self.cur.execute( query )
         except Exception, (e) :

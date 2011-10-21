@@ -8,6 +8,7 @@ from collimator import Source
 ##############    SeattleSeq   ########################################
 #######################################################################
 cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","cDNAPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
+
 #no cDNA
 #cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
 
@@ -16,12 +17,12 @@ for i,col in enumerate(cols) :
     indexOf[col] = i
 
 class SeattleAnnotator(Source) :
-    def __init__(self, file, switch) :
+    def __init__(self, file, switch, fast_forward=0) :
         self.file = file
         self.switch = switch
         self.indexOf = indexOf
-        self.iterator = self.iterate()  
-        self.allow_unmatched = False
+        self.iterator = self.iterate(fast_forward)  
+        self.allow_absent = False
         self.group_repeats = True
 
         #want this? cDNAPosition
@@ -140,9 +141,9 @@ class SeattleAnnotator(Source) :
                 pos,tot = int(splt[0]), int(splt[1])
 
             iso = Isoform()
-            iso.fields["accession"] = out_splt[indexOf["accession"]]
-            iso.fields["ss_functionGVS"] = out_splt[indexOf["functionGVS"]]
-            iso.fields["ss_polyPhen"] = out_splt[indexOf["polyPhen"]]
+            iso.fields["accession"] = self.nullify(out_splt[indexOf["accession"]])
+            iso.fields["ss_functionGVS"] = self.nullify(out_splt[indexOf["functionGVS"]])
+            iso.fields["ss_polyPhen"] = self.nullify(out_splt[indexOf["polyPhen"]])
             iso.fields["codon_pos"] = pos
             iso.fields["codon_total"] = tot
             variant.isoforms.append(iso)

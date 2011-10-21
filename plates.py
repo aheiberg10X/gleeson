@@ -23,10 +23,10 @@ class Pilot(Plate) :
     def __init__(self) :
         self.name = 'Pilot'
         Plate.__init__(self)
-        self.snpfile = "pilot_full_snps.vcf"
-        self.indelfile = "pilot_full_indels.vcf"
-        self.seattle_snp_file = ""
-        self.seattle_indel_file = ""
+        self.snpfile = "pilot_inhouse_hg19_snps.vcf"
+        self.indelfile = "pilot_inhouse_hg19_indels.vcf"
+        self.seattle_snp_file = "Seattle_pilotsnps.txt"
+        self.seattle_indel_file = "Seattle_pilotindels.txt"
         self.broadfile = "doesnt.exist"
         self.families = []
 
@@ -46,8 +46,8 @@ class PlateI(Plate) :
         Plate.__init__(self)
         self.snpfile = "plateI_inhouse_hg19_snps.vcf"
         self.indelfile = "plateI_inhouse_hg19_indels.vcf"
-        self.seattle_snp_file = ""
-        self.seattle_indel_file = ""
+        self.seattle_snp_file = "SeattleSeqAnnotation131.Broad_WES_Data_GVS.218386164983_SNPS.tsv"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.plateI_inhouse_hg19_indels.vcf.219046801512.txt"
         self.broadfile = "doesn't exist"
         self.families= []
 
@@ -57,7 +57,7 @@ class PlateIII(Plate) :
         Plate.__init__(self)
         self.snpfile = "plateIII_broad_hg19_snps.vcf"
         self.indelfile = "plateIII_broad_hg19_indels.vcf"
-        self.seattle_snp_file = ""
+        self.seattle_snp_file = "SeattleSeqAnnotation131.plateIII_broad_hg19_snps.vcf.gz.218877682875.txt"
         self.seattle_indel_file = ""
 
 class CIDR(Plate) :

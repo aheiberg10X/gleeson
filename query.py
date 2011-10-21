@@ -258,7 +258,7 @@ def familyReports() :
     conn2 = db.Conn("localhost")
     print "connetions made"
     vcols = conn2.getColumns('Variants')
-    vcols = ["id", "chrom","pos","ref","mut","ref_aa","mut_aa","qual",
+    vcols = ["id", "chrom","pos","ref","mut","type","ref_aa","mut_aa","qual",
              "filter","AF","granthamScore","scorePhastCons",
              "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
              "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
@@ -276,11 +276,12 @@ def familyReports() :
     fouts = {}
 
     #if we want to restrict attention to a certain plate of patients
-    query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
-    string = []
-    for row in conn.iterateQuery( query ) :
-        string.append("id=%d" % row[0])
-    string = ' or '.join(string)
+    #query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
+    #string = []
+    #for row in conn.iterateQuery( query ) :
+        #string.append("id=%d" % row[0])
+    #string = ' or '.join(string)
+    string = '1 = 1'
     query = '''select name from Patients where %s''' % string
 
     for r in conn.iterateQuery( query ) :
@@ -290,30 +291,54 @@ def familyReports() :
                                    delimiter='\t', \
                                    quoting=csv.QUOTE_MINIMAL )
         #print header
-        fouts[patient].writerow( ["GT:DP:GQ"] + vcols[1:] + icols + [ "Hom Shares","Het Shares"] )
+        fouts[patient].writerow( ["GT","DP","GQ","geneSymbol"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
 
-        #what are the interesting variants
-        vcols_string = ', '.join(["v.%s" % c for c in vcols])
-        query = '''select %s, i.*
-               from Variants as v inner join Isoforms as i on v.id = i.var_id
-               where v.dbSNP = '.' and (ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')  and v.AF < 0.3''' % vcols_string
+    #what are the interesting variants
+    vcols_string = ', '.join(["v.%s" % c for c in vcols])
+    dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
+    gvs = ["ss_functionGVS <> '%s'" % dw for dw in dont_want]
+    gvs = ' and '.join(gvs)
+    query = '''select %s, i.*, g.geneSymbol
+           from Variants as v inner join Isoforms as i on v.id = i.var_id inner join Genes as g on i.gene_id = g.id
+           where v.dbSNP = '.' and (%s)  and v.AF < 0.1
+           order by AF''' % (vcols_string, gvs)
+#(ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')
+    print query
 
-    for r in conn.iterateQuery( query ) :
+    for varix,r in enumerate(conn.query( query )) :
+        if varix % 5000 == 0 : print varix
         var_id = r[0]
         #only look at patients meeting these call reqs
         where = " and c.DP >= 8"
         (noinfs,hets,homs) = getPatients( conn, var_id, where )
-        hom_pats = '; '.join([p[1] for p in homs])
-        het_pats = '; '.join([p[1] for p in hets])
+
+        if len(hets) == len(homs) == 0 : continue
+
+        hom_pats = [p[1] for p in homs]
+        num_homs = max(0,len(hom_pats)-1)
+        hom_string = '; '.join(hom_pats)
+
+        het_pats = [p[1] for p in hets]
+        het_string = '; '.join(het_pats)
+        num_hets = max(0,len(het_pats)-1)
+
         for ix,(pat_id,pat,call) in enumerate(homs) :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
-            fouts[pat].writerow( [call] + list(r[1:]) + [hom_shares,het_pats] )
+            hom_string = '; '.join(hom_shares)
+            fouts[pat].writerow( call.split(':') + \
+                                 [r[-1]] + \
+                                 list(r[1:-1]) + \
+                                 [num_homs, hom_string, num_hets, het_string] )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
-            fouts[pat].writerow( [call] + list(r[1:]) + [hom_pats,het_shares] )
+            het_string = '; '.join(het_shares)
+            fouts[pat].writerow( call.split(':') + \
+                                 [r[-1]] + \
+                                 list(r[1:-1]) + \
+                                 [num_homs,hom_string,num_hets,het_string] )
 
 
         #hom_names = [t[1] for t in homs]
@@ -334,7 +359,8 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    familyReport()
+
+    familyReports()
     #conn = db.Conn("localhost", dry_run=False)
     #updateAF(conn)
     

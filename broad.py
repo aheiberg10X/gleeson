@@ -54,7 +54,7 @@ def makeMultiCallsSpecific( multi_calls, variant_ix ) :
 #filter_non_passes : Broad applys filters to each variant. If anyone finds
 #the variant to be of low quality or otherwise suspicious, it marks it something
 #that != 'PASS'
-def separateSNPSandINDELS( filter_non_passes = True ) :
+def separateSNPSandINDELS( ) :
     fin = open( "%s/PlateII/Ciliopathies_Whole_Exome_Gleeson_Indels_20110526.vcf" % globes.ROOT_DIR ) 
     #fin = open( '%s/raw_data/SUBSET.vcf' % (globes.DATA_DIR) )
     fsnp = open( "%s/PlateII/plateII_snps.vcf" % globes.ROOT_DIR, 'wb' )

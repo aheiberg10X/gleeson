@@ -48,13 +48,14 @@ class BaseCall(SQLizable) :
         #return s
 
     def prettyPrint(self) :
-        skeys = globes.sortKeysByValues( broad.CALL_MAP )
-        t = [str(getattr(self,k)) for k in skeys]
-        gt = int(t[0])
-        if gt == 0 : return broad.encodeGT( gt )
-        else :
-            t[0] = broad.encodeGT( int(t[0]) )
-            return ":".join( t )
+        print self.fields
+        #skeys = globes.sortKeysByValues( broad.CALL_MAP )
+        #t = [str(getattr(self,k)) for k in skeys]
+        #gt = int(t[0])
+        #if gt == 0 : return broad.encodeGT( gt )
+        #else :
+            #t[0] = broad.encodeGT( int(t[0]) )
+            #return ":".join( t )
 
     def isMutated(self) :
         return broad.isMutated( self.GT )
@@ -92,15 +93,23 @@ class Variant(SQLizable) :
 
 #Generalizing SNPList and IndelList
 class VariantList(Source) :
-    def __init__(self, vcf_file) :
+    def __init__(self, vcf_file, fast_forward=0) :
         self.indexOf = broad.COLUMN_MAP
         globes.printColumnWarning( vcf_file, self.indexOf )
-        fin = open( vcf_file, "rb" )
-        self.patients = broad.getPatients( fin )
+        self.fin = open( vcf_file, "rb" )
+        self.patients = broad.getPatients( self.fin )
 
-        self.allow_unmatched = False
+        self.allow_absent = False
         self.group_repeats = False
-        self.iterator = globes.splitIterator( fin, burn=0 )
+        self.iterator = self.iterate(fast_forward)
+
+    def iterate(self, fast_forward = 0) :
+        count = 0
+        for row in globes.splitIterator( self.fin, burn=0 ) :
+            if count < fast_forward :
+                count += 1
+                continue
+            else : yield row
 
     def eqkey(self, it) :
         fields = ["chrom","pos","ref","mut"]
