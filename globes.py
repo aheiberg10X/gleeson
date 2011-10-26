@@ -39,7 +39,8 @@ def splitIterator( fh_or_name, sep='\t', burn=0, skipper=dontStop, stopper=dontS
             handle.close()
             raise StopIteration
         elif skipper( splt ) : continue
-        else : yield splt
+        else : 
+            yield splt
 
     handle.close()
 

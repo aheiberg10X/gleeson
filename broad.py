@@ -312,7 +312,7 @@ def infoDictToString( dinfo ) :
     return ";".join( string )
 
 def splitCall( call ) :
-    if call == './.' : return ['./.']
+    if call.startswith( './.' ) : return ['./.']
     else : return call.split(":")
 
 def justCalls( splt ) :

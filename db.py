@@ -11,6 +11,7 @@ class Conn :
     #if dry_run : print out PUT queries without executing
     def __init__(self, switch, warning_file="warning.txt", dry_run=False) :
         self.connection = self.quickConnect( switch )
+        print 'lalalalala'
         self.cur = self.connection.cursor()
         self.fwarning = open(warning_file,'wb')
         self.dry_run = dry_run
@@ -23,7 +24,7 @@ class Conn :
     def quickConnect( self, switch ) :
         connections = {"gleeson-closet" : \
                            ["132.239.160.134", \
-                            "root", \
+                            "gleeson", \
                             "(umulus88", \
                             "gleeson"], \
                        "localhost" : \
@@ -38,7 +39,8 @@ class Conn :
         return MySQLdb.connect( host=host, \
                                 user=user, \
                                 passwd=password, \
-                                db=db )
+                                db=db,
+                                connect_timeout = 5)
 
     #there are two classes of database interactions:
     #GETs (queries/reads) and PUTs (updates/inserts/deletes/writes)

@@ -8,7 +8,9 @@ import broad
 from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
 #### HIStory ##########
 
-#PlateI snps
+#pilot plate: snps, indels
+
+#PlateI snps, indels
 
 #PlateII indels
 #PlateII snps
@@ -16,16 +18,15 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
 #CIDR Indels
 #CIDR snps
 
-#plateIII snps
+#plateIII indels, waiting on seattle for snps
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
 dry_run = False
 switch = 'indel'
-plate = PlateI()
+plate = PlateIII()
 
 ############# /CONFIGURE  ####################################3
-
 conn2 = db.Conn("localhost",dry_run=dry_run)
 
 variant_cols = conn2.getColumns("Variants")
@@ -228,6 +229,34 @@ def insertMissingVariants(conn) :
     for i,v in enumerate(c) :
         if i % 5000 == 0 : print i
         pass #waiting for dbSource to be absent, this will trigger absentHandler
+
+def removeCalls() :
+    plate_id = globes.plates("PlateIII")
+
+    #delete all Calls that are old
+    query = '''
+delete c
+from Calls as c inner join Variants as v on c.var_id = v.id
+where c.plate =  and type = '''
+
+    #delete any stranded variants
+    query = '''
+    delete v
+    from Variants as v left join Calls as c on v.id = c.var_id
+    where c.var_id is null
+    '''
+
+    #delete any stranded patients
+    query = '''delete p 
+    FROM Patients AS p
+    LEFT JOIN (
+
+        SELECT DISTINCT pat_id
+        FROM Calls
+    ) AS t ON t.pat_id = p.id
+    WHERE pat_id IS NULL
+    '''
+
 
 if __name__ == '__main__' :
     conn = db.Conn("localhost",dry_run=dry_run)
