@@ -51,7 +51,7 @@ class SeattleAnnotator(Source) :
         if self.switch == 'snp' :
             #if it was called with parsed input, there will be only one thing in
             #the sampleGenotype column, rather than info for everyone
-            if len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
+            if False : #len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
                 keys = ["chromosome","position","referenceBase","sampleGenotype"]
                 (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
             #otherwise it is easier to use sampleAlleles
@@ -127,13 +127,10 @@ class SeattleAnnotator(Source) :
         #remember there may be multiple corresponding to different isoforms
         for (c,dbc) in zip(self.cols,self.db_cols) :
             variant.fields[c] = self.nullify( out_splts[0][indexOf[c]] )
-        aas = out_splts[0][indexOf["aminoAcids"]].split(',')
-        if len(aas) == 2 :
-            variant.fields["ref_aa"] = aas[0]
-            variant.fields["mut_aa"] = aas[1]
 
         #make variant.isoforms out of each splt
         for out_splt in out_splts :
+
             pp = out_splt[indexOf["proteinPosition"]]
             pos,tot = -1,-1
             if not pp == '' and not pp == 'NA':
@@ -146,6 +143,11 @@ class SeattleAnnotator(Source) :
             iso.fields["ss_polyPhen"] = self.nullify(out_splt[indexOf["polyPhen"]])
             iso.fields["codon_pos"] = pos
             iso.fields["codon_total"] = tot
+
+            aas = out_splt[indexOf["aminoAcids"]].split(',')
+            if len(aas) == 2 :
+                iso.fields["ref_aa"] = aas[0]
+                iso.fields["mut_aa"] = aas[1]
             variant.isoforms.append(iso)
 
         return variant

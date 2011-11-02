@@ -55,9 +55,9 @@ class PlateIII(Plate) :
     def __init__(self) :
         self.name = "PlateIII"
         Plate.__init__(self)
-        self.snpfile = "plate3_broad_hg19_snps.vcf"
-        self.indelfile = "plate3_broad_hg19_indels.vcf"
-        self.seattle_snp_file = "Seattle_plate3snps.txt"
+        self.snpfile = "plateIII_snps.vcf"
+        self.indelfile = "plateIII_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.plate3_broad_hg19_snps.tar.gz.219684944227.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.plate3_broad_hg19_indels.vcf.219648601649.txt"
 
 class CIDR(Plate) :

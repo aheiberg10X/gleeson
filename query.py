@@ -252,7 +252,6 @@ def makeReport(params) :
         print "<br /><br />%s" % str(e)
 
 def familyReports() :
-    plate_id = globes.plates["CIDR"]
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
     conn2 = db.Conn("localhost")
@@ -275,6 +274,7 @@ def familyReports() :
     #the per family reports
     fouts = {}
 
+    #plate_id = globes.plates["CIDR"]
     #if we want to restrict attention to a certain plate of patients
     #query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
     #string = []
@@ -286,12 +286,14 @@ def familyReports() :
 
     for r in conn.iterateQuery( query ) :
         patient = broad.sanitizePatientName( r[0] )
-        filename = '%s/%s_variants.tsv' % (outdir,patient)
-        fouts[patient]=csv.writer( open(filename, 'wb'),\
-                                   delimiter='\t', \
-                                   quoting=csv.QUOTE_MINIMAL )
+        fouts[patient] = {}
+        for gt in ["hets","homs"] :
+            filename = '%s/%s_%s.tsv' % (outdir,patient,gt)
+            fouts[patient][gt] = csv.writer( open(filename, 'wb'),\
+                                             delimiter='\t', \
+                                             quoting=csv.QUOTE_MINIMAL )
         #print header
-        fouts[patient].writerow( ["GT","DP","GQ","geneSymbol"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
+            fouts[patient][gt].writerow( ["GT","DP","GQ","geneSymbol"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
 
     #what are the interesting variants
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
@@ -300,7 +302,7 @@ def familyReports() :
     gvs = ' and '.join(gvs)
     query = '''select %s, i.*, g.geneSymbol
            from Variants as v inner join Isoforms as i on v.id = i.var_id inner join Genes as g on i.gene_id = g.id
-           where v.dbSNP = '.' and (%s)  and v.AF < 0.1
+           where v.dbSNP is NULL and (%s)  and v.AF < 0.1
            order by AF''' % (vcols_string, gvs)
 #(ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')
     print query
@@ -315,30 +317,30 @@ def familyReports() :
         if len(hets) == len(homs) == 0 : continue
 
         hom_pats = [p[1] for p in homs]
-        num_homs = max(0,len(hom_pats)-1)
+        num_homs = len(hom_pats)
         hom_string = '; '.join(hom_pats)
 
         het_pats = [p[1] for p in hets]
         het_string = '; '.join(het_pats)
-        num_hets = max(0,len(het_pats)-1)
+        num_hets = len(het_pats)
 
         for ix,(pat_id,pat,call) in enumerate(homs) :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
             hom_string = '; '.join(hom_shares)
-            fouts[pat].writerow( call.split(':') + \
+            fouts[pat]["homs"].writerow( call.split(':') + \
                                  [r[-1]] + \
                                  list(r[1:-1]) + \
-                                 [num_homs, hom_string, num_hets, het_string] )
+                                 [num_homs-1, hom_string, num_hets, het_string] )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
             het_string = '; '.join(het_shares)
-            fouts[pat].writerow( call.split(':') + \
+            fouts[pat]["hets"].writerow( call.split(':') + \
                                  [r[-1]] + \
                                  list(r[1:-1]) + \
-                                 [num_homs,hom_string,num_hets,het_string] )
+                                 [num_homs,hom_string,num_hets-1,het_string] )
 
 
         #hom_names = [t[1] for t in homs]

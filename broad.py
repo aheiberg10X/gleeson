@@ -55,11 +55,11 @@ def makeMultiCallsSpecific( multi_calls, variant_ix ) :
 #the variant to be of low quality or otherwise suspicious, it marks it something
 #that != 'PASS'
 def separateSNPSandINDELS( ) :
-    fin = open( "%s/PlateII/Ciliopathies_Whole_Exome_Gleeson_Indels_20110526.vcf" % globes.ROOT_DIR ) 
+    fin = open( "%s/PlateIII/Gleeson_B3_110908_105_Samples.vcf" % globes.ROOT_DIR ) 
     #fin = open( '%s/raw_data/SUBSET.vcf' % (globes.DATA_DIR) )
-    fsnp = open( "%s/PlateII/plateII_snps.vcf" % globes.ROOT_DIR, 'wb' )
-    findel = open( "%s/PlateII/plateII_indels.vcf" % globes.ROOT_DIR, 'wb' )
-    fnotrepped = open( "%s/PlateII/not_repped.tsv" % (globes.ROOT_DIR), 'wb' )
+    fsnp = open( "%s/PlateIII/plateIII_snps.vcf" % globes.ROOT_DIR, 'wb' )
+    findel = open( "%s/PlateIII/plateIII_indels.vcf" % globes.ROOT_DIR, 'wb' )
+    fnotrepped = open( "%s/PlateIII/not_repped.tsv" % (globes.ROOT_DIR), 'wb' )
 
     indexOf = COLUMN_MAP
 

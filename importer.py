@@ -22,8 +22,8 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
 #### /HISTORY #########
 
 ##########  CONFIGURE ########################################
-dry_run = False
-switch = 'indel'
+dry_run = False 
+switch = 'snp'
 plate = PlateIII()
 
 ############# /CONFIGURE  ####################################3

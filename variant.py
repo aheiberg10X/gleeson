@@ -85,7 +85,11 @@ class Variant(SQLizable) :
         self.isoforms = []
 
     def __repr__(self) : 
+        #if 'dbSNP' in self.fields :
+            #return str(self.fields['dbSNP'])
+        #else : return '.'
         return str(self.getPosition()) + " and calls..."
+
 
     def getPosition(self):
         fields = ["chrom","pos","ref","mut"]
@@ -136,6 +140,17 @@ class VariantList(Source) :
                     ##TODO generalize this to make it vendor independent
                     dinfo = broad.makeInfoDict( splt[ self.indexOf[k] ] )
                     fields["AF"] = dinfo["AF"]
+                elif k == "dbSNP" :
+                    value = splt[self.indexOf[k]]
+
+                    #when we getFields, 'dbsnp' will be missing and yield null
+                    if value == '.' : pass
+                    #right now just take the first rs number if multiple
+                    elif value.startswith('rs') :
+                        fields[k] = [int(t.strip()[2:]) for t in value.split(';')][0]
+                    else :
+                        print "malformed rs number?", splt
+                        assert False
                 else :
                     fields[k] = splt[ self.indexOf[k] ]
 
