@@ -1,6 +1,5 @@
 import db
 import csv
-import simplejson as json
 import sys
 import os.path
 import broad
@@ -32,8 +31,8 @@ q0 = "delete from TempIntVars"
 
 def printNewColsDict() :
     cols = ["tiv1.int_id", "tiv1.var_id", "v.id", "v.chrom", \
-            "v.pos", "v.dbSNP", "v.ref", "v.mut", "v.ref_aa", \
-            "v.mut_aa", "v.qual", "v.filter", "v.AF", \
+            "v.pos", "v.dbSNP", "v.ref", "v.mut", "i.ref_aa", \
+            "i.mut_aa", "v.qual", "v.filter", "v.AF", \
             "v.ss_granthamScore", "v.ss_scorePhastCons", \
             "v.ss_consScoreGERP", "v.ss_distanceToSplice", \
             "v.ss_cDNAPosition", "v.ss_AfricanHapMapFreq", \
@@ -113,15 +112,15 @@ def genQ1( params ) :
     % (include_weigher, patient_group, penalty_weigher, patient_exclude_group, interval_table, variant_restrictions, calls_group, calls_exclude_group, call_restrictions) #, null_weight)
 
 dcols ={0 : 'tiv1.int_id', \
-        1 : 'g.geneSymbol', \
+        1 : 'i.gene', \
         2 : 'v.id', \
         3 : 'v.chrom', \
         4 : 'v.pos', \
         5 : 'v.dbSNP', \
         6 : 'v.ref', \
         7 : 'v.mut', \
-        8 : 'v.ref_aa', \
-        9 : 'v.mut_aa', \
+        8 : 'i.ref_aa', \
+        9 : 'i.mut_aa', \
         10 : 'v.qual', \
         11 : 'v.filter', \
         12 : 'v.AF', \
@@ -253,16 +252,18 @@ def makeReport(params) :
 
 def familyReports() :
     outdir = globes.OUT_DIR
-    conn = db.Conn("localhost")
-    conn2 = db.Conn("localhost")
+    conn = db.Conn("gleeson-closet")
+    conn2 = db.Conn("gleeson-closet")
     print "connetions made"
-    vcols = conn2.getColumns('Variants')
-    vcols = ["id", "chrom","pos","ref","mut","type","ref_aa","mut_aa","qual",
-             "filter","AF","granthamScore","scorePhastCons",
-             "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
-             "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+    #vcols = conn2.getColumns('Variants')
+    vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
+             "filter","AF","ss_granthamScore","ss_scorePhastCons",
+             "ss_consScoreGERP","ss_distanceToSplice","ss_AfricanHapMapFreq",
+             "ss_EuropeanHapMapFreq", "ss_AsianHapMapFreq","clinicalAssociation"]
 
-    icols = conn2.getColumns('Isoforms')
+
+    #icols = conn2.getColumns('Isoforms')
+    icols = ["ss_functionGVS","ss_polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
 
     #the general report
     #fout = open("%s/indelReport.tsv" % (outdir),'w')
@@ -293,17 +294,18 @@ def familyReports() :
                                              delimiter='\t', \
                                              quoting=csv.QUOTE_MINIMAL )
         #print header
-            fouts[patient][gt].writerow( ["GT","DP","GQ","geneSymbol"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
+            fouts[patient][gt].writerow( ["GT","DP","GQ"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
 
     #what are the interesting variants
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
+    icols_string = ', '.join(["i.%s" % c for c in icols])
     dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
     gvs = ["ss_functionGVS <> '%s'" % dw for dw in dont_want]
     gvs = ' and '.join(gvs)
-    query = '''select %s, i.*, g.geneSymbol
-           from Variants as v inner join Isoforms as i on v.id = i.var_id inner join Genes as g on i.gene_id = g.id
-           where v.dbSNP is NULL and (%s)  and v.AF < 0.1
-           order by AF''' % (vcols_string, gvs)
+    query = '''select %s, %s 
+           from Variants as v inner join Isoforms as i on v.id = i.var_id
+           where (%s)  and v.AF < 0.1
+           order by AF''' % (vcols_string, icols_string, gvs)
 #(ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')
     print query
 
@@ -313,7 +315,6 @@ def familyReports() :
         #only look at patients meeting these call reqs
         where = " and c.DP >= 8"
         (noinfs,hets,homs) = getPatients( conn, var_id, where )
-
         if len(hets) == len(homs) == 0 : continue
 
         hom_pats = [p[1] for p in homs]
@@ -327,20 +328,18 @@ def familyReports() :
         for ix,(pat_id,pat,call) in enumerate(homs) :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
-            hom_string = '; '.join(hom_shares)
+            new_hom_string = '; '.join(hom_shares)
             fouts[pat]["homs"].writerow( call.split(':') + \
-                                 [r[-1]] + \
-                                 list(r[1:-1]) + \
-                                 [num_homs-1, hom_string, num_hets, het_string] )
+                                         list(r[1:]) + \
+                                 [num_homs-1, new_hom_string, num_hets, het_string] )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
-            het_string = '; '.join(het_shares)
+            new_het_string = '; '.join(het_shares)
             fouts[pat]["hets"].writerow( call.split(':') + \
-                                 [r[-1]] + \
-                                 list(r[1:-1]) + \
-                                 [num_homs,hom_string,num_hets-1,het_string] )
+                                         list(r[1:]) + \
+                                 [num_homs,hom_string,num_hets-1,new_het_string] )
 
 
         #hom_names = [t[1] for t in homs]
@@ -363,7 +362,7 @@ def updateAF(conn) :
 if __name__ == '__main__' :
 
     familyReports()
-    #conn = db.Conn("localhost", dry_run=False)
+    #conn = db.Conn("gleeson-closet", dry_run=False)
     #updateAF(conn)
     
     #print genQ1(params)

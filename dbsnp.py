@@ -1,6 +1,7 @@
 from collimator import Collimator, Source
 import globes
 import db
+import csv
 
 class DBSNPSource(Source) :
     def __init__(self, freq_file, allele_file ) :
@@ -20,26 +21,25 @@ class DBSNPSource(Source) :
 
     def iterate(self) :
         prev_rsid = -1
-        #[rsid, {allele:(count,freq),allele2:(count,freq)]
+        #[rsid, allele, count, allele2, count]
         rsid_info = []
         for splt in globes.splitIterator( self.freq_file ) :
             #print splt
-            rsid,alleleid,count,freq = int(splt[0]), int(splt[1]), \
-                                       int(float(splt[2])), float(splt[3])
+            try :
+                rsid,alleleid,count = int(splt[0]), int(splt[1]), \
+                                      int(float(splt[2]))
+            except ValueError :
+                print splt
+                assert "Value" == "Error"
 
-            if len(self.dallele[alleleid]) > 1 \
-               or alleleid == 5 \
-               or alleleid == 8 :
+            if alleleid > 13 or alleleid == 5 or alleleid == 8 :
+                # where the indels start
+                # + (used for generic indels?) 
+                # - (used for generic indels?)
                 continue
+
             if rsid != prev_rsid :
                 if prev_rsid > 0 :
-                    freq = 0
-                    for k in rsid_info[1] :
-                        freq += rsid_info[1][k][1]
-                    if freq < .999 :
-                        print "the way we skip indels isnt getting it right"
-                        assert False
-
                     yield rsid_info
                     prev_rsid = rsid_info[0]
                     rsid_info = []
@@ -106,25 +106,75 @@ def newTarget() : return {}
 #def handleAbsent( ae ) {
     #if ae.ix == 0 : pass
 
+def flipGenotype( base ) :
+    if   base == 'A' : return 'T'
+    elif base == 'T' : return 'A'
+    elif base == 'C' : return 'G'
+    elif base == 'G' : return 'C'
+    else :
+        print base, "is not a valid base"
+        assert False
+
 if __name__ == '__main__' :
-    dbss = DBSNPSource("SNPAlleleFreq.bcp","Allele.bcp")
-    conn = db.Conn("localhost")
+    conn = db.Conn("gleeson-closet")
+    conn2 = db.Conn("gleeson-closet")
+    query = "select id,dbSNP,ref,mut from Variants"
+    for ix,row in enumerate( conn.query( query ) ) :
+        var_id, rsid, ref, mut = row[0],row[1],row[2],row[3]
+        if rsid :
+            query = "select * from dbSNP where id = %d" % rsid
+            rows = conn2.query(query)
+            if len(rows) != 1 :
+                print "no match for rsid: %d" % rsid
+                continue
 
-    print 'wuuuuuuuuuuuut'
-    fbulk = open("dbsnp_bulk_inserts.txt",'wb')
-    for d in dbss.iterate() :
-        fbulk.write( "%s\n" % ",".join(d) )
+            (rsid,allele1,count1,allele2,count2) = rows[0]
+            if allele2 :
+                total = float(count1 + count2)
+                if   ref == allele1 and mut == allele2 :
+                    freq = count2 / total
+                elif ref == allele2 and mut == allele1 :
+                    freq = count1 / total
+                else :
+                    ref = flipGenotype(ref)
+                    mut = flipGenotype(mut)
+                    if   ref == allele1 and mut == allele2 :
+                        freq = count2 / total
+                    elif ref == allele2 and mut == allele1 :
+                        freq = count1 / total
+                    else :
+                        print row, rows[0]
+                        print "no match, even after flip\n"
+                        #assert False
+            else :
+                if mut == allele1 :
+                    freq = 1
+                else :
+                    mut = flipGenotype(mut)
+                    if mut == allele1 :
+                        freq = 1
+                    else:
+                        print row, rows[0]
+                        print "no match\n"
+                        #assert False
 
-    fbulk.close()
+                #print "ref,mut", ref, mut, "1,2:", allele1, allele2 
 
 
-    #vs = VariantSource(conn)
+        if ix > 500 : break
+
+
+    #dbss = DBSNPSource("SNPAlleleFreq.bcp","Allele.bcp")
 #
-    #sources = [vs,dbss]
-    #coll = Collimator( sources, globes.compareHelper, newTarget )
+    #name = "dbSNP.txt"
+    #fout = open(name,'wb')
+    #fbulk = csv.writer( fout, \
+                        #delimiter=',', \
+                        #quoting=csv.QUOTE_MINIMAL )
+    #for d in dbss.iterate() :
+        #fbulk.writerow( d )
 #
-    #for t in coll :
-        #if 'rsid' not in t :
-            #print "no info in db about this rsid"
-        #else :
-            #print t
+    #fout.close()
+
+#LOAD DATA LOCAL INFILE 'dbSNP.txt' INTO TABLE dbSNP FIELDS TERMINATED BY ',' LINES TERMINATED BY '\n' (id,allele1,count1,allele2,count2);
+

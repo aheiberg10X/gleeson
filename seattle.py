@@ -61,9 +61,11 @@ class SeattleAnnotator(Source) :
                 sp = als.split('/')
                 if len(sp) == 2 :
                     (a1,a2) = sp
-                    if a1 == ref2 : mut2 = a2
+                    if   a1 == ref2 : mut2 = a2
                     elif a2 == ref2 : mut2 = a1
-                    else : assert "Have a problem" == "with figuring out mut2"
+                    else : 
+                        print out_splt
+                        assert "Have a problem" == "with figuring out mut2"
                 elif len(sp) == 1 :
                     mut2 = sp[0]
                 else :
@@ -115,7 +117,7 @@ class SeattleAnnotator(Source) :
         return (globes.chromNum(chrom2),pos2,ref2,mut2)
     
     def nullify( self, value ) :
-        if value == 'NA' or value == 'unknown' : 
+        if value == 'NA' or value == 'unknown' or value == 'none':
             return ''
         else : return value
 
@@ -131,24 +133,25 @@ class SeattleAnnotator(Source) :
         #make variant.isoforms out of each splt
         for out_splt in out_splts :
 
+            iso = Isoform()
             pp = out_splt[indexOf["proteinPosition"]]
-            pos,tot = -1,-1
             if not pp == '' and not pp == 'NA':
                 splt = pp.split('/')
                 pos,tot = int(splt[0]), int(splt[1])
+                iso.fields["codon_pos"] = pos
+                iso.fields["codon_total"] = tot
 
-            iso = Isoform()
             iso.fields["accession"] = self.nullify(out_splt[indexOf["accession"]])
             iso.fields["ss_functionGVS"] = self.nullify(out_splt[indexOf["functionGVS"]])
             iso.fields["ss_polyPhen"] = self.nullify(out_splt[indexOf["polyPhen"]])
-            iso.fields["codon_pos"] = pos
-            iso.fields["codon_total"] = tot
 
             aas = out_splt[indexOf["aminoAcids"]].split(',')
             if len(aas) == 2 :
                 iso.fields["ref_aa"] = aas[0]
                 iso.fields["mut_aa"] = aas[1]
             variant.isoforms.append(iso)
+
+            iso.fields["gene"] = self.nullify( out_splt[indexOf["geneList"]] )
 
         return variant
 

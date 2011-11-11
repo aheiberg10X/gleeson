@@ -24,7 +24,7 @@ class Conn :
     def quickConnect( self, switch ) :
         connections = {"gleeson-closet" : \
                            ["132.239.160.134", \
-                            "gleeson", \
+                            "root", \
                             "(umulus88", \
                             "gleeson"], \
                        "localhost" : \

@@ -6,6 +6,11 @@ import db
 from math import log
 import broad
 from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
+##########  CONFIGURE ########################################
+dry_run = False 
+switch = 'indel'
+plate = CIDR()
+############ /CONFIGURE  ####################################3
 #### HIStory ##########
 
 #pilot plate: snps, indels
@@ -21,13 +26,7 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR
 #plateIII indels, waiting on seattle for snps
 #### /HISTORY #########
 
-##########  CONFIGURE ########################################
-dry_run = False 
-switch = 'snp'
-plate = PlateIII()
-
-############# /CONFIGURE  ####################################3
-conn2 = db.Conn("localhost",dry_run=dry_run)
+conn2 = db.Conn("gleeson-closet",dry_run=dry_run)
 
 variant_cols = conn2.getColumns("Variants")
 call_cols = conn2.getColumns("Calls")
@@ -35,7 +34,7 @@ call_cols_tograb = call_cols[3:]
 iso_cols = conn2.getColumns("Isoforms")
 iso_cols_tograb = iso_cols[2:]
 plate_id = plate.getPlateID()
-plate_contrib = 2^plate_id
+#plate_contrib = 2^plate_id
 
 #make patient name->id lookup
 results = conn2.query( '''select id,name from Patients''' )
@@ -94,12 +93,14 @@ def seattleToDatabase( conn, seattleSource ) :
 def insertVariant(conn, variant) :
     variant_dbix = conn.getNextID("Variants")
     values = variant.getFields( variant_cols )
-    pos = variant.getPosition()[1]
+    #pos = variant.getPosition()[1]
     values[0] = variant_dbix
-    values[11] = plate_id
+
     if switch == 'indel': tipe = 2
     else : tipe = 1
-    values[12] = tipe
+    typeix = variant_cols.index("type")
+    values[typeix] = tipe
+
     #print variant_cols
     #print values
     conn.insert( 'Variants', values, variant_cols )
@@ -108,14 +109,14 @@ def insertVariant(conn, variant) :
 
     #print variant.isoforms
     for iso in variant.isoforms :
-        iso.fields['gene_id'] = geneIDFromAccession( conn, iso.fields["accession"] )
+        #iso.fields['gene_id'] = geneIDFromAccession( conn, iso.fields["accession"] )
         values = [variant_dbix] + iso.getFields( iso_cols_tograb )
         conn.insert( "Isoforms", values, iso_cols[1:] )
 
     #now do the calls
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [variant_dbix, pat_dbix, plate_contrib] + \
+        values = [variant_dbix, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
         conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
 
@@ -134,16 +135,16 @@ def addToCalls(conn, vid, variant) :
     #merge qual,filter,AF (or do AF separately across global pop?)
     #nah just leave and use the first one, can worry about merging later
     #if these columns turn out to be useful
-    src = conn.queryScalar("select plate from Variants where id=%d" % vid, int)
-    if not presentIn( src, plate_id ) :
-        #update the plate column if this variant is from a novel plate
-        update = "update Variants set plate = plate+%d where id=%d" \
-                  % (plate_contrib, vid)
-        conn.cur.execute( update )
+    #src = conn.queryScalar("select plate from Variants where id=%d" % vid, int)
+    #if not presentIn( src, plate_id ) :
+        ##update the plate column if this variant is from a novel plate
+        #update = "update Variants set plate = plate+%d where id=%d" \
+                  #% (plate_contrib, vid)
+        #conn.cur.execute( update )
 
     for call in variant.base_calls :
         pat_dbix = lookupPatientID( call )
-        values = [vid, pat_dbix, plate_contrib] + \
+        values = [vid, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
         conn.insert( 'Calls', values, call_cols, skip_dupes=True )
 
@@ -155,15 +156,15 @@ def populatePatients( conn, patient_names ) :
         pid = conn.queryScalar(query,int)
         if not pid :
             patient = broad.sanitizePatientName( patient )
-            conn.insert( "Patients", [patient_dbix,patient,plate_id], ["id","name","plate"] )
+            conn.insert( "Patients", [patient_dbix,patient], ["id","name"] )
             patients_dbix[patient] = patient_dbix
-        else :
-            src = conn.queryScalar("select plate from Patients where id=%d" % pid, int)
-            if not presentIn( src, plate_id ) :
-                #update the plate column if this variant is from a novel plate
-                update = "update Patients set plate = plate+%d where id=%d" \
-                          % ( plate_contrib, pid)
-                conn.cur.execute( update )
+        #else :
+            #src = conn.queryScalar("select plate from Patients where id=%d" % pid, int)
+            #if not presentIn( src, plate_id ) :
+                ##update the plate column if this variant is from a novel plate
+                #update = "update Patients set plate = plate+%d where id=%d" \
+                          #% ( plate_contrib, pid)
+                #conn.cur.execute( update )
         
         patient_dbix += 1
 
@@ -259,7 +260,8 @@ where c.plate =  and type = '''
 
 
 if __name__ == '__main__' :
-    conn = db.Conn("localhost",dry_run=dry_run)
+
+    conn = db.Conn("gleeson-closet",dry_run=dry_run)
     #insertMissingVariants(conn)
 
     populatePatients( conn, varSource.patients )

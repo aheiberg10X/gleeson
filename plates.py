@@ -17,7 +17,7 @@ class Plate :
             return "%s/%s" % (self.data_dir, self.seattle_indel_file)
 
     def getPlateID( self ) :
-        return 2^globes.plates[self.name]
+        return globes.plates[self.name]
 
 class Pilot(Plate) :
     def __init__(self) :
@@ -46,6 +46,7 @@ class PlateI(Plate) :
         Plate.__init__(self)
         self.snpfile = "plateI_inhouse_hg19_snps.vcf"
         self.indelfile = "plateI_inhouse_hg19_indels.vcf"
+        #no cDNA column!
         self.seattle_snp_file = "SeattleSeqAnnotation131.Broad_WES_Data_GVS.218386164983_SNPS.tsv"
         self.seattle_indel_file = "SeattleSeqAnnotation131.plateI_inhouse_hg19_indels.vcf.219046801512.txt"
         self.broadfile = "doesn't exist"
