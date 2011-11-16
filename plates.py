@@ -1,5 +1,11 @@
 import globes
 
+# A class to abstract the notion of a plate
+# Each plate must specify 5 things:
+#   A name (the same as the folder you put all the data in.  
+#           This folder should be directly under globes.ROOT_DIR)
+#   SNP and INDEL vcf file
+#   Corresponding SeattleSeq SNP and INDEL file
 class Plate :
     def __init__(self) :
         self.data_dir = "%s/%s" % (globes.ROOT_DIR, self.name)
@@ -27,8 +33,6 @@ class Pilot(Plate) :
         self.indelfile = "pilot_inhouse_hg19_indels.vcf"
         self.seattle_snp_file = "Seattle_pilotsnps.txt"
         self.seattle_indel_file = "Seattle_pilotindels.txt"
-        self.broadfile = "doesnt.exist"
-        self.families = []
 
 class PlateII(Plate) :
     def __init__(self) :
@@ -70,11 +74,20 @@ class CIDR(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation131.allcidrsnps.vcf.218621577750.tsv"
         self.seattle_indel_file = "SeattleSeqAnnotation131.allcidrindels.vcf.218621621211.tsv"
 
-class Frazer(Plate) :
+class Frazer_ali2(Plate) :
     def __init__(self) :
-        self.name = "Frazer"
+        self.name = "Frazer_ali2"
         Plate.__init__(self)
-        self.snpfile = "cbhag_allsnps.vcf"
-        self.indelfile = "42"
+        self.snpfile = "fromfrazer_threads2_snps.vcf"
+        self.indelfile = "fromfrazer_threads2_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads2_snps.vcf.221292923075.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads2_indels.vcf.221295179021.txt"
+
+class Frazer_aligned(Plate) :
+    def __init__(self) :
+        self.name = "Frazer_aligned"
+        Plate.__init__(self)
+        self.snpfile = "fromfrazer_threads_snps.vcf"
+        self.indelfile = "fromfrazer_threads_indels.vcf"
         self.seattle_snp_file = ""
         self.seattle_indel_file = ""

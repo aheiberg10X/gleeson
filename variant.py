@@ -24,8 +24,8 @@ class SQLizable :
         return fields
 
 class BaseCall(SQLizable) :
-    def __init__(self, call_splt, pat_ix, variant_ix=1) :
-        self.pat_ix = pat_ix
+    def __init__(self, call_splt, pat_name, variant_ix=1) :
+        self.pat_name = pat_name
         self.fields = {}
         self.fields["GT"] = broad.convertGT( call_splt, variant_ix )
         if len(call_splt) > 1 :
@@ -95,7 +95,6 @@ class Variant(SQLizable) :
         fields = ["chrom","pos","ref","mut"]
         return [self.fields[f] for f in fields]
 
-#Generalizing SNPList and IndelList
 class VariantList(Source) :
     def __init__(self, vcf_file, fast_forward=0) :
         self.indexOf = broad.COLUMN_MAP
@@ -126,10 +125,11 @@ class VariantList(Source) :
             calls = splt[ broad.CALL_START: ]
             base_calls = []
             for pat_ix,c in enumerate(calls) :
+                pat_name = self.patients[pat_ix]
                 sc = broad.splitCall(c)
                 gt = broad.convertGT( sc )
                 if broad.isMutated( gt ) or broad.noInf( gt ) :
-                    base_calls.append( BaseCall(sc,pat_ix) )
+                    base_calls.append( BaseCall(sc,pat_name) )
 
             fields = {}
             keys = broad.COLUMN_MAP.keys()
@@ -137,12 +137,11 @@ class VariantList(Source) :
                 if k == "chrom" :
                     fields[k] = globes.chromNum( splt[self.indexOf[k]] )
                 elif k == "info" :
-                    ##TODO generalize this to make it vendor independent
+                    #this information is useless, will get globally updated
                     dinfo = broad.makeInfoDict( splt[ self.indexOf[k] ] )
                     fields["AF"] = dinfo["AF"]
                 elif k == "dbSNP" :
                     value = splt[self.indexOf[k]]
-
                     #when we getFields, 'dbsnp' will be missing and yield null
                     if value == '.' : pass
                     #right now just take the first rs number if multiple

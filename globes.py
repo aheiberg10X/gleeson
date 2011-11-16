@@ -3,14 +3,16 @@ import re
 
 
 #names should match up with self.name of plates.py
-plates = {"Pilot" : 0,\
-           "PlateI" : 1,\
-           "PlateII" : 2, \
-           "PlateIII" : 3, \
-           "CIDR" : 4, \
-           "Frazer" : 5 }
+plates = { "Pilot" :          0, \
+           "PlateI" :         1, \
+           "PlateII" :        2, \
+           "PlateIII" :       3, \
+           "CIDR" :           4, \
+           "Frazer_ali2" :    5, \
+           "Frazer_aligned" : 6}
 
-ROOT_DIR = "/home/Gleeson/andrew/gleeson"
+
+ROOT_DIR = "/home/andrew/gleeson"
 OUT_DIR = "%s/output" % ROOT_DIR
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'
@@ -21,7 +23,7 @@ def tritonStop( splt ) :
 def dontStop( splt ) : return False
 
 #turn a filename into a line iterator, returning line splits
-#burn specifies the number of lines to discard before iterating
+#burn specifies the number of lines to discard before yielding 
 #stopper is a function that decides when to raise a StopIteratiion
 def splitIterator( fh_or_name, sep='\t', burn=0, skipper=dontStop, stopper=dontStop ) :
     if type(fh_or_name) == file :

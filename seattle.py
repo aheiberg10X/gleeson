@@ -113,9 +113,9 @@ class SeattleAnnotator(Source) :
         #not ideal, but if SeattleSeq is going to be a bitch
         #it's the best we can do
         if mut2 == 'N' : mut2 = '*'
-        #print "returning: ", chrom2, pos2, ref2, mut2
+        print 'seattle pos: ',chrom2, pos2, ref2, mut2
         return (globes.chromNum(chrom2),pos2,ref2,mut2)
-    
+
     def nullify( self, value ) :
         if value == 'NA' or value == 'unknown' or value == 'none':
             return ''

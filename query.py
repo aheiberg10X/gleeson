@@ -198,10 +198,6 @@ def getPatients( conn, var_id, where_clause="" ) :
 
     return (noinfs,hets,homs)
 
-#TODO
-#need some kind of general rollup function here
-
-
 def makeColsReadable( cols ) :
     return [c.split('.')[1] for c in cols]
 
@@ -255,22 +251,34 @@ def familyReports() :
     conn = db.Conn("gleeson-closet")
     conn2 = db.Conn("gleeson-closet")
     print "connetions made"
-    #vcols = conn2.getColumns('Variants')
+
+    #columsn to grab from DB
     vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
              "filter","AF","ss_granthamScore","ss_scorePhastCons",
              "ss_consScoreGERP","ss_distanceToSplice","ss_AfricanHapMapFreq",
              "ss_EuropeanHapMapFreq", "ss_AsianHapMapFreq","clinicalAssociation"]
 
-
-    #icols = conn2.getColumns('Isoforms')
     icols = ["ss_functionGVS","ss_polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
 
-    #the general report
-    #fout = open("%s/indelReport.tsv" % (outdir),'w')
-    #freport = csv.writer( fout, \
-                          #delimiter='\t', \
-                          #quoting=csv.QUOTE_MINIMAL )
-    #freport.writerow( vcols + icols + ["Homs","Hets"] )
+
+    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", \
+                      "functionGVS", "AA_Change", "AA_Pos", \
+                      "granthamScore", "scorePhastCons", "consScoreGERP", \
+                      "distanceToSplice", "clinicalAssociation", \
+                      "GT:DP:GQ", "#HomShares", "Hom Shares", \
+                      "#HetShares", "Het Shares"]
+
+    #basic var stuff
+    v[1:6]
+    #gene
+    i[4]
+    #functionGVS
+    i[0]
+    #ref/mut aa
+    "%s/%s" % (i[-2],i[-1])
+    #pos/tot
+    "%d/%d" % 
+
 
     #the per family reports
     fouts = {}
@@ -285,6 +293,13 @@ def familyReports() :
     string = '1 = 1'
     query = '''select name from Patients where %s''' % string
 
+    #open files for each patient, one for hets, one for homs
+    #print the column headers for each file
+
+    #TODO: 
+    #chr pos dbsnp ref mut gene aa/change aa/pos [conservation/scores] gt:dp:gq
+    # [homs] [hets]
+
     for r in conn.iterateQuery( query ) :
         patient = broad.sanitizePatientName( r[0] )
         fouts[patient] = {}
@@ -293,8 +308,7 @@ def familyReports() :
             fouts[patient][gt] = csv.writer( open(filename, 'wb'),\
                                              delimiter='\t', \
                                              quoting=csv.QUOTE_MINIMAL )
-        #print header
-            fouts[patient][gt].writerow( ["GT","DP","GQ"] + vcols[1:] + icols + [ "#HomShares", "Hom Shares", "#HetShares", "Het Shares"] )
+            fouts[patient][gt].writerow( column_headers )
 
     #what are the interesting variants
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
@@ -306,7 +320,6 @@ def familyReports() :
            from Variants as v inner join Isoforms as i on v.id = i.var_id
            where (%s)  and v.AF < 0.1
            order by AF''' % (vcols_string, icols_string, gvs)
-#(ss_polyPhen = 'probably-damaging' or ss_polyPhen = 'possibly-damaging')
     print query
 
     for varix,r in enumerate(conn.query( query )) :
@@ -329,25 +342,16 @@ def familyReports() :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
             new_hom_string = '; '.join(hom_shares)
-            fouts[pat]["homs"].writerow( call.split(':') + \
-                                         list(r[1:]) + \
-                                 [num_homs-1, new_hom_string, num_hets, het_string] )
+            fouts[pat]["homs"].writerow()
+
+            #[num_homs-1, new_hom_string, num_hets, het_string] )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
             new_het_string = '; '.join(het_shares)
-            fouts[pat]["hets"].writerow( call.split(':') + \
-                                         list(r[1:]) + \
-                                 [num_homs,hom_string,num_hets-1,new_het_string] )
-
-
-        #hom_names = [t[1] for t in homs]
-        #het_names = [t[1] for t in hets]
-        #(hom_string, het_string) = ['; '.join(t) for t in (het_names,hom_names)]
-        #freport.writerow( list(r)+[hom_string,het_string] )
-
-    #fout.close()
+            fouts[pat]["hets"].writerow()
+              #[num_homs,hom_string,num_hets-1,new_het_string] )
 
 def updateAF(conn) :
     query = "select count(*) from Patients"

@@ -1,17 +1,23 @@
 import MySQLdb
 import warnings
+import globes
+import json
 
 endOfIteration = -1
 
-#allow MySQLdb.Warning to be raise Exceptions, rather than printing to stdout
+#makes MySQLdb.Warning raise an Exception, rather than printing to stdout
 #this lets us log
-warnings.simplefilter("error", MySQLdb.Warning) 
+warnings.simplefilter("error", MySQLdb.Warning)
 
 class Conn :
     #if dry_run : print out PUT queries without executing
     def __init__(self, switch, warning_file="warning.txt", dry_run=False) :
-        self.connection = self.quickConnect( switch )
-        print 'lalalalala'
+        fconn = open( "%s/connections.js" % globes.ROOT_DIR )
+        burn = fconn.readline()
+        print burn
+        self.connections =  json.loads( fconn.read() )
+        print self.connections
+        self.connection = self.connect( *self.connections[switch] )
         self.cur = self.connection.cursor()
         self.fwarning = open(warning_file,'wb')
         self.dry_run = dry_run
@@ -21,18 +27,9 @@ class Conn :
         self.cur.close()
         self.connection.close()
 
+    # This should not be here.  
+    # Store passwd information in separate file that is not on a public repo
     def quickConnect( self, switch ) :
-        connections = {"gleeson-closet" : \
-                           ["132.239.160.134", \
-                            "root", \
-                            "(umulus88", \
-                            "gleeson"], \
-                       "localhost" : \
-                           ["localhost", \
-                            "root", \
-                            "pHuc7h35", \
-                            "gleeson"] \
-                      }
         return self.connect( *connections[switch] )
 
     def connect( self, host, user, password, db ) :
@@ -152,12 +149,12 @@ class Conn :
     def wipe(self, table) :
         self.put("delete from %s" % table)
 
-#######################################################################################
-###############      Exception Handling   #############################################
-#######################################################################################
+##############################################################################
+###############      Exception Handling   ####################################
+##############################################################################
 
-#If an Exception is caught doing a SQL operation, we refine it to figure out
-#what is actually going wrong
+# If an Exception is caught doing a SQL operation, we refine it to figure out
+# what is actually going wrong
 def refineException( message, query ) :
     if "integrity" in message.lower() :
         return SQLDuplicate(message,query)
@@ -166,7 +163,8 @@ def refineException( message, query ) :
     else :
         return SQLError(message,query)
 
-#the general, unrefined Error
+# the general, unrefined Error.  Can print the error message and the query that
+# caused it
 class SQLError(Exception) :
     def __init__(self, e, query) :
         self.error = e
