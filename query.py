@@ -248,19 +248,19 @@ def makeReport(params) :
 
 def familyReports() :
     outdir = globes.OUT_DIR
-    conn = db.Conn("gleeson-closet")
-    conn2 = db.Conn("gleeson-closet")
+    conn = db.Conn("localhost")
+    conn2 = db.Conn("localhost")
     print "connetions made"
 
     #columsn to grab from DB
     vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
-             "filter","AF","ss_granthamScore","ss_scorePhastCons",
-             "ss_consScoreGERP","ss_distanceToSplice","ss_AfricanHapMapFreq",
-             "ss_EuropeanHapMapFreq", "ss_AsianHapMapFreq","clinicalAssociation"]
+             "filter","AF","granthamScore","scorePhastCons",
+             "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
+             "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
-    icols = ["ss_functionGVS","ss_polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
+    icols = ["functionGVS","polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
 
-
+    #going in the output
     column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", \
                       "functionGVS", "AA_Change", "AA_Pos", \
                       "granthamScore", "scorePhastCons", "consScoreGERP", \
@@ -268,16 +268,27 @@ def familyReports() :
                       "GT:DP:GQ", "#HomShares", "Hom Shares", \
                       "#HetShares", "Het Shares"]
 
-    #basic var stuff
-    v[1:6]
-    #gene
-    i[4]
-    #functionGVS
-    i[0]
-    #ref/mut aa
-    "%s/%s" % (i[-2],i[-1])
-    #pos/tot
-    "%d/%d" % 
+    #We queried for vcols, icols and want to print out the appropriate
+    #values for column_headers.  Return a list of the values.
+    #Note this won't get us all the way.  This list will stil be missing
+    #GT:DP:GQ and all the share information
+    num_vcols = len(vcols)
+    def formatQueryRow( row ) :
+        output = []
+        #basic var stuff
+        output.extend( row[1:6] )
+        #gene
+        output.append( row[-3] )
+        #functionGVS
+        output.append( row[-7] )
+        #ref/mut aa
+        output.append( "%s/%s" % (row[-2],row[-1]) )
+        #pos/tot
+        output.append( "%s/%s" % (row[-4],row[-3]) )
+        #grantham,phast,gerp,splice
+        output.extend( row[10:14] )
+        output.append( row[17] )
+        return output
 
 
     #the per family reports
@@ -314,7 +325,7 @@ def familyReports() :
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
     icols_string = ', '.join(["i.%s" % c for c in icols])
     dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
-    gvs = ["ss_functionGVS <> '%s'" % dw for dw in dont_want]
+    gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
     gvs = ' and '.join(gvs)
     query = '''select %s, %s 
            from Variants as v inner join Isoforms as i on v.id = i.var_id
@@ -338,20 +349,25 @@ def familyReports() :
         het_string = '; '.join(het_pats)
         num_hets = len(het_pats)
 
+        output_row = formatQueryRow( r )
+
         for ix,(pat_id,pat,call) in enumerate(homs) :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
             new_hom_string = '; '.join(hom_shares)
-            fouts[pat]["homs"].writerow()
-
-            #[num_homs-1, new_hom_string, num_hets, het_string] )
+            output_row.append( call )
+            output_row.extend( [num_homs-1, new_hom_string, \
+                                num_hets,   het_string] )
+            fouts[pat]["homs"].writerow( output_row )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
             new_het_string = '; '.join(het_shares)
-            fouts[pat]["hets"].writerow()
-              #[num_homs,hom_string,num_hets-1,new_het_string] )
+            output_row.append( call )
+            output_row.extend( [num_homs,   hom_string, \
+                                num_hets-1, new_het_string] )
+            fouts[pat]["hets"].writerow( output_row )
 
 def updateAF(conn) :
     query = "select count(*) from Patients"
