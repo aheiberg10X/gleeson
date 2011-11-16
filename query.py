@@ -365,9 +365,9 @@ def updateAF(conn) :
 
 if __name__ == '__main__' :
 
-    familyReports()
-    #conn = db.Conn("gleeson-closet", dry_run=False)
-    #updateAF(conn)
+    #familyReports()
+    conn = db.Conn("gleeson-closet", dry_run=False)
+    updateAF(conn)
     
     #print genQ1(params)
     #printNewColsDict()
