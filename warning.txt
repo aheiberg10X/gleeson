@@ -1,0 +1,276 @@
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'missense',NULL,'175','843','PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1','ASN','SER' );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871051',NULL,'missense',NULL,'175','951','PCDHA9,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1','ASN','SER' );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'coding-synonymous',NULL,'667','949','PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'coding-synonymous',NULL,'667','845','PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871052',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'missense',NULL,'671','949','PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1','GLY','ARG' );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'missense',NULL,'671','845','PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1','GLY','ARG' );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871053',NULL,'intron',NULL,NULL,NULL,'PCDHA9,PCDHA10,PCDHA8,PCDHA7,PCDHA6,PCDHA5,PCDHA4,PCDHA3,PCDHA2,PCDHA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'intron',NULL,NULL,NULL,'PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'coding-synonymous',NULL,'428','930','PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871054',NULL,'coding-synonymous',NULL,'428','815','PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'coding-synonymous',NULL,'71','936','PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'intron',NULL,NULL,NULL,'PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'coding-synonymous',NULL,'71','838','PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+
+Warning: Warning("Data truncated for column 'gene' at row 1",) 
+ Query: INSERT INTO gleeson.Isoforms (`var_id`,`gene_id`,`functionGVS`,`polyPhen`,`codon_pos`,`codon_total`,`gene`,`ref_aa`,`mut_aa`) VALUES( '871055',NULL,'coding-synonymous',NULL,'71','751','PCDHGB4,PCDHGA8,PCDHGB7,PCDHGB6,PCDHGB5,PCDHGB3,PCDHGB2,PCDHGB1,PCDHGA11,PCDHGA10,PCDHGA9,PCDHGA7,PCDHGA6,PCDHGA5,PCDHGA4,PCDHGA3,PCDHGA2,PCDHGA1',NULL,NULL );
+
+

@@ -121,7 +121,7 @@ class SeattleAnnotator(Source) :
     def integrator( self, variant, out_splts ) :
         #get the variant field information from the first out_splt
         #remember there may be multiple corresponding to different isoforms
-        for (c,dbc) in zip(self.cols,self.db_cols) :
+        for c in self.cols :
             variant.fields[c] = self.nullify( out_splts[0][indexOf[c]] )
 
         #make variant.isoforms out of each splt

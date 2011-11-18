@@ -12,11 +12,11 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_a
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = False
+dry_run = False 
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(Frazer_aligned(),'indel')]
+plates_and_switches = [(Frazer_ali2(),'snp'),(Frazer_ali2(),'indel')]
 
 #Run with python importer.py
 
@@ -24,7 +24,7 @@ plates_and_switches = [(Frazer_aligned(),'indel')]
 
 ############# GLOBALS ########################################
 
-conn = db.Conn("gleeson-closet",dry_run=dry_run)
+conn = db.Conn("localhost",dry_run=dry_run)
 
 # X_cols are the columns of the database table we want to fill
 # X_cols_tograb is the data we can fetch directly from the Variant object
