@@ -12,7 +12,7 @@ plates = { "Pilot" :          0, \
            "Frazer_aligned" : 6}
 
 
-ROOT_DIR = "/home/andrew/gleeson"
+ROOT_DIR = "/home/Gleeson/database"
 OUT_DIR = "%s/output" % ROOT_DIR
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'

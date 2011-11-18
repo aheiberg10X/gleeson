@@ -89,5 +89,5 @@ class Frazer_aligned(Plate) :
         Plate.__init__(self)
         self.snpfile = "fromfrazer_threads_snps.vcf"
         self.indelfile = "fromfrazer_threads_indels.vcf"
-        self.seattle_snp_file = ""
-        self.seattle_indel_file = ""
+        self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads_snps.vcf.221296444806.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads_indels.vcf.221298757736.txt"

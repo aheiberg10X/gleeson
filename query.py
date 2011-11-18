@@ -261,7 +261,7 @@ def familyReports() :
     icols = ["functionGVS","polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
 
     #going in the output
-    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", \
+    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", "AF", \
                       "functionGVS", "AA_Change", "AA_Pos", \
                       "granthamScore", "scorePhastCons", "consScoreGERP", \
                       "distanceToSplice", "clinicalAssociation", \
@@ -279,12 +279,14 @@ def familyReports() :
         output.extend( row[1:6] )
         #gene
         output.append( row[-3] )
+        #AF
+        output.append( row[9] )
         #functionGVS
         output.append( row[-7] )
         #ref/mut aa
         output.append( "%s/%s" % (row[-2],row[-1]) )
         #pos/tot
-        output.append( "%s/%s" % (row[-4],row[-3]) )
+        output.append( "%s/%s" % (row[-5],row[-4]) )
         #grantham,phast,gerp,splice
         output.extend( row[10:14] )
         output.append( row[17] )
@@ -355,19 +357,17 @@ def familyReports() :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
             new_hom_string = '; '.join(hom_shares)
-            output_row.append( call )
-            output_row.extend( [num_homs-1, new_hom_string, \
-                                num_hets,   het_string] )
-            fouts[pat]["homs"].writerow( output_row )
+            fouts[pat]["homs"].writerow( output_row + \
+                                         [call, num_homs-1, new_hom_string, \
+                                          num_hets, het_string] )
 
         for ix,(pat_id,pat,call) in enumerate(hets) :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
             new_het_string = '; '.join(het_shares)
-            output_row.append( call )
-            output_row.extend( [num_homs,   hom_string, \
-                                num_hets-1, new_het_string] )
-            fouts[pat]["hets"].writerow( output_row )
+            fouts[pat]["hets"].writerow( output_row + \
+                                         [call, num_homs, hom_string, \
+                                          num_hets-1, new_het_string] )
 
 def updateAF(conn) :
     query = "select count(*) from Patients"
@@ -381,9 +381,9 @@ def updateAF(conn) :
 
 if __name__ == '__main__' :
 
-    #familyReports()
-    conn = db.Conn("gleeson-closet", dry_run=False)
-    updateAF(conn)
+    familyReports()
+    #conn = db.Conn("localhost", dry_run=False)
+    #updateAF(conn)
     
     #print genQ1(params)
     #printNewColsDict()
