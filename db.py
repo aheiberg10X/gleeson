@@ -14,9 +14,7 @@ class Conn :
     def __init__(self, switch, warning_file="warning.txt", dry_run=False) :
         fconn = open( "%s/connections.js" % globes.ROOT_DIR )
         burn = fconn.readline()
-        print burn
         self.connections =  json.loads( fconn.read() )
-        print self.connections
         self.connection = self.connect( *self.connections[switch] )
         self.cur = self.connection.cursor()
         self.fwarning = open(warning_file,'wb')

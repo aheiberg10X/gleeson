@@ -31,12 +31,6 @@ class SeattleAnnotator(Source) :
                      "distanceToSplice", "AfricanHapMapFreq", \
                      "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
-        self.db_cols = ["accession","ss_functionGVS","ss_polyPhen",\
-                        "ss_granthamScore","ss_scorePhastCons",\
-                        "ss_consScoreGERP","ss_distanceToSplice",\
-                        "ss_cDNAPosition", \
-                        "ss_AfricanHapMapFreq","ss_EuropeanHapMapFreq",\
-                        "ss_AsianHapMapFreq"]
     def iterate(self, fast_forward = 0) :
         count = 0
         for row in  globes.splitIterator( self.file, \
@@ -142,8 +136,8 @@ class SeattleAnnotator(Source) :
                 iso.fields["codon_total"] = tot
 
             iso.fields["accession"] = self.nullify(out_splt[indexOf["accession"]])
-            iso.fields["ss_functionGVS"] = self.nullify(out_splt[indexOf["functionGVS"]])
-            iso.fields["ss_polyPhen"] = self.nullify(out_splt[indexOf["polyPhen"]])
+            iso.fields["functionGVS"] = self.nullify(out_splt[indexOf["functionGVS"]])
+            iso.fields["polyPhen"] = self.nullify(out_splt[indexOf["polyPhen"]])
 
             aas = out_splt[indexOf["aminoAcids"]].split(',')
             if len(aas) == 2 :
