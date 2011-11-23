@@ -12,7 +12,7 @@ plates = { "Pilot" :          0, \
            "Frazer_aligned" : 6}
 
 
-ROOT_DIR = "/home/andrew/gleeson"
+ROOT_DIR = "/home/Gleeson/database"
 OUT_DIR = "%s/output" % ROOT_DIR
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'
@@ -21,26 +21,38 @@ def tritonStop( splt ) :
     return "Nodes" in splt[0]
 
 def dontStop( splt ) : return False
-
+def assertSane( splt ) : return (True,"good to go")
 #turn a filename into a line iterator, returning line splits
+#headerSanityCheck checks that the specified line (header_line_num)
+#does indeed meet the expectations of what should be in this file
 #burn specifies the number of lines to discard before yielding 
 #stopper is a function that decides when to raise a StopIteratiion
-def splitIterator( fh_or_name, sep='\t', burn=0, skipper=dontStop, stopper=dontStop ) :
+def splitIterator( fh_or_name, sep='\t', burn=0, \
+                   header_line_num = 0, \
+                   headerSanityCheck = assertSane, \
+                   skipLine = dontStop, \
+                   stopIter = dontStop ) :
     if type(fh_or_name) == file :
         handle = fh_or_name
     else :
         handle = open(fh_or_name)
     count = 0
     while count < burn :
-        handle.readline()
+        line = handle.readline()
+        if count == header_line_num :
+            splt = line.strip('\n').split(sep)
+            (ok,message) = headerSanityCheck( splt )
+            if not ok :
+                print "\n\n %s, \nline split: %s \n\n" % (message,str(splt))
+                raise StopIteration
         count += 1
 
     for line in handle :
         splt = line.strip('\n').split(sep)
-        if stopper( splt ) :
+        if stopIter( splt ) :
             handle.close()
             raise StopIteration
-        elif skipper( splt ) : continue
+        elif skipLine( splt ) : continue
         else : 
             yield splt
 
@@ -84,30 +96,6 @@ def compareVariants( chr1,pos1,ref1,mut1, \
         r = compareHelper(a,b)
         if not r == 0 : return r
     return r
-
-    #diff = chromNum(chr1) - chromNum(chr2)
-    #if diff < 0 :
-        #return -1
-    #elif diff == 0 :
-        #if pos1 < pos2 : return -1
-        #elif pos1 == pos2 :
-#
-            #if not( ref1==ref2 and mut1==mut2 ) :
-                #print "Equal Position (chr:%s,pos%d) but differing ref/mut (%s/%s vs %s/%s)" % (chr1,pos1,ref1,mut1,ref2,mut2)
-#
-            #if ref1 < ref2 : return -1
-            #elif ref1==ref2 :
-                #if mut1 < mut2 : return -1
-                #elif mut1 == mut2 : return 0
-                #else : return 1
-            #else : return 1
-#
-#
-            #return 0
-        #else : return 1
-    #else :
-        #return 1
-
 
 def comparePositions( chr1, pos1, chr2, pos2 ) :
     pos1,pos2 = int(pos1),int(pos2)

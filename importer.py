@@ -1,7 +1,7 @@
 from collimator import Collimator, Source
-import variant
+from variant import Variant
 import globes
-from seattle import SeattleAnnotator
+from seattle import SeattleSource
 import db
 from math import log
 import broad
@@ -12,11 +12,20 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_a
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = False 
+dry_run = True
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(Frazer_ali2(),'snp'),(Frazer_ali2(),'indel')]
+plates_and_switches = [\
+                       #(Pilot(),'snp'),(Pilot(),'indel'), \
+                       #(PlateI(),'snp') \
+                       (PlateI(),'indel') \
+                       #(PlateII(),'snp'),(PlateII(),'indel'), \
+                       #(PlateIII(),'snp'),\
+                       #(CIDR(),'snp'),(CIDR(),'indel'), \
+                       #(Frazer_ali2(),'snp'),(Frazer_ali2(),'indel'), \
+                       #(Frazer_aligned(),'snp'),(Frazer_aligned(),'indel') \
+                      ]
 
 #Run with python importer.py
 
@@ -53,11 +62,11 @@ def insertPlate( conn, plate, switch ) :
     plate_id = plate.getPlateID()
 
     # Construct the Sources for a Collimator to work on
-    varSource = variant.VariantList( plate.varFile(switch) )
-    seattleSource = SeattleAnnotator( plate.seattleFile(switch), switch )
-    sources = [varSource, seattleSource]
+    vcfSource = broad.VCFSource( plate.varFile(switch) )
+    seattleSource = SeattleSource( plate.seattleFile(switch), switch )
+    sources = [vcfSource, seattleSource]
 
-    populatePatients( conn, varSource.patients )
+    populatePatients( conn, vcfSource.patients )
     c = Collimator( sources, comparator, targetCreator )
     for i,var in enumerate(c) :
         if i % 5000 == 0 : print "%d variants processed" % i
@@ -130,7 +139,6 @@ def insertVariant(conn, variant, plate_id) :
 
     #insert the calls
     for call in variant.base_calls :
-        #pat_dbix = lookupPatientID( call )
         pat_dbix = patients_dbix[call.pat_name]
         values = [variant_dbix, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
@@ -165,7 +173,7 @@ def populatePatients( conn, patient_names ) :
 
 #Given a BaseCall object (see variant.py), get the actual patient name
 def lookupPatientID( call ) :
-    patient_name = varSource.patients[call.pat_ix]
+    patient_name = vcfSource.patients[call.pat_ix]
     return patients_dbix[patient_name]
 
 if __name__ == '__main__' :
@@ -265,7 +273,7 @@ def insertMissingVariants(conn) :
 
     dbSource = Source( it, eqkey, integrator, allow_absent = False )
 
-    c = Collimator( [varSource,seattleSource,dbSource], comparator, targetCreator, absentHandler = absentHandler )
+    c = Collimator( [vcfSource,seattleSource,dbSource], comparator, targetCreator, absentHandler = absentHandler )
     for i,v in enumerate(c) :
         if i % 5000 == 0 : print i
         pass #waiting for dbSource to be absent, this will trigger absentHandler

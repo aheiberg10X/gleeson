@@ -12,11 +12,13 @@ cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype
 #no cDNA
 #cols = ["# inDBSNPOrNot","chromosome","position","referenceBase","sampleGenotype","sampleAlleles","allelesDBSNP","accession","functionGVS","functionDBSNP","rsID","aminoAcids","proteinPosition","polyPhen","granthamScore","scorePhastCons","consScoreGERP","chimpAllele","CNV","geneList","AfricanHapMapFreq","EuropeanHapMapFreq","AsianHapMapFreq","hasGenotypes","dbSNPValidation","repeatMasker","tandemRepeat","clinicalAssociation","distanceToSplice","microRNAs","proteinSequence"]
 
+#build and indexOf out of the cols
 indexOf = {}
 for i,col in enumerate(cols) :
     indexOf[col] = i
 
-class SeattleAnnotator(Source) :
+#TODO: column sanity check
+class SeattleSource(Source) :
     def __init__(self, file, switch, fast_forward=0) :
         self.file = file
         self.switch = switch
@@ -25,13 +27,13 @@ class SeattleAnnotator(Source) :
         self.allow_absent = False
         self.group_repeats = True
 
-        #want this? cDNAPosition
+        #the columns concerning a Variant - want cDNAPosition?
         self.cols = ["accession", "functionGVS", "polyPhen", \
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
                      "distanceToSplice", "AfricanHapMapFreq", \
                      "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
-    def iterate(self, fast_forward = 0) :
+    def iterate(self, sanity_check=lambda x:True, fast_forward = 0) :
         count = 0
         for row in  globes.splitIterator( self.file, \
                                           burn=1, \
@@ -48,11 +50,13 @@ class SeattleAnnotator(Source) :
             if False : #len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
                 keys = ["chromosome","position","referenceBase","sampleGenotype"]
                 (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
+
             #otherwise it is easier to use sampleAlleles
             else :
                 keys = ["chromosome","position","referenceBase","sampleAlleles"]
                 (chrom2,pos2,ref2,als) = [out_splt[self.indexOf[k]] for k in keys]
                 sp = als.split('/')
+                #split up the sample alleles, find which one matches the ref
                 if len(sp) == 2 :
                     (a1,a2) = sp
                     if   a1 == ref2 : mut2 = a2
@@ -69,11 +73,14 @@ class SeattleAnnotator(Source) :
         elif self.switch == 'indel' :
             keys = ['chromosome','position','referenceBase','sampleGenotype']
             (chrom2,pos2,ref2,sg) = [out_splt[self.indexOf[k]] for k in keys]
-            #print "readiung: ", chrom2, pos2, ref2, sg
             samples = sg.split(',')
             mut2 = ""
 
             isInsertion = '-' in ref2
+            # go through each sample, find the first allele different 
+            # from the ref
+            # when we can't match, use wildcard '*', 
+            # globes.compareVariants will know how to use
             if isInsertion :
                 ref2 = ref2[0]
                 for sample in samples :
@@ -86,6 +93,7 @@ class SeattleAnnotator(Source) :
                         break
                     else : continue
                 if mut2 == 'N' or mut2 == '' : mut2 = '*'
+
             else :
                 for sample in samples :
                     (one,two) = sample.split('/')
@@ -104,12 +112,14 @@ class SeattleAnnotator(Source) :
 
         else : assert 'switch must be' == 'snp or indel'
 
-        #not ideal, but if SeattleSeq is going to be a bitch
-        #it's the best we can do
         if mut2 == 'N' : mut2 = '*'
         #print 'seattle pos: ',chrom2, pos2, ref2, mut2
         return (globes.chromNum(chrom2),pos2,ref2,mut2)
 
+    # SeattleSeq says 'I don't know' or 'Not applicable' a few different
+    # ways, we want to turn then into NULL's in the database
+    # Giving a field an empty string will result in a database NULL
+    # via db.sanitizeValue()
     def nullify( self, value ) :
         if value == 'NA' or value == 'unknown' or value == 'none':
             return ''
@@ -118,15 +128,18 @@ class SeattleAnnotator(Source) :
     def eqkey( self, out_splt ) :
         return self.getPosition( out_splt )
 
+    # The variant is our target
+    # out_splts are split lines from the SS file that have the info
+    # we want to put inside a variant
     def integrator( self, variant, out_splts ) :
-        #get the variant field information from the first out_splt
-        #remember there may be multiple corresponding to different isoforms
+        # get the variant field information from the first out_splt
+        # remember there may be multiple lines all with the same eqkey() evaluation,
+        # corresponding to different isoforms
         for c in self.cols :
             variant.fields[c] = self.nullify( out_splts[0][indexOf[c]] )
 
         #make variant.isoforms out of each splt
         for out_splt in out_splts :
-
             iso = Isoform()
             pp = out_splt[indexOf["proteinPosition"]]
             if not pp == '' and not pp == 'NA':
@@ -149,10 +162,19 @@ class SeattleAnnotator(Source) :
 
         return variant
 
+    # used by iterate() to stop the file iterator
     def stopper( self, splt ) :
         return len(splt) == 1
 
 
+if __name__ == '__main__' :
+    #indelList = indel.inputINDELS( globes.INDEL_FILE )
+    #parseIndels( 5 )
+    separateOutputToFamilies()
+
+
+
+# old stuff, doubtful it will be useful again
 #take the data back from seattle seq and separate 
 def separateOutputToFamilies() :
     fin = open( "%s/seattle/input/indel_input.vcf" % (globes.INT_DIR) )
@@ -230,7 +252,4 @@ def separateOutputToFamilies() :
     [f.close() for f in fouts]
     fin.close()
 
-if __name__ == '__main__' :
-    #indelList = indel.inputINDELS( globes.INDEL_FILE )
-    #parseIndels( 5 )
-    separateOutputToFamilies()
+

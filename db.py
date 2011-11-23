@@ -1,7 +1,7 @@
 import MySQLdb
 import warnings
 import globes
-import json
+import simplejson as json
 
 endOfIteration = -1
 
@@ -125,11 +125,11 @@ class Conn :
     def insert(self, table, values, columns=[], skip_dupes=False ) :
         values = ','.join( map( self.sanitizeValue, values ) )
         if not columns :
-            ins = """INSERT INTO gleeson.%s VALUES( %s );""" \
+            ins = """INSERT INTO %s VALUES( %s );""" \
                   % (table, ','.join(values))
         else :
             columns = ','.join(['`%s`' % c for c in columns])
-            ins = "INSERT INTO gleeson.%s (%s) VALUES( %s );" \
+            ins = "INSERT INTO %s (%s) VALUES( %s );" \
                    % (table, columns, values)
         try :
             self.put(ins)

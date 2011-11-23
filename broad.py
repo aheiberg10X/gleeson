@@ -1,23 +1,19 @@
-import globes
-
 import re
 import os
 
-COLUMN_MAP  =       {"chrom" :  0,
-                     "pos" :    1,
-                     "dbSNP" :  2,
-                     "ref" :    3,
-                     "mut" :    4,
-                     "qual" :   5,
-                     "filter" : 6,
-                     "info"   : 7,
-                     "format" : 8}
+import globes
+from collimator import Source
 
-#COLUMN_CAST = {"chrom" : str,
-               #"pos" : int,
-               #"dbSNP" : str,
-               #"ref" : str,
-               #"mut
+COLUMN_MAP  =   {"chrom" :  0,
+                 "pos" :    1,
+                 "dbSNP" :  2,
+                 "ref" :    3,
+                 "mut" :    4,
+                 "qual" :   5,
+                 "filter" : 6,
+                 "info"   : 7,
+                 "format" : 8}
+
 
 CALL_START = len(COLUMN_MAP)
 
@@ -27,7 +23,178 @@ CALL_MAP = {"GT" : 0,
             "GQ" : 3,
             "PL" : 4}
 
+# This class wraps a vcf file for Collimator consumption
+class VCFSource(Source) :
+    def __init__(self, vcf_file, fast_forward=0) :
+        self.indexOf = broad.COLUMN_MAP
+        globes.printColumnWarning( vcf_file, self.indexOf )
+        self.fin = open( vcf_file, "rb" )
+        self.patients = broad.getPatients( self.fin )
 
+        self.allow_absent = False
+        self.group_repeats = False
+        self.iterator = self.iterate(fast_forward)
+
+    def iterate(self, fast_forward = 0) :
+        count = 0
+        for row in globes.splitIterator( self.fin, burn=0 ) :
+            if count < fast_forward :
+                count += 1
+                continue
+            else : yield row
+
+    def eqkey(self, it) :
+        fields = ["chrom","pos","ref","mut"]
+        return [it[self.indexOf[f]] for f in fields]
+
+    
+    def integrator( self, target, splts ) :
+        if len(splts) != 1 : assert "len isn't right"
+        for splt in splts :
+            ##TODO generalize this to make it vendor independent, call start column is feature of VCF, not broad???
+            calls = splt[ broad.CALL_START: ]
+            base_calls = []
+            for pat_ix,c in enumerate(calls) :
+                pat_name = self.patients[pat_ix]
+                sc = broad.splitCall(c)
+                gt = broad.convertGT( sc )
+                if broad.isMutated( gt ) or broad.noInf( gt ) :
+                    base_calls.append( BaseCall(sc,pat_name) )
+
+            fields = {}
+            keys = broad.COLUMN_MAP.keys()
+            for k in keys :
+                if k == "chrom" :
+                    fields[k] = globes.chromNum( splt[self.indexOf[k]] )
+                elif k == "info" :
+                    #this information is useless, will get globally updated
+                    dinfo = broad.makeInfoDict( splt[ self.indexOf[k] ] )
+                    fields["AF"] = dinfo["AF"]
+                elif k == "dbSNP" :
+                    value = splt[self.indexOf[k]]
+                    #when we getFields, 'dbsnp' will be missing and yield null
+                    if value == '.' : pass
+                    #right now just take the first rs number if multiple
+                    elif value.startswith('rs') :
+                        fields[k] = [int(t.strip()[2:]) for t in value.split(';')][0]
+                    else :
+                        print "malformed rs number?", splt
+                        assert False
+                else :
+                    fields[k] = splt[ self.indexOf[k] ]
+
+
+            #according to: http://www.broadinstitute.org/gsa/wiki/index.php/Understanding_the_Unified_Genotyper's_VCF_files
+            #ref and alt are always given for the forward strand
+            fields['strand'] = True
+
+        return Variant( fields, base_calls )
+
+#######################################################################
+#############     Helper Funcs  #######################################
+#######################################################################
+
+#returns the list of patients
+#also, advances broad_fh to the spot where data lines start
+def getColumnsAndHeaders( broad_fh, toFind = "CHROM" ) :
+    #skip all the header files
+    headers = []
+    while True :
+        line = broad_fh.readline().strip()
+        lineIsHeader = toFind not in line #line.find( toFind ) == -1
+        if not lineIsHeader : break
+        else : headers.append( line )
+
+    #process the header line w/ header colums
+    columns = line.strip().split("\t")
+    return (columns, headers)
+
+def getPatients( broad_fh ) :
+    columns = getColumnsAndHeaders(broad_fh)[0]
+    return [sanitizePatientName(p) for p in columns[CALL_START:]]
+
+#strip of transcript means to ignore num part of: 'att_1, att_2, etc'
+#will throw an exception if all values are not the same
+def makeInfoDict( info, strip_of_transcript = False) :
+    dinfo = {}
+    for kv in info.split(';') :
+        if kv.startswith("refseq") : continue
+        try :
+            (key,value) = kv.split('=')
+        except ValueError :
+            key,value = kv,""
+
+        if strip_of_transcript :
+            try :
+                (key,transcript_ix) = key.split('_')
+            except ValueError :
+                pass
+            if key in dinfo :
+                if not dinfo[key] == value :
+                    raise Exception( \
+                       "\n\n--------------------------------------- \n" + \
+                       "problem key: %s \n" % (key) + \
+                       "info: %s \n " % (info) )
+            else :
+                dinfo[key] = value
+        else :
+            dinfo[key] = value
+
+    return dinfo
+
+def noRefseqAnnotation( dinfo ) :
+    for k in dinfo : 
+        if k.startswith("refseq") :
+            del dinfo[k]
+    return dinfo
+
+def infoDictToString( dinfo ) :
+    string = []
+    for key in dinfo :
+        if dinfo[key] == "" :
+            string.append( "%s" % key )
+        else :
+            string.append( "%s=%s" % (key,dinfo[key]) )
+    return ";".join( string )
+
+def splitCall( call ) :
+    if call.startswith( './.' ) : return ['./.']
+    else : return call.split(":")
+
+def justCalls( splt ) :
+    return splt[ CALL_START: ]
+
+#take the genotype from a broad call and convert into an int
+def convertGT( call_splt, variant_ix=1 ) :
+    GT_string = call_splt[ CALL_MAP["GT"] ]
+    if   GT_string == "./." : return 0
+    elif GT_string == "0/0" : return 3
+    elif GT_string == "%d/%d" % (variant_ix,variant_ix) : return 2
+    elif GT_string == "0/%d" % (variant_ix) : return 1
+    #the call is a different variant
+    else : return -1
+
+def encodeGT( gt, variant_ix=1 ) :
+    if   gt == 0 : return './.'
+    elif gt == 3 : return '0/0'
+    elif gt == 2 : return '%d/%d' % (variant_ix, variant_ix)
+    elif gt == 1 : return '0/%d' % variant_ix
+    elif gt == -1 : return '0/0'
+    else : raise Exception("GT must be 0,1,2,3, not %d" % gt)
+
+def isMutated( gt ) :
+    return gt == 1 or gt == 2
+
+def noInf( gt ) : return gt == 0 
+
+def isCovered( call_splt, coverage_thresh=8 ) :
+    if len(call_splt) == 1 : return False
+    else:
+        return int( call_splt[ CALL_MAP["DP"] ] ) > coverage_thresh
+
+########################################################################
+###############     VCF File Manipulation   ############################
+########################################################################
 
 #in Broad file, there can be multiple variations @ the same position
 #they get smashed into same column, delimited by ','
@@ -239,112 +406,6 @@ def breakIntoFamilyFiles( orig_filename, outdir ) :
     if not os.path.isdir( outdir ) : os.mkdir( outdir ) 
     pickOutFamilies( orig_filename, outdir, family_groups )
 
-#######################################################################
-#############    Helper Classes    ####################################
-#######################################################################
-
-
-#######################################################################
-#############     Helper Funcs  #######################################
-#######################################################################
-
-#returns the list of patients
-#also, advances broad_fh to the spot where data lines start
-def getColumnsAndHeaders( broad_fh, toFind = "CHROM" ) :
-    #skip all the header files
-    headers = []
-    while True :
-        line = broad_fh.readline().strip()
-        lineIsHeader = toFind not in line #line.find( toFind ) == -1
-        if not lineIsHeader : break
-        else : headers.append( line )
-
-    #process the header line w/ header colums
-    columns = line.strip().split("\t")
-    return (columns, headers)
-
-def getPatients( broad_fh ) :
-    columns = getColumnsAndHeaders(broad_fh)[0]
-    return [sanitizePatientName(p) for p in columns[CALL_START:]]
-
-#strip of transcript means to ignore num part of: 'att_1, att_2, etc'
-#will throw an exception if all values are not the same
-def makeInfoDict( info, strip_of_transcript = False) :
-    dinfo = {}
-    for kv in info.split(';') :
-        if kv.startswith("refseq") : continue
-        try :
-            (key,value) = kv.split('=')
-        except ValueError :
-            key,value = kv,""
-
-        if strip_of_transcript :
-            try :
-                (key,transcript_ix) = key.split('_')
-            except ValueError :
-                pass
-            if key in dinfo :
-                if not dinfo[key] == value :
-                    raise Exception( \
-                       "\n\n--------------------------------------- \n" + \
-                       "problem key: %s \n" % (key) + \
-                       "info: %s \n " % (info) )
-            else :
-                dinfo[key] = value
-        else :
-            dinfo[key] = value
-
-    return dinfo
-
-def noRefseqAnnotation( dinfo ) :
-    for k in dinfo : 
-        if k.startswith("refseq") :
-            del dinfo[k]
-    return dinfo
-
-def infoDictToString( dinfo ) :
-    string = []
-    for key in dinfo :
-        if dinfo[key] == "" :
-            string.append( "%s" % key )
-        else :
-            string.append( "%s=%s" % (key,dinfo[key]) )
-    return ";".join( string )
-
-def splitCall( call ) :
-    if call.startswith( './.' ) : return ['./.']
-    else : return call.split(":")
-
-def justCalls( splt ) :
-    return splt[ CALL_START: ]
-
-#take the genotype from a broad call and convert into an int
-def convertGT( call_splt, variant_ix=1 ) :
-    GT_string = call_splt[ CALL_MAP["GT"] ]
-    if   GT_string == "./." : return 0
-    elif GT_string == "0/0" : return 3
-    elif GT_string == "%d/%d" % (variant_ix,variant_ix) : return 2
-    elif GT_string == "0/%d" % (variant_ix) : return 1
-    #the call is a different variant
-    else : return -1
-
-def encodeGT( gt, variant_ix=1 ) :
-    if   gt == 0 : return './.'
-    elif gt == 3 : return '0/0'
-    elif gt == 2 : return '%d/%d' % (variant_ix, variant_ix)
-    elif gt == 1 : return '0/%d' % variant_ix
-    elif gt == -1 : return '0/0'
-    else : raise Exception("GT must be 0,1,2,3, not %d" % gt)
-
-def isMutated( gt ) :
-    return gt == 1 or gt == 2
-
-def noInf( gt ) : return gt == 0 
-
-def isCovered( call_splt, coverage_thresh=8 ) :
-    if len(call_splt) == 1 : return False
-    else:
-        return int( call_splt[ CALL_MAP["DP"] ] ) > coverage_thresh
 
 if __name__ == "__main__" :
     #breakIntoFamilyFiles( globes.INDEL_FILE, \

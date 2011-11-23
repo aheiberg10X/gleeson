@@ -9,7 +9,8 @@ class Source :
     #       ***self.iterator is expected to be sorted with respect to eqkey***
     #integrator: is a function that takes a list of items from iterator
     #            and merges it into some data structure called 'target'
-    #allow_absent: Collimator will find the minimum set of items across multipl     #              Sources.  Do we ever let this Source be absent from this 
+    #allow_absent: Collimator will find the minimum set of items across multipl     
+    #              Sources.  Do we ever let this Source be absent from this 
     #              minimum set?
     #group_repeats: if there are multiple entries with the same key, 
     #               do we treat them as one unit and give them all 
