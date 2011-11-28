@@ -25,11 +25,6 @@ class Conn :
         self.cur.close()
         self.connection.close()
 
-    # This should not be here.  
-    # Store passwd information in separate file that is not on a public repo
-    def quickConnect( self, switch ) :
-        return self.connect( *connections[switch] )
-
     def connect( self, host, user, password, db ) :
         return MySQLdb.connect( host=host, \
                                 user=user, \
