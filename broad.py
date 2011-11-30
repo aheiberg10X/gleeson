@@ -26,10 +26,10 @@ CALL_MAP = {"GT" : 0,
 # This class wraps a vcf file for Collimator consumption
 class VCFSource(Source) :
     def __init__(self, vcf_file, fast_forward=0) :
-        self.indexOf = broad.COLUMN_MAP
+        self.indexOf = COLUMN_MAP
         globes.printColumnWarning( vcf_file, self.indexOf )
         self.fin = open( vcf_file, "rb" )
-        self.patients = broad.getPatients( self.fin )
+        self.patients = getPatients( self.fin )
 
         self.allow_absent = False
         self.group_repeats = False
@@ -52,23 +52,23 @@ class VCFSource(Source) :
         if len(splts) != 1 : assert "len isn't right"
         for splt in splts :
             ##TODO generalize this to make it vendor independent, call start column is feature of VCF, not broad???
-            calls = splt[ broad.CALL_START: ]
+            calls = splt[ CALL_START: ]
             base_calls = []
             for pat_ix,c in enumerate(calls) :
                 pat_name = self.patients[pat_ix]
-                sc = broad.splitCall(c)
-                gt = broad.convertGT( sc )
-                if broad.isMutated( gt ) or broad.noInf( gt ) :
+                sc = splitCall(c)
+                gt = convertGT( sc )
+                if isMutated( gt ) or noInf( gt ) :
                     base_calls.append( BaseCall(sc,pat_name) )
 
             fields = {}
-            keys = broad.COLUMN_MAP.keys()
+            keys = COLUMN_MAP.keys()
             for k in keys :
                 if k == "chrom" :
                     fields[k] = globes.chromNum( splt[self.indexOf[k]] )
                 elif k == "info" :
                     #this information is useless, will get globally updated
-                    dinfo = broad.makeInfoDict( splt[ self.indexOf[k] ] )
+                    dinfo = makeInfoDict( splt[ self.indexOf[k] ] )
                     fields["AF"] = dinfo["AF"]
                 elif k == "dbSNP" :
                     value = splt[self.indexOf[k]]

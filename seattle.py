@@ -37,7 +37,7 @@ class SeattleSource(Source) :
         count = 0
         for row in  globes.splitIterator( self.file, \
                                           burn=1, \
-                                          stopper=self.stopper ) :
+                                          stopIter=self.stopper ) :
             if count < fast_forward :
                 count += 1
                 continue

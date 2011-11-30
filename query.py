@@ -258,7 +258,9 @@ def familyReports() :
              "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
              "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
-    icols = ["functionGVS","polyPhen","codon_pos","codon_total","gene","ref_aa","mut_aa"]
+    icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa"]
+
+    gcols = ["geneSymbol","omim"]
 
     #going in the output
     column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", "AF", \
@@ -268,7 +270,7 @@ def familyReports() :
                       "GT:DP:GQ", "#HomShares", "Hom Shares", \
                       "#HetShares", "Het Shares"]
 
-    #We queried for vcols, icols and want to print out the appropriate
+    #We queried for vcols, icols, gcols and want to print out the appropriate
     #values for column_headers.  Return a list of the values.
     #Note this won't get us all the way.  This list will stil be missing
     #GT:DP:GQ and all the share information
@@ -278,15 +280,17 @@ def familyReports() :
         #basic var stuff
         output.extend( row[1:6] )
         #gene
-        output.append( row[-3] )
+        output.append( row[-2] )
         #AF
         output.append( row[9] )
         #functionGVS
-        output.append( row[-7] )
+        output.append( row[-8] )
         #ref/mut aa
-        output.append( "%s/%s" % (row[-2],row[-1]) )
+        output.append( "%s/%s" % (row[-4],row[-3]) )
         #pos/tot
-        output.append( "%s/%s" % (row[-5],row[-4]) )
+        output.append( "%s/%s" % (row[-6],row[-5]) )
+        #omim 
+        output.append( row[-1] )
         #grantham,phast,gerp,splice
         output.extend( row[10:14] )
         output.append( row[17] )
