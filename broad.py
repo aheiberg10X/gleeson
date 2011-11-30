@@ -1,5 +1,6 @@
 import re
-import os
+import os 
+import variant
 
 import globes
 from collimator import Source
@@ -59,7 +60,7 @@ class VCFSource(Source) :
                 sc = splitCall(c)
                 gt = convertGT( sc )
                 if isMutated( gt ) or noInf( gt ) :
-                    base_calls.append( BaseCall(sc,pat_name) )
+                   base_calls.append( variant.BaseCall(sc,pat_name) )
 
             fields = {}
             keys = COLUMN_MAP.keys()
@@ -88,7 +89,7 @@ class VCFSource(Source) :
             #ref and alt are always given for the forward strand
             fields['strand'] = True
 
-        return Variant( fields, base_calls )
+        return variant.Variant( fields, base_calls )
 
 #######################################################################
 #############     Helper Funcs  #######################################

@@ -67,6 +67,12 @@ if __name__ == '__main__' :
     #fillGenesTable()
     updateGenesWithOMIM()
 
+##Gene | Disease
+#cat genemap | awk -F '|' '{ print $6 "||" $14 } '
+
+##Below is all crap, the FIELD TI is not what we wanted
+
+
 ##just grab the 'FIELD TI' lines out of omim.txt, then strip of optional *|^|% char
 ##split mim_id and disease name with a tab
 #cat omim.txt | awk '/\*FIELD\* TI/ {getline; print $0 }' | gawk 'match($0, /([0-9]+)(.*)/, ary) {print ary[1]"\t"ary[2]}' > omim_field_ti.txt

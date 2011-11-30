@@ -264,7 +264,7 @@ def familyReports() :
 
     #going in the output
     column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", "AF", \
-                      "functionGVS", "AA_Change", "AA_Pos", \
+                      "functionGVS", "omim", "AA_Change", "AA_Pos", \
                       "granthamScore", "scorePhastCons", "consScoreGERP", \
                       "distanceToSplice", "clinicalAssociation", \
                       "GT:DP:GQ", "#HomShares", "Hom Shares", \
@@ -285,12 +285,12 @@ def familyReports() :
         output.append( row[9] )
         #functionGVS
         output.append( row[-8] )
+        #omim 
+        output.append( row[-1] )
         #ref/mut aa
         output.append( "%s/%s" % (row[-4],row[-3]) )
         #pos/tot
         output.append( "%s/%s" % (row[-6],row[-5]) )
-        #omim 
-        output.append( row[-1] )
         #grantham,phast,gerp,splice
         output.extend( row[10:14] )
         output.append( row[17] )

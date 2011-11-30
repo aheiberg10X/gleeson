@@ -17,14 +17,7 @@ dry_run = True
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
 plates_and_switches = [\
-                       #(Pilot(),'snp'),(Pilot(),'indel'), \
-                       #(PlateI(),'snp') \
-                       (PlateI(),'indel') \
-                       #(PlateII(),'snp'),(PlateII(),'indel'), \
-                       #(PlateIII(),'snp'),\
-                       #(CIDR(),'snp'),(CIDR(),'indel'), \
-                       #(Frazer_ali2(),'snp'),(Frazer_ali2(),'indel'), \
-                       #(Frazer_aligned(),'snp'),(Frazer_aligned(),'indel') \
+                       (Pilot(),'snp') \
                       ]
 
 #Run with python importer.py
@@ -90,7 +83,7 @@ def comparator(a,b) :
 
 #method needed to construct a Collimator
 def targetCreator() :
-    return variant.Variant([],[])
+    return Variant([],[])
 
 #Would very much like to speed up this process, dont see how
 def getVariantID( var_tuple ) :
@@ -134,6 +127,7 @@ def insertVariant(conn, variant, plate_id) :
     #insert the isoforms
     for iso in variant.isoforms :
         #iso.fields['gene_id'] = geneIDFromAccession( conn, iso.fields["accession"] )
+        print iso
         values = [variant_dbix] + iso.getFields( iso_cols_tograb )
         conn.insert( "Isoforms", values, iso_cols[1:] )
 
