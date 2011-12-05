@@ -184,7 +184,7 @@ def getPatients( conn, var_id, where_clause="" ) :
     q = '''
     select c.*, p.name
     from Calls as c inner join Patients as p on c.pat_id = p.id
-    where c.var_id = %d %s''' % (var_id, where_clause)
+    where p.valid = 1 and c.var_id = %d %s''' % (var_id, where_clause)
     noinfs, homs, hets = [],[],[]
     lookup = {0 : noinfs, \
               1 : hets, \
@@ -260,13 +260,13 @@ def familyReports() :
 
     icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa"]
 
-    gcols = ["geneSymbol","omim"]
+    gcols = ["geneSymbol","omim_disease"]
 
     #going in the output
     column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", "AF", \
-                      "functionGVS", "omim", "AA_Change", "AA_Pos", \
+                      "functionGVS", "AA_Change", "AA_Pos", \
                       "granthamScore", "scorePhastCons", "consScoreGERP", \
-                      "distanceToSplice", "clinicalAssociation", \
+                      "distanceToSplice", "omim", "clinicalAssociation", \
                       "GT:DP:GQ", "#HomShares", "Hom Shares", \
                       "#HetShares", "Het Shares"]
 
@@ -285,14 +285,15 @@ def familyReports() :
         output.append( row[9] )
         #functionGVS
         output.append( row[-8] )
-        #omim 
-        output.append( row[-1] )
         #ref/mut aa
         output.append( "%s/%s" % (row[-4],row[-3]) )
         #pos/tot
         output.append( "%s/%s" % (row[-6],row[-5]) )
         #grantham,phast,gerp,splice
         output.extend( row[10:14] )
+        #omim 
+        output.append( row[-1] )
+        #clinicalAssociation
         output.append( row[17] )
         return output
 
@@ -330,13 +331,15 @@ def familyReports() :
     #what are the interesting variants
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
     icols_string = ', '.join(["i.%s" % c for c in icols])
+    gcols_string = ', '.join(["g.%s" % c for c in gcols])
     dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
     gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
     gvs = ' and '.join(gvs)
-    query = '''select %s, %s 
+    query = '''select %s, %s, %s
            from Variants as v inner join Isoforms as i on v.id = i.var_id
+                              inner join Genes as g on g.id = i.gene_id
            where (%s)  and v.AF < 0.1
-           order by AF''' % (vcols_string, icols_string, gvs)
+           order by AF''' % (vcols_string, icols_string, gcols_string, gvs)
     print query
 
     for varix,r in enumerate(conn.query( query )) :
@@ -374,19 +377,21 @@ def familyReports() :
                                           num_hets-1, new_het_string] )
 
 def updateAF(conn) :
-    query = "select count(*) from Patients"
+    query = "select count(*) from Patients where valid = 1"
     num_pats = conn.queryScalar( query, int )
     query = '''update Variants, (select var_id, sum(GT)/%d as newAF
-                                 from Calls
+                                 from Calls as c inner join Patients as p
+                                      on c.pat_id = p.id
+                                 where p.valid = 1
                                  group by var_id) as t
                set AF = t.newAF
                where id = t.var_id''' % (2*num_pats)
     conn.put( query )
 
 if __name__ == '__main__' :
-
-    familyReports()
     #conn = db.Conn("localhost", dry_run=False)
+    #print getPatients( conn, 414941 )
+    familyReports()
     #updateAF(conn)
     
     #print genQ1(params)

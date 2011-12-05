@@ -83,6 +83,15 @@ class Frazer_ali2(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads2_snps.vcf.221292923075.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads2_indels.vcf.221295179021.txt"
 
+class FrazerII(Plate) :
+    def __init__(self) :
+        self.name = "FrazerII"
+        Plate.__init__(self)
+        self.snpfile = "CBH-348.snps.vcf"
+        self.indelfile = "CBH-348.indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.CBH-348.snps.vcf.222970028015.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.CBH-348.indels.vcf.222971913506.txt"
+
 class Frazer_aligned(Plate) :
     def __init__(self) :
         self.name = "Frazer_aligned"

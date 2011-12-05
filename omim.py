@@ -41,26 +41,52 @@ def fillGenesTable() :
 
 def updateGenesWithOMIM() :
     conn = db.Conn("localhost",dry_run=False)
-    fin = open("../omim/refined.txt")
+
+    fin = open("../omim/gene_disease.txt")
+    count = 0
+    total = 0
     max_len = 0
     for line in fin.readlines() :
-        splt = line.strip().split('\t')
-        disease_name = splt[1].split(';')[0]
-        if len(disease_name) > max_len : max_len = len(disease_name)
-        gene_name = splt[-1]
-        query = "select id from Genes where geneSymbol = '%s'" % gene_name
-        gid = conn.queryScalar( query, int )
-        if gid :
-            conn.update('Genes',[disease_name],['omim'],gid)
-            pass
-        else :
-            print 'cant find gene_name %s' % gene_name
-        #query = "update Genes set omim = '%s' where geneSymbol = '%s'" \
-                #% (disease_name, gene_name)
+        (genes, mimnum, diseases) = line.strip().split('|')
+        diseases = diseases.strip(';').strip().replace("\\'","'").replace("'","''")
+        genes = [g.strip() for g in genes.split(',')]
+        if diseases :
+            if len(diseases) > max_len : max_len = len(diseases)
+            for gene in genes :
+                #q = "select count(*) from Genes where geneSymbol = '%s'" % gene
+                #c = conn.queryScalar( q, int )
+                #if c : count += 1
+                #total += 1
+                q = '''update Genes
+                       set omim_disease = '%s', mim_num = %s
+                       where geneSymbol = '%s' ''' \
+                        % (diseases, mimnum, gene )
+                conn.put( q )
 
-    print max_len
-
+    print "max_lken", max_len
+    print count, "/", total
     fin.close()
+
+    #fin = open("../omim/refined.txt")
+    #max_len = 0
+    #for line in fin.readlines() :
+        #splt = line.strip().split('\t')
+        #disease_name = splt[1].split(';')[0]
+        #if len(disease_name) > max_len : max_len = len(disease_name)
+        #gene_name = splt[-1]
+        #query = "select id from Genes where geneSymbol = '%s'" % gene_name
+        #gid = conn.queryScalar( query, int )
+        #if gid :
+            #conn.update('Genes',[disease_name],['omim'],gid)
+            #pass
+        #else :
+            #print 'cant find gene_name %s' % gene_name
+        ##query = "update Genes set omim = '%s' where geneSymbol = '%s'" \
+                ##% (disease_name, gene_name)
+#
+    #print max_len
+#
+    #fin.close()
 
 if __name__ == '__main__' :
     #makeGeneIDs()

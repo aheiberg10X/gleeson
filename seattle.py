@@ -32,11 +32,20 @@ class SeattleSource(Source) :
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
                      "distanceToSplice", "AfricanHapMapFreq", \
                      "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+    def headerCheck( self, header_splt ) :
+        b = cols == header_splt
+        if not b :
+            return (False,"%s \n\ndo not match expected: \n\n%s" \
+                   % (header_splt,cols))
+        else :
+            return (True,"good to go")
 
-    def iterate(self, sanity_check=lambda x:True, fast_forward = 0) :
+    def iterate(self, fast_forward = 0) :
         count = 0
         for row in  globes.splitIterator( self.file, \
                                           burn=1, \
+                                          header_line_num=0, \
+                                          headerSanityCheck=self.headerCheck, \
                                           stopIter=self.stopper ) :
             if count < fast_forward :
                 count += 1
@@ -170,8 +179,8 @@ class SeattleSource(Source) :
 if __name__ == '__main__' :
     #indelList = indel.inputINDELS( globes.INDEL_FILE )
     #parseIndels( 5 )
-    separateOutputToFamilies()
-
+    #separateOutputToFamilies()
+    pass
 
 
 # old stuff, doubtful it will be useful again

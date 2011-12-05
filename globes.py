@@ -9,10 +9,11 @@ plates = { "Pilot" :          0, \
            "PlateIII" :       3, \
            "CIDR" :           4, \
            "Frazer_ali2" :    5, \
-           "Frazer_aligned" : 6}
+           "Frazer_aligned" : 6, \
+           "FrazerII" :       7}
 
 
-ROOT_DIR = "/home/Gleeson/ken"
+ROOT_DIR = "/home/Gleeson/database"
 OUT_DIR = "%s/output" % ROOT_DIR
 
 #Jobs output from triton have their last line as 'Nodes:    ttc....'
@@ -43,7 +44,7 @@ def splitIterator( fh_or_name, sep='\t', burn=0, \
             splt = line.strip('\n').split(sep)
             (ok,message) = headerSanityCheck( splt )
             if not ok :
-                print "\n\n %s, \nline split: %s \n\n" % (message,str(splt))
+                print message
                 raise StopIteration
         count += 1
 

@@ -5,20 +5,18 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = True
+dry_run = False
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [\
-                       (Pilot(),'snp') \
-                      ]
+plates_and_switches = [(FrazerII(),'indel')]
 
 #Run with python importer.py
 
@@ -126,8 +124,8 @@ def insertVariant(conn, variant, plate_id) :
 
     #insert the isoforms
     for iso in variant.isoforms :
-        #iso.fields['gene_id'] = geneIDFromAccession( conn, iso.fields["accession"] )
-        print iso
+        iso.fields['gene_id'] = geneIDFromName( conn, iso.fields["gene"] )
+        #print iso
         values = [variant_dbix] + iso.getFields( iso_cols_tograb )
         conn.insert( "Isoforms", values, iso_cols[1:] )
 
@@ -169,6 +167,20 @@ def populatePatients( conn, patient_names ) :
 def lookupPatientID( call ) :
     patient_name = vcfSource.patients[call.pat_ix]
     return patients_dbix[patient_name]
+
+def geneIDFromName( conn, gene_name ) :
+    query = "select id from Genes where geneSymbol = '%s'" % gene_name
+    gene_ids = conn.query( query )
+    if not gene_ids :
+        gid = -1 #makeEmptyGene( conn, 'refseq', accession )
+    elif len(gene_ids) == 1 :
+        gid = int(gene_ids[0][0])
+    else :
+        #'what to do when an accession: %s matches multiple Genes %s?' % (accession, str(gene_ids))
+        #take the first one
+        gid = int(gene_ids[0][0])
+
+    return gid
 
 if __name__ == '__main__' :
     for plate,switch in plates_and_switches :
@@ -218,20 +230,6 @@ def makeEmptyGene(conn,col,value) :
     conn.insert( "Genes", [nid,value], ["id",col] )
     return nid
 
-#Hold over from when we were maintaining a Genes table.  Not used currently
-def geneIDFromAccession( conn, accession ) :
-    query = "select id from Genes where refseq = '%s'" % accession
-    gene_ids = conn.query( query )
-    if not gene_ids :
-        gid = makeEmptyGene( conn, 'refseq', accession )
-    elif len(gene_ids) == 1 :
-        gid = int(gene_ids[0][0])
-    else :
-        #'what to do when an accession: %s matches multiple Genes %s?' % (accession, str(gene_ids))
-        #take the first one
-        gid = int(gene_ids[0][0])
-
-    return gid
 
 #quick hack to add in some missing variants
 def insertMissingVariants(conn) :
