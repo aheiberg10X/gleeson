@@ -1,5 +1,15 @@
 import globes
 
+ids =    { "Pilot" :          0, \
+           "PlateI" :         1, \
+           "PlateII" :        2, \
+           "PlateIII" :       3, \
+           "CIDR" :           4, \
+           "Frazer_ali2" :    5, \
+           "Frazer_aligned" : 6, \
+           "FrazerII" :       7, \
+           "PlateIV" :       8}
+
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
 #   A name (the same as the folder you put all the data in.  
@@ -23,7 +33,7 @@ class Plate :
             return "%s/%s" % (self.data_dir, self.seattle_indel_file)
 
     def getPlateID( self ) :
-        return globes.plates[self.name]
+        return ids[self.name]
 
 class Pilot(Plate) :
     def __init__(self) :
@@ -83,6 +93,15 @@ class Frazer_ali2(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads2_snps.vcf.221292923075.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads2_indels.vcf.221295179021.txt"
 
+class Frazer_aligned(Plate) :
+    def __init__(self) :
+        self.name = "Frazer_aligned"
+        Plate.__init__(self)
+        self.snpfile = "fromfrazer_threads_snps.vcf"
+        self.indelfile = "fromfrazer_threads_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads_snps.vcf.221296444806.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads_indels.vcf.221298757736.txt"
+
 class FrazerII(Plate) :
     def __init__(self) :
         self.name = "FrazerII"
@@ -92,11 +111,12 @@ class FrazerII(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation131.CBH-348.snps.vcf.222970028015.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.CBH-348.indels.vcf.222971913506.txt"
 
-class Frazer_aligned(Plate) :
+class PlateIV(Plate) :
     def __init__(self) :
-        self.name = "Frazer_aligned"
+        self.name = "PlateIV"
         Plate.__init__(self)
-        self.snpfile = "fromfrazer_threads_snps.vcf"
-        self.indelfile = "fromfrazer_threads_indels.vcf"
-        self.seattle_snp_file = "SeattleSeqAnnotation131.fromfrazer_threads_snps.vcf.221296444806.txt"
-        self.seattle_indel_file = "SeattleSeqAnnotation131.fromfrazer_threads_indels.vcf.221298757736.txt"
+        self.snpfile = "plateIV.snps.vcf"
+        self.indelfile = "plateIV.indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.plateIV.snps.vcf.223309049013.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.plateIV.indels.vcf.223306147216.txt"
+

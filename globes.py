@@ -1,17 +1,7 @@
 import os
 import re
 
-
 #names should match up with self.name of plates.py
-plates = { "Pilot" :          0, \
-           "PlateI" :         1, \
-           "PlateII" :        2, \
-           "PlateIII" :       3, \
-           "CIDR" :           4, \
-           "Frazer_ali2" :    5, \
-           "Frazer_aligned" : 6, \
-           "FrazerII" :       7}
-
 
 ROOT_DIR = "/home/Gleeson/database"
 OUT_DIR = "%s/output" % ROOT_DIR
@@ -75,7 +65,6 @@ def chromNum( chrom ) :
         try : return int(chrom)
         except ValueError :
             print "chromNum can't cast %s to int" % chrom
-
 
 def compareHelper( a,b ) :
     if a == '*' or b == '*' : return 0

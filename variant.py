@@ -37,6 +37,7 @@ class BaseCall(SQLizable) :
     def isMutated(self) :
         return broad.isMutated( self.GT )
 
+
 class Isoform(SQLizable) :
     def __init__(self) :
         self.fields = {}
@@ -52,6 +53,10 @@ class Isoform(SQLizable) :
         for f in self.fields :
             s.append("||%s : %s||" % (f,self.fields[f]) )
         return '\n'.join(s)
+
+class SNPEffIsoform(SQLizable) :
+    def __init__(self) :
+        self.fields = {}
 
 # A variant object is something that can be inserted into the db 
 # see see insertVariant() in importer.py

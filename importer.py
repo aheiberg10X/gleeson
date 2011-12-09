@@ -5,7 +5,7 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
@@ -16,7 +16,7 @@ dry_run = False
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(FrazerII(),'indel')]
+plates_and_switches = [(PlateIV(),'snp')]
 
 #Run with python importer.py
 
@@ -192,7 +192,7 @@ if __name__ == '__main__' :
 #unfinished.  Idea was to remove Calls that were spurious,
 #then removed the Variants, Patients, and Isoforms that got orphaned
 def removeCalls() :
-    plate_id = globes.plates("PlateIII")
+    plate_id = plates.ids("PlateIII")
 
     #delete all Calls that are old
     query = '''
