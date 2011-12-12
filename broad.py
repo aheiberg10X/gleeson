@@ -4,6 +4,7 @@ import variant
 
 import globes
 from collimator import Source
+import plates
 
 COLUMN_MAP  =   {"chrom" :  0,
                  "pos" :    1,
@@ -38,11 +39,13 @@ class VCFSource(Source) :
 
     def iterate(self, fast_forward = 0) :
         count = 0
-        for row in globes.splitIterator( self.fin, burn=0 ) :
-            if count < fast_forward :
-                count += 1
-                continue
-            else : yield row
+        #burn was 0
+        for row in globes.splitIterator( self.fin, burn=fast_forward ) :
+            #if count < fast_forward :
+                #count += 1
+                #continue
+            #else : yield row
+            yield row
 
     def eqkey(self, it) :
         fields = ["chrom","pos","ref","mut"]
@@ -222,12 +225,12 @@ def makeMultiCallsSpecific( multi_calls, variant_ix ) :
 #filter_non_passes : Broad applys filters to each variant. If anyone finds
 #the variant to be of low quality or otherwise suspicious, it marks it something
 #that != 'PASS'
-def separateSNPSandINDELS( ) :
-    fin = open( "%s/PlateIII/Gleeson_B3_110908_105_Samples.vcf" % globes.ROOT_DIR ) 
+def separateSNPSandINDELS( filepath ) :
+    fin = open( filepath ) 
     #fin = open( '%s/raw_data/SUBSET.vcf' % (globes.DATA_DIR) )
-    fsnp = open( "%s/PlateIII/plateIII_snps.vcf" % globes.ROOT_DIR, 'wb' )
-    findel = open( "%s/PlateIII/plateIII_indels.vcf" % globes.ROOT_DIR, 'wb' )
-    fnotrepped = open( "%s/PlateIII/not_repped.tsv" % (globes.ROOT_DIR), 'wb' )
+    fsnp = open( "%s_snps.vcf" % filepath, 'wb' )
+    findel = open( "%s_indels.vcf" % filepath, 'wb' )
+    fnotrepped = open( "%s_not_repped.tsv" % (filepath), 'wb' )
 
     indexOf = COLUMN_MAP
 
@@ -240,9 +243,21 @@ def separateSNPSandINDELS( ) :
     variants_not_repped = []
 
     lines_written = 0
-    for dataline in fin :
+    prev_loc = (42,42,42,42)
+    for i,dataline in enumerate(fin) :
+        if i % 5000 == 0 : print i
         splt = dataline.strip().split('\t')
         col_keys = ['chrom','pos','ref','mut', 'info']
+        loc = [splt[indexOf[k]] for k in col_keys[:-1]]
+        if loc == prev_loc :
+            print 'dupe'
+            print prev_loc
+            print loc
+            print dataline
+            continue
+        else :
+            prev_loc = loc
+
         (chrom,pos,ref,muts,info) = [ splt[ indexOf[k] ] for k in col_keys ]
         calls_splt = splt[ CALL_START: ]
 
@@ -413,7 +428,7 @@ if __name__ == "__main__" :
                           #outdir = "%s/raw_data/indels_by_fam" \
                                     #% (globes.DATA_DIR) )
 
-    separateSNPSandINDELS()
+    separateSNPSandINDELS( plates.PlateIV().broadfile )
 
 #def pickOutFamilies( orig_filename, outdir,family_groups, \
                      #callToString = lambda x:x,\

@@ -37,7 +37,7 @@ def splitIterator( fh_or_name, sep='\t', burn=0, \
                 print message
                 raise StopIteration
         count += 1
-
+    
     for line in handle :
         splt = line.strip('\n').split(sep)
         if stopIter( splt ) :

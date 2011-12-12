@@ -298,8 +298,10 @@ def familyReports() :
         return output
 
 
-    #the per family reports
+    #handles to the file descriptors
     fouts = {}
+    #buffers to accumulate writes to the fouts
+    fbuffers = {}
 
     #plate_id = globes.plates["CIDR"]
     #if we want to restrict attention to a certain plate of patients
@@ -313,20 +315,19 @@ def familyReports() :
 
     #open files for each patient, one for hets, one for homs
     #print the column headers for each file
-
-    #TODO: 
-    #chr pos dbsnp ref mut gene aa/change aa/pos [conservation/scores] gt:dp:gq
-    # [homs] [hets]
-
+    #also initialize the buffer space
     for r in conn.iterateQuery( query ) :
         patient = broad.sanitizePatientName( r[0] )
         fouts[patient] = {}
+        fbuffers[patient] = {}
         for gt in ["hets","homs"] :
             filename = '%s/%s_%s.tsv' % (outdir,patient,gt)
             fouts[patient][gt] = csv.writer( open(filename, 'wb'),\
                                              delimiter='\t', \
                                              quoting=csv.QUOTE_MINIMAL )
             fouts[patient][gt].writerow( column_headers )
+
+            fbuffers[patient][gt] = []
 
     #what are the interesting variants
     vcols_string = ', '.join(["v.%s" % c for c in vcols])
@@ -343,7 +344,16 @@ def familyReports() :
     print query
 
     for varix,r in enumerate(conn.query( query )) :
-        if varix % 5000 == 0 : print varix
+        #do a buffer flush
+        if varix % 20000 == 0 : 
+            for pat in fbuffers :
+                for gt in ["homs","hets"] :
+                    fouts[pat][gt].writerows( fbuffers[pat][gt] )
+                    fbuffers[pat][gt] = []
+            
+            print varix
+
+
         var_id = r[0]
         #only look at patients meeting these call reqs
         where = " and c.DP >= 8"
@@ -364,7 +374,7 @@ def familyReports() :
             pat = broad.sanitizePatientName( pat )
             hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
             new_hom_string = '; '.join(hom_shares)
-            fouts[pat]["homs"].writerow( output_row + \
+            fbuffers[pat]["homs"].append( output_row + \
                                          [call, num_homs-1, new_hom_string, \
                                           num_hets, het_string] )
 
@@ -372,9 +382,12 @@ def familyReports() :
             pat = broad.sanitizePatientName( pat )
             het_shares = het_pats[:ix] + het_pats[ix+1:]
             new_het_string = '; '.join(het_shares)
-            fouts[pat]["hets"].writerow( output_row + \
+            fbuffers[pat]["hets"].append( output_row + \
                                          [call, num_homs, hom_string, \
                                           num_hets-1, new_het_string] )
+            #fouts[pat]["hets"].writerow( output_row + \
+                                         #[call, num_homs, hom_string, \
+                                          #num_hets-1, new_het_string] )
 
 def updateAF(conn) :
     query = "select count(*) from Patients where valid = 1"

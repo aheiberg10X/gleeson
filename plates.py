@@ -115,8 +115,9 @@ class PlateIV(Plate) :
     def __init__(self) :
         self.name = "PlateIV"
         Plate.__init__(self)
-        self.snpfile = "plateIV.snps.vcf"
-        self.indelfile = "plateIV.indels.vcf"
+        self.broadfile = "Complete_Gleeson_120211.vcf"
+        self.snpfile = "Complete_Gleeson_120211.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_120211.vcf_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation131.plateIV.snps.vcf.223309049013.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.plateIV.indels.vcf.223306147216.txt"
 

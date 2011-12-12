@@ -12,11 +12,11 @@ from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_a
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = False
+dry_run = False 
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(PlateIV(),'snp')]
+plates_and_switches = [(PlateIV(),'indel')]
 
 #Run with python importer.py
 
@@ -53,8 +53,10 @@ def insertPlate( conn, plate, switch ) :
     plate_id = plate.getPlateID()
 
     # Construct the Sources for a Collimator to work on
-    vcfSource = broad.VCFSource( plate.varFile(switch) )
-    seattleSource = SeattleSource( plate.seattleFile(switch), switch )
+    ff = 0
+    vcfSource = broad.VCFSource( plate.varFile(switch), fast_forward = ff )
+    ff = 1
+    seattleSource = SeattleSource( plate.seattleFile(switch), switch, fast_forward = ff )
     sources = [vcfSource, seattleSource]
 
     populatePatients( conn, vcfSource.patients )
@@ -70,7 +72,7 @@ def insertPlate( conn, plate, switch ) :
         else :
             updated_count += 1
             addToCalls( conn, vid, var, plate_id )
-
+    
     print "Plate: %d" % plate_id
     print "    inserted", inserted_count
     print "    updated", updated_count

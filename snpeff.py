@@ -1,44 +1,98 @@
 from annotator import Annotator, walker, doNothing
 import batch
 import globes
+from collimator import Source
 from variant import Isoform
 from os.path import basename, splitext
 from os import chmod
 import importer
 from subprocess import Popen
 
-indexOf =  { \
-    "chrom" :               0, \
-    "position" :            1, \
-    "reference" :           2, \
-    "change" :              3, \
-    "change type" :         4, \
-    "homozygous" :          5, \
-    "quality" :             6, \
-    "coverage" :            7, \
-    "warnings" :            8, \
-    "gene_id" :             9, \
-    "gene_name" :           10, \
-    "bio_type" :            11, \
-    "transcript_id" :       12, \
-    "exon_id" :             13, \
-    "exon_rank" :           14, \
-    "effect" :              15, \
-    "old_aa/new_aa" :       16, \
-    "old_codon/new_codon" : 17, \
-    "codon_num(cds)" :      18, \
-    "cds_size" :            19, \
-    "codons around" :       20, \
-    "aas around" :          21, \
-    "custom_interval_id" :  22} \
+cols = ["chrom","position","reference","change","change type","homozygous","quality","coverage","warnings","gene_id","gene_name","bio_type","transcript_id","exon_id","exon_rank","effect","old_aa/new_aa","old_codon/new_codon","codon_num(cds)","cds_size","codons around","aas around","custom_interval_id"]
+
+indexOf =  {}
+for i,col in enumerate(cols) : indexOf[col] = i
 
 #Chromo    Position    Reference   Change  Change type Homozygous  Quality Coverage    Warnings    Gene_ID Gene_name   Bio_type    Trancript_ID    Exon_ID Exon_Rank   Effect  old_AA/new_AA   Old_codon/New_codon Codon_Num(CDS)  Codon_Degeneracy    CDS_size    Codons around   AAs around  Custom_interval_ID
 
-class SNPEffAnnotator(Annotator) :
-    def __init__(self ) :
-        Annotator.__init__(self,"snpeff")
+class SNPEffAnnotator(Source) :
+    def __init__(self, file, switch, fast_forward=0 ) :
+        self.file = file
+        self.switch = switch
         self.indexOf = indexOf
+        self.iterator = self.iterate(fast_forward)
+        self.allow_absent = False
+        self.group_repeats = True
 
+    #iterate() helper
+    def headerCheck( self, header_splt ) :
+        if not cols == header_splt :
+            return (False, "%s \n\ndo not match expected: \n\n%s" \
+                            % (header_splt, cols))
+        else :
+            return (True, "good to go")
+
+    #iterate() helper
+    def stopper( self, out_splt ) :
+        return True
+
+    def skipper( self, out_splt ) :
+        change_type = out_splt[ self.indexOf["change_type"] ]
+        isSNP = change_type.lower() == 'snp'
+        if self.switch == 'snp' :
+            return not isSNP
+        elif self.switch == 'indel' :
+            return inSNP
+        else :
+            assert 'switch must be' == ' snp or indel'
+
+    def iterate( self, fast_forward = 0 ) :
+        count = 0
+        for row in globes.splitIterator( \
+                            self.file, \
+                            burn = ?, \
+                            header_line_num = ?, \
+                            skipLine = self.skipper, \
+                            headerSanityCheck = self.headerCheck, \
+                            stopIter = self.stopper ) :
+            if count < fast_forward :
+                count += 1
+                continue
+            else : yield row
+
+    def eqkey( self, out_splt ) :
+        if self.switch == 'snp' :
+            keys = ['chrom','position','reference','change']
+            (chrom,pos,ref,mut) = [ out_splt[ self.indexOf[k] ] for k in keys ]
+            return (globes.chromNum(chrom),pos,ref,mut)
+        elif sel.switch == 'indel' :
+            keys = ['chrom','position','reference','change', "change type"]
+            (chrom2,pos2,ref2,mut2,change_type) = \
+                              [ out_splt[ self.indexOf[k] ] for k in keys ]
+            if change_type == 'INS' :
+                #example:
+                # 1   866511  rs60722469  C   CCCCT
+                # 1   866512              *   +CCCT   INS
+                return globes.compareVariants( chrom1, pos1, ref1, mut1[1:], \
+                                               chrom2, int(pos2)-1, ref2, mut2[1:] )
+            elif change_type == 'DEL' :
+                #1   874864  .   CT  C
+                #1   874865       * -T  DEL Het
+                return globes.compareVariants( chrom1, pos1, ref1[1:], mut1, \
+                                               chrom2, int(pos2)-1, mut2[1:], ref2 ) 
+            else :
+                assert "change_type %s is not" % change_type == " INS or DEL"
+
+        else : assert 'switch must be' == ' snp or indel'
+
+    def integrator( self, variant, out_splts ) :
+        pass
+
+
+    ########################################################################
+    #######          OLD            ########################################
+    
+    
     def run(self, input_file, run_locally=True) :
         print input_file
         bname = splitext( basename(input_file) )[0]

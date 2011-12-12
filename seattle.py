@@ -32,6 +32,8 @@ class SeattleSource(Source) :
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
                      "distanceToSplice", "AfricanHapMapFreq", \
                      "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+    
+    #iterate() helper
     def headerCheck( self, header_splt ) :
         b = cols == header_splt
         if not b :
@@ -40,17 +42,23 @@ class SeattleSource(Source) :
         else :
             return (True,"good to go")
 
-    def iterate(self, fast_forward = 0) :
+    #iterate() helper
+    def stopper( self, splt ) :
+        return len(splt) == 1
+
+    def iterate(self, fast_forward = 1) :
         count = 0
+        #burn was 1
         for row in  globes.splitIterator( self.file, \
-                                          burn=1, \
+                                          burn=fast_forward, \
                                           header_line_num=0, \
                                           headerSanityCheck=self.headerCheck, \
                                           stopIter=self.stopper ) :
-            if count < fast_forward :
-                count += 1
-                continue
-            else : yield row
+            #if count < fast_forward :
+                #count += 1
+                #continue
+            #else : yield row
+            yield row
 
     def getPosition( self, out_splt ) :
         if self.switch == 'snp' :
@@ -171,12 +179,16 @@ class SeattleSource(Source) :
 
         return variant
 
-    # used by iterate() to stop the file iterator
-    def stopper( self, splt ) :
-        return len(splt) == 1
 
 
 if __name__ == '__main__' :
+    s = "none    19    54721150    T    T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T    T/G    NA    NM_006864    intron    unknown 0   none    NA  NA  unknown NA  0.005   0.716   T   520,3199,4088,35675,35676,35677,35678,48058,50207,53265 LILRB3  NA  NA  NA  no  NA  NA  NA  unknown 36  none    NA"
+    out_splt = s.split("    ")
+
+    print out_splt
+
+    ss = SeattleSource('derp','snp')
+    print ss.getPosition( out_splt )
     #indelList = indel.inputINDELS( globes.INDEL_FILE )
     #parseIndels( 5 )
     #separateOutputToFamilies()
