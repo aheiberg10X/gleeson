@@ -8,7 +8,10 @@ ids =    { "Pilot" :          0, \
            "Frazer_ali2" :    5, \
            "Frazer_aligned" : 6, \
            "FrazerII" :       7, \
-           "PlateIV" :       8}
+           "PlateIV" :        8, \
+           "PlateIV_1" :      9, \
+           "PlateIV_2" :     10, \
+           "PlateIV_3" :     11}
 
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
@@ -19,6 +22,9 @@ ids =    { "Pilot" :          0, \
 class Plate :
     def __init__(self) :
         self.data_dir = "%s/%s" % (globes.ROOT_DIR, self.name)
+
+    def broadFile(self) :
+        return "%s/%s" % (self.data_dir, self.broadfile)
 
     def varFile(self,switch) :
         if switch == "snp" :
@@ -120,4 +126,34 @@ class PlateIV(Plate) :
         self.indelfile = "Complete_Gleeson_120211.vcf_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation131.plateIV.snps.vcf.223309049013.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.plateIV.indels.vcf.223306147216.txt"
+
+class PlateIV_1(Plate) :
+    def __init__(self) :
+        self.name = "PlateIV_1"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_295_120711_1.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_295_120711_1.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_295_120711_1.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.snps.tar.gz.223721330517.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.indels.tar.gz.223897410296.txt"
+
+class PlateIV_2(Plate) :
+    def __init__(self) :
+        self.name = "PlateIV_2"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_295_120711_2.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_295_120711_2.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_295_120711_2.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.snps.tar.gz.223729941739.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.indels.tar.gz.223726827483.txt"
+
+class PlateIV_3(Plate) :
+    def __init__(self) :
+        self.name = "PlateIV_3"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_295_120711_3.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_295_120711_3.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_295_120711_3.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation131.snps.tar.gz.223801286912.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation131.indels.tar.gz.223735315294.txt"
 

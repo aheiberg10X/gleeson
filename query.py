@@ -298,7 +298,7 @@ def familyReports() :
         return output
 
 
-    #handles to the file descriptors
+    #handles to the file names
     fouts = {}
     #buffers to accumulate writes to the fouts
     fbuffers = {}
@@ -322,10 +322,15 @@ def familyReports() :
         fbuffers[patient] = {}
         for gt in ["hets","homs"] :
             filename = '%s/%s_%s.tsv' % (outdir,patient,gt)
-            fouts[patient][gt] = csv.writer( open(filename, 'wb'),\
-                                             delimiter='\t', \
-                                             quoting=csv.QUOTE_MINIMAL )
-            fouts[patient][gt].writerow( column_headers )
+            fouts[patient][gt] = filename
+
+            f = open(filename, 'wb')
+            fout = csv.writer( f,\
+                               delimiter='\t', \
+                               quoting=csv.QUOTE_MINIMAL )
+            #fouts[patient][gt].writerow( column_headers )
+            fout.writerow( column_headers )
+            f.close()
 
             fbuffers[patient][gt] = []
 
@@ -345,18 +350,28 @@ def familyReports() :
 
     for varix,r in enumerate(conn.query( query )) :
         #do a buffer flush
-        if varix % 20000 == 0 : 
+        if varix % 50000 == 0 : 
             for pat in fbuffers :
                 for gt in ["homs","hets"] :
-                    fouts[pat][gt].writerows( fbuffers[pat][gt] )
+                    f = open( fouts[pat][gt], 'a')
+                    fout = csv.writer( f,\
+                                       delimiter='\t', \
+                                       quoting=csv.QUOTE_MINIMAL )
+                    fout.writerows( fbuffers[pat][gt] )
+                    f.close()
+                    #fouts[pat][gt].writerows( fbuffers[pat][gt] )
                     fbuffers[pat][gt] = []
             
             print varix
 
 
         var_id = r[0]
-        #only look at patients meeting these call reqs
-        where = " and c.DP >= 8"
+        isIndel = int(r[6]) == 2
+        if isIndel :
+            where = ""
+        else :
+   #        only look at patients meeting these call reqs
+            where = " and c.DP >= 8"
         (noinfs,hets,homs) = getPatients( conn, var_id, where )
         if len(hets) == len(homs) == 0 : continue
 

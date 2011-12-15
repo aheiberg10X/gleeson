@@ -5,7 +5,7 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
@@ -16,7 +16,7 @@ dry_run = False
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(PlateIV(),'indel')]
+plates_and_switches = [(PlateIV_1(),'indel')]
 
 #Run with python importer.py
 
@@ -48,7 +48,10 @@ for (ID,name) in results :
 def insertPlate( conn, plate, switch ) :
     inserted_count = 0
     updated_count = 0
-
+    iso_count = 0
+    hold1 = 0
+    hold2 = 0
+    iso = 0
     #We will keep track which plate each call comes from.
     plate_id = plate.getPlateID()
 
@@ -63,12 +66,14 @@ def insertPlate( conn, plate, switch ) :
     c = Collimator( sources, comparator, targetCreator )
     for i,var in enumerate(c) :
         if i % 5000 == 0 : print "%d variants processed" % i
-
+        iso_count = iso_count + hold1
+        iso = iso + hold2
         values = var.getPosition()
         vid = getVariantID( values )
+        #vid = False
         if not vid :
             inserted_count += 1
-            insertVariant( conn, var, plate_id )
+            hold1,hold2 = insertVariant( conn, var, plate_id,0,0 )
         else :
             updated_count += 1
             addToCalls( conn, vid, var, plate_id )
@@ -76,7 +81,8 @@ def insertPlate( conn, plate, switch ) :
     print "Plate: %d" % plate_id
     print "    inserted", inserted_count
     print "    updated", updated_count
-
+    print "    Isoforms", iso_count
+    print "    All Iso" , iso
 #method needed to construct a Collimator
 def comparator(a,b) :
     return globes.compareVariants( a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3] )
@@ -97,10 +103,13 @@ def getVariantID( var_tuple ) :
 
     return conn.queryScalar( query, int )
 
+#deprecated.....
 def variantToDatabase( conn, variant ) :
     global inserted_count, updated_count
     keys = ["chrom","pos","ref","mut"]
     values = [variant.fields[k] for k in keys]
+    #print "adsfasfasfdasdfasdfasdf"
+    #print values
     vid = getVariantID( values )
     if not vid :
         inserted_count += 1
@@ -110,7 +119,7 @@ def variantToDatabase( conn, variant ) :
         addToCalls( conn, vid, variant )
 
 #We have a brand new variant, put it into the db
-def insertVariant(conn, variant, plate_id) :
+def insertVariant(conn, variant, plate_id, count,isoforms) :
     variant_dbix = conn.getNextID("Variants")
     values = variant.getFields( variant_cols )
     #pos = variant.getPosition()[1]
@@ -123,13 +132,20 @@ def insertVariant(conn, variant, plate_id) :
 
     #insert the variants
     conn.insert( 'Variants', values, variant_cols )
-
+    prevIso = -1
     #insert the isoforms
     for iso in variant.isoforms :
-        iso.fields['gene_id'] = geneIDFromName( conn, iso.fields["gene"] )
-        #print iso
-        values = [variant_dbix] + iso.getFields( iso_cols_tograb )
-        conn.insert( "Isoforms", values, iso_cols[1:] )
+        isoforms = isoforms +1;
+        isoCur = iso.getFields( iso_cols_tograb )
+        if( isoCur != prevIso):
+            prevIso = isoCur
+            iso.fields['gene_id'] = geneIDFromName( conn, iso.fields["gene"] )
+            #print iso
+            values = [variant_dbix] + iso.getFields( iso_cols_tograb )
+            conn.insert( "Isoforms", values, iso_cols[1:] )
+            count = count +1
+        else: 
+            prevIso = isoCur
 
     #insert the calls
     for call in variant.base_calls :
@@ -137,7 +153,7 @@ def insertVariant(conn, variant, plate_id) :
         values = [variant_dbix, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
         conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
-
+    return count, isoforms
 # This variant (identified by vid) has already been added to the system
 # By definition so have the isoforms
 # The calls, however, are novel
