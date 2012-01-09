@@ -5,7 +5,7 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
@@ -16,7 +16,7 @@ dry_run = False
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(PlateIV_1(),'indel')]
+plates_and_switches = [(PlateV_1(),'indel')]
 
 #Run with python importer.py
 
@@ -210,13 +210,12 @@ if __name__ == '__main__' :
 #unfinished.  Idea was to remove Calls that were spurious,
 #then removed the Variants, Patients, and Isoforms that got orphaned
 def removeCalls() :
-    plate_id = plates.ids("PlateIII")
+    plate_id = plates.ids("PlateV_2")
 
     #delete all Calls that are old
     query = '''
-delete c
-from Calls as c inner join Variants as v on c.var_id = v.id
-where c.plate =  and type = '''
+delete Calls
+where plate = %d''' % plate_id
 
     #delete any stranded variants
     query = '''
@@ -224,6 +223,11 @@ where c.plate =  and type = '''
     from Variants as v left join Calls as c on v.id = c.var_id
     where c.var_id is null
     '''
+
+    query = '''
+    delete i
+    from Isoforms as i left join Variants as v on v.id = i.var_id
+    where v.id is null'''
 
     #delete any stranded patients
     query = '''delete p 

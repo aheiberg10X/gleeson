@@ -11,17 +11,21 @@ ids =    { "Pilot" :          0, \
            "PlateIV" :        8, \
            "PlateIV_1" :      9, \
            "PlateIV_2" :     10, \
-           "PlateIV_3" :     11}
+           "PlateIV_3" :     11, \
+           "PlateV_1" :      12, \
+           "PlateV_2" :      13, \
+           "PlateV_3" :      14, \
+           "PlateV_4" :      15}
 
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
-#   A name (the same as the folder you put all the data in.  
+#   A folder_name (the same as the folder you put all the data in.  
 #           This folder should be directly under globes.ROOT_DIR)
 #   SNP and INDEL vcf file
 #   Corresponding SeattleSeq SNP and INDEL file
 class Plate :
     def __init__(self) :
-        self.data_dir = "%s/%s" % (globes.ROOT_DIR, self.name)
+        self.data_dir = "%s/%s" % (globes.ROOT_DIR, self.folder_name)
 
     def broadFile(self) :
         return "%s/%s" % (self.data_dir, self.broadfile)
@@ -39,11 +43,12 @@ class Plate :
             return "%s/%s" % (self.data_dir, self.seattle_indel_file)
 
     def getPlateID( self ) :
-        return ids[self.name]
+        h = self.__class__.__name__
+        return ids[h]
 
 class Pilot(Plate) :
     def __init__(self) :
-        self.name = 'Pilot'
+        self.folder_name = 'Pilot'
         Plate.__init__(self)
         self.snpfile = "pilot_inhouse_hg19_snps.vcf"
         self.indelfile = "pilot_inhouse_hg19_indels.vcf"
@@ -52,7 +57,7 @@ class Pilot(Plate) :
 
 class PlateII(Plate) :
     def __init__(self) :
-        self.name = "PlateII"
+        self.folder_name = "PlateII"
         Plate.__init__(self)
         self.snpfile = "plateII_snps.vcf"
         self.indelfile = "plateII_indels.vcf"
@@ -62,7 +67,7 @@ class PlateII(Plate) :
 
 class PlateI(Plate) :
     def __init__(self) :
-        self.name = "PlateI"
+        self.folder_name = "PlateI"
         Plate.__init__(self)
         self.snpfile = "plateI_inhouse_hg19_snps.vcf"
         self.indelfile = "plateI_inhouse_hg19_indels.vcf"
@@ -74,7 +79,7 @@ class PlateI(Plate) :
 
 class PlateIII(Plate) :
     def __init__(self) :
-        self.name = "PlateIII"
+        self.folder_name = "PlateIII"
         Plate.__init__(self)
         self.snpfile = "plateIII_snps.vcf"
         self.indelfile = "plateIII_indels.vcf"
@@ -83,7 +88,7 @@ class PlateIII(Plate) :
 
 class CIDR(Plate) :
     def __init__(self) :
-        self.name = "CIDR"
+        self.folder_name = "CIDR"
         Plate.__init__(self)
         self.snpfile = "allcidrsnps.vcf"
         self.indelfile = "allcidrindels.vcf"
@@ -92,7 +97,7 @@ class CIDR(Plate) :
 
 class Frazer_ali2(Plate) :
     def __init__(self) :
-        self.name = "Frazer_ali2"
+        self.folder_name = "Frazer_ali2"
         Plate.__init__(self)
         self.snpfile = "fromfrazer_threads2_snps.vcf"
         self.indelfile = "fromfrazer_threads2_indels.vcf"
@@ -101,7 +106,7 @@ class Frazer_ali2(Plate) :
 
 class Frazer_aligned(Plate) :
     def __init__(self) :
-        self.name = "Frazer_aligned"
+        self.folder_name = "Frazer_aligned"
         Plate.__init__(self)
         self.snpfile = "fromfrazer_threads_snps.vcf"
         self.indelfile = "fromfrazer_threads_indels.vcf"
@@ -110,7 +115,7 @@ class Frazer_aligned(Plate) :
 
 class FrazerII(Plate) :
     def __init__(self) :
-        self.name = "FrazerII"
+        self.folder_name = "FrazerII"
         Plate.__init__(self)
         self.snpfile = "CBH-348.snps.vcf"
         self.indelfile = "CBH-348.indels.vcf"
@@ -119,7 +124,7 @@ class FrazerII(Plate) :
 
 class PlateIV(Plate) :
     def __init__(self) :
-        self.name = "PlateIV"
+        self.folder_name = "PlateIV"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_120211.vcf"
         self.snpfile = "Complete_Gleeson_120211.vcf_snps.vcf"
@@ -129,7 +134,7 @@ class PlateIV(Plate) :
 
 class PlateIV_1(Plate) :
     def __init__(self) :
-        self.name = "PlateIV_1"
+        self.folder_name = "PlateIV_1"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_295_120711_1.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_295_120711_1.unannotated.vcf_snps.vcf"
@@ -139,7 +144,7 @@ class PlateIV_1(Plate) :
 
 class PlateIV_2(Plate) :
     def __init__(self) :
-        self.name = "PlateIV_2"
+        self.folder_name = "PlateIV_2"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_295_120711_2.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_295_120711_2.unannotated.vcf_snps.vcf"
@@ -149,11 +154,51 @@ class PlateIV_2(Plate) :
 
 class PlateIV_3(Plate) :
     def __init__(self) :
-        self.name = "PlateIV_3"
+        self.folder_name = "PlateIV_3"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_295_120711_3.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_295_120711_3.unannotated.vcf_snps.vcf"
         self.indelfile = "Complete_Gleeson_295_120711_3.unannotated.vcf_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation131.snps.tar.gz.223801286912.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation131.indels.tar.gz.223735315294.txt"
+
+class PlateV_1(Plate) :
+    def __init__(self) :
+        self.folder_name = "PlateV"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_368_122211_batch_1.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_368_122211_batch_1.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_368_122211_batch_1.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_1.unannotated.vcf_snps.vcf.gz.225899199676.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_1.unannotated.vcf_indels.vcf.gz.225912947699.txt"
+
+class PlateV_2(Plate) :
+    def __init__(self) :
+        self.folder_name = "PlateV"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_368_122211_batch_2.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_368_122211_batch_2.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_368_122211_batch_2.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_2.unannotated.vcf_snps.vcf.225871687747.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_2.unannotated.vcf_indels.vcf.225888136772.txt"
+
+class PlateV_3(Plate) :
+    def __init__(self) :
+        self.folder_name = "PlateV"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf.225875884690.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf.225888255282.txt"
+
+class PlateV_4(Plate) :
+    def __init__(self) :
+        self.folder_name = "PlateV"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_368_122211_batch_4.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_368_122211_batch_4.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_368_122211_batch_4.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_snps.vcf.225879594853.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_indels.vcf.225891223327.txt"
 

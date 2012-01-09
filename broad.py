@@ -428,7 +428,8 @@ if __name__ == "__main__" :
                           #outdir = "%s/raw_data/indels_by_fam" \
                                     #% (globes.DATA_DIR) )
 
-    separateSNPSandINDELS( plates.PlateIV_3().broadFile() )
+    separateSNPSandINDELS( plates.PlateV_3().broadFile() )
+    separateSNPSandINDELS( plates.PlateV_4().broadFile() )
 
 #def pickOutFamilies( orig_filename, outdir,family_groups, \
                      #callToString = lambda x:x,\

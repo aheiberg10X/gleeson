@@ -26,7 +26,7 @@ class BaseCall(SQLizable) :
             self.fields["AD_ref"] = r
             self.fields["AD_mut"] = m
 
-            (aa,ab,bb) = [pow(10, -1*float(t)) for t in PL.split(',')]
+            (aa,ab,bb) = [pow(10, -1*(float(t)/10)) for t in PL.split(',')]
             self.fields["PL_AA"] = aa
             self.fields["PL_AB"] = ab
             self.fields["PL_BB"] = bb

@@ -27,6 +27,8 @@ import globes
                     #or ss_functionGVS = 'splice-5'
                     #or (ss_functionGVS is null and effect = 'NON_SYNONYMOUS_CODING'))'''}
 
+COVERAGE = 8
+
 q0 = "delete from TempIntVars"
 
 def printNewColsDict() :
@@ -346,22 +348,41 @@ def familyReports() :
                               inner join Genes as g on g.id = i.gene_id
            where (%s)  and v.AF < 0.1
            order by AF''' % (vcols_string, icols_string, gcols_string, gvs)
+    
+    #query = '''select %s, %s, %s
+               #from Variants as v inner join Isoforms as i on v.id = i.var_id
+               #inner join Genes as g on g.id = i.gene_id
+               #inner join (select distinct var_id
+        #from Calls
+        #where pat_id = 547 and
+        #((PL_AB >= .10)  or (PL_BB >= .10))
+        #and DP >= 8 and var_id not in
+        #(select distinct var_id
+                #from Calls
+                    #where pat_id = 455 and DP >= 8 and PL_AA <= .005)
+            #) as t on t.var_id = v.id
+        #where (%s) and v.AF < 0.1''' % (vcols_string, icols_string, gcols_string, gvs)
+
     print query
+
+    #write the buffers out to the respective files
+    def flush() :
+        for pat in fbuffers :
+            for gt in ["homs","hets"] :
+                f = open( fouts[pat][gt], 'a')
+                fout = csv.writer( f,\
+                                   delimiter='\t', \
+                                   quoting=csv.QUOTE_MINIMAL )
+                fout.writerows( fbuffers[pat][gt] )
+                f.close()
+                #fouts[pat][gt].writerows( fbuffers[pat][gt] )
+                fbuffers[pat][gt] = []
+
 
     for varix,r in enumerate(conn.query( query )) :
         #do a buffer flush
-        if varix % 50000 == 0 : 
-            for pat in fbuffers :
-                for gt in ["homs","hets"] :
-                    f = open( fouts[pat][gt], 'a')
-                    fout = csv.writer( f,\
-                                       delimiter='\t', \
-                                       quoting=csv.QUOTE_MINIMAL )
-                    fout.writerows( fbuffers[pat][gt] )
-                    f.close()
-                    #fouts[pat][gt].writerows( fbuffers[pat][gt] )
-                    fbuffers[pat][gt] = []
-            
+        if varix % 10000 == 0 : 
+            flush()
             print varix
 
 
@@ -371,7 +392,7 @@ def familyReports() :
             where = ""
         else :
    #        only look at patients meeting these call reqs
-            where = " and c.DP >= 8"
+            where = " and c.DP >= %d" % COVERAGE
         (noinfs,hets,homs) = getPatients( conn, var_id, where )
         if len(hets) == len(homs) == 0 : continue
 
@@ -404,21 +425,26 @@ def familyReports() :
                                          #[call, num_homs, hom_string, \
                                           #num_hets-1, new_het_string] )
 
+    flush()
+
 def updateAF(conn) :
     query = "select count(*) from Patients where valid = 1"
     num_pats = conn.queryScalar( query, int )
     query = '''update Variants, (select var_id, sum(GT)/%d as newAF
                                  from Calls as c inner join Patients as p
                                       on c.pat_id = p.id
-                                 where p.valid = 1
+                                 where p.valid = 1 and DP >= %d
                                  group by var_id) as t
                set AF = t.newAF
-               where id = t.var_id''' % (2*num_pats)
+               where id = t.var_id''' % (2*num_pats, COVERAGE)
     conn.put( query )
 
 if __name__ == '__main__' :
-    #conn = db.Conn("localhost", dry_run=False)
-    #print getPatients( conn, 414941 )
+    conn = db.Conn("localhost", dry_run=False)
+    #(noinfs,hets,homs) = getPatients( conn, 55028 )
+    #print homs
+    #print 'aaaaaaaaaaaaaaaaaaaa'
+    #print hets
     familyReports()
     #updateAF(conn)
     

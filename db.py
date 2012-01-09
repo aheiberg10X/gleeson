@@ -7,7 +7,7 @@ endOfIteration = -1
 
 #makes MySQLdb.Warning raise an Exception, rather than printing to stdout
 #this lets us log
-warnings.simplefilter("error", MySQLdb.Warning)
+#warnings.simplefilter("error", MySQLdb.Warning)
 
 class Conn :
     #if dry_run : print out PUT queries without executing
