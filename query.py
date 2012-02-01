@@ -182,9 +182,9 @@ def callString( calls_row ) :
 
     return ':'.join( [GT] + dp_gq )
 
-def getPatients( conn, var_id, where_clause="" ) :
+def getPatients( conn, var_id, where_clause="",exclude=[] ) :
     q = '''
-    select c.*, p.name
+    select c.*, p.name, p.id
     from Calls as c inner join Patients as p on c.pat_id = p.id
     where p.valid = 1 and c.var_id = %d %s''' % (var_id, where_clause)
     noinfs, homs, hets = [],[],[]
@@ -193,12 +193,93 @@ def getPatients( conn, var_id, where_clause="" ) :
               2 : homs}
     r = conn.iterateQuery( q )
     for row in r :
-        call_row = row[:-1]
+        call_row = row[:-2]
         call_string = callString(call_row)
         GT = row[3]
-        lookup[int(GT)].append( (call_row[1],row[-1],call_string) )
+        if int(row[-1]) not in exclude :
+            lookup[int(GT)].append( (call_row[1],row[-2],call_string) )
 
     return (noinfs,hets,homs)
+
+def parentFind( parent1, parent2, child) :
+    conn = db.Conn("localhost")
+    query = '''
+    select t1.*
+    from (
+    select v.id, chrom, pos
+    from Calls as c inner join Variants as v on v.id = c.var_id
+    where (pat_id = %d or pat_id = %d) and GT = 1 and AF < .1
+    group by var_id
+    having count(pat_id) = 2) as t1
+    inner join
+    (select v.id, chrom, pos
+     from Calls as c inner join Variants as v on v.id = c.var_id
+     where pat_id = %d and GT = 2 and AF < .1) as t2 on t1.id = t2.id''' \
+    % (parent1, parent2, child)
+
+def intersect() :
+    conn = db.Conn("localhost")
+    conn2 = db.Conn("localhost")
+    cols = "g.id, v.id, i.id, v.chrom, v.pos, v.dbSNP, v.ref, v.mut, v.filter, g.geneSymbol, v.AF, i.functionGVS, i.polyPhen, i.ref_aa, i.mut_aa, i.codon_pos, i.codon_total, v.granthamScore, v.scorePhastCons, v.consScoreGERP, v.distanceToSplice, g.omim_disease"
+ 
+    query = '''
+    SELECT %s FROM Isoforms AS i
+    INNER JOIN (
+        SELECT var_id
+        FROM Calls
+        WHERE GT =1 AND ( pat_id =899 OR pat_id =1077  )
+        GROUP BY var_id
+        HAVING count( pat_id ) =2
+    ) AS t ON t.var_id = i.var_id
+    INNER JOIN Variants AS v ON v.id = i.var_id
+    INNER JOIN Genes AS g ON i.gene_id = g.id
+    WHERE TYPE = 1  AND ( functionGVS LIKE 'missense%%'
+                       OR functionGVS = 'nonsense'
+                       OR functionGVS LIKE 'stop%%'
+                       OR functionGVS LIKE 'frameshift%%' )
+
+    ORDER BY i.gene_id, i.id''' % cols
+
+    fh = open("intersect.txt",'wb')
+    fout = csv.writer( fh, \
+                    delimiter='\t', \
+                    quoting=csv.QUOTE_MINIMAL )
+
+    def writeOut( fout, buffer, var_count ) :
+        if var_count > 1 :
+            fout.writerows(buffer)
+
+    #print headers
+    fout.writerow( [t.split('.')[1] for t in cols.split(', ')][3:] + \
+                   ["Hom Count", "Hom Shares", "Het Count", "Het Shares"] )
+
+    prev_gid = -42
+    prev_vid = -42
+    var_count = 0
+    buffer = []
+    for i,row in enumerate(conn.query(query)) :
+        if i % 1000 == 0 :
+            print i
+        (gid,vid,iid) = row[0],row[1],row[2]
+
+        (noinfs, hets, homs) = getPatients( conn, vid, exclude=[899,1077] )
+        het_string = '; '.join([ht[1] for ht in hets])
+        hom_string = '; '.join([ht[1] for hm in homs])
+        output = row[3:]+(len(homs),hom_string,len(hets),het_string)
+
+        if gid != prev_gid :
+            writeOut( fout, buffer, var_count )
+            buffer = [output]
+            var_count = 1
+            prev_gid = gid
+            prev_vid = -42
+        else :
+            buffer.append( output )
+            if vid != prev_vid :
+                var_count += 1
+                prev_vid = vid
+    writeOut( fout, buffer, var_count )
+    fh.close()
 
 def makeColsReadable( cols ) :
     return [c.split('.')[1] for c in cols]
@@ -251,6 +332,7 @@ def makeReport(params) :
 def familyReports() :
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
+
     conn2 = db.Conn("localhost")
     print "connetions made"
 
@@ -265,7 +347,8 @@ def familyReports() :
     gcols = ["geneSymbol","omim_disease"]
 
     #going in the output
-    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "gene", "AF", \
+    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "filter", \
+                      "gene", "AF", \
                       "functionGVS", "AA_Change", "AA_Pos", \
                       "granthamScore", "scorePhastCons", "consScoreGERP", \
                       "distanceToSplice", "omim", "clinicalAssociation", \
@@ -273,14 +356,18 @@ def familyReports() :
                       "#HetShares", "Het Shares"]
 
     #We queried for vcols, icols, gcols and want to print out the appropriate
-    #values for column_headers.  Return a list of the values.
-    #Note this won't get us all the way.  This list will stil be missing
+    #values given the column_headers we've chosen.  
+    #THis functions takes a row returned by the query and selects only the
+    #stuff we care to print
+    #Note this doesn't get us all the way.  This list will stil be missing
     #GT:DP:GQ and all the share information
     num_vcols = len(vcols)
     def formatQueryRow( row ) :
         output = []
         #basic var stuff
         output.extend( row[1:6] )
+        #filter
+        output.append( row[8] )
         #gene
         output.append( row[-2] )
         #AF
@@ -393,7 +480,7 @@ def familyReports() :
         else :
    #        only look at patients meeting these call reqs
             where = " and c.DP >= %d" % COVERAGE
-        (noinfs,hets,homs) = getPatients( conn, var_id, where )
+        (noinfs,hets,homs) = getPatients( conn2, var_id, where )
         if len(hets) == len(homs) == 0 : continue
 
         hom_pats = [p[1] for p in homs]
@@ -440,12 +527,10 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    conn = db.Conn("localhost", dry_run=False)
-    #(noinfs,hets,homs) = getPatients( conn, 55028 )
-    #print homs
-    #print 'aaaaaaaaaaaaaaaaaaaa'
-    #print hets
-    familyReports()
+    intersect()
+
+    #conn = db.Conn("localhost", dry_run=False)
+    #familyReports()
     #updateAF(conn)
     
     #print genQ1(params)

@@ -428,8 +428,7 @@ if __name__ == "__main__" :
                           #outdir = "%s/raw_data/indels_by_fam" \
                                     #% (globes.DATA_DIR) )
 
-    separateSNPSandINDELS( plates.PlateV_3().broadFile() )
-    separateSNPSandINDELS( plates.PlateV_4().broadFile() )
+    #separateSNPSandINDELS( plates.PlateV_3().broadFile() )
 
 #def pickOutFamilies( orig_filename, outdir,family_groups, \
                      #callToString = lambda x:x,\
@@ -439,5 +438,43 @@ if __name__ == "__main__" :
                    #) :
     #groups= {"spoan-1513" : ["SPOAN-1513"]}
     #groups = {"lis-pmg-771" : ["LIS-PMG-711-II-4-4"]}
-    #pickOutFamilies( globes.BROAD_FILE, ".", groups )
+    groups = {"LR_and_LP_3" : ["LR05-160", \
+    "LR05-160f", \
+    "LR09-141f", \
+    "LR10-227f", \
+    "LR11-019f", \
+    "LR11-033", \
+    "LR11-117m", \
+    "LR11-124f", \
+    "LR11-144m", \
+    "LP97-114f", \
+    "LP97-114m", \
+    "LP98-078", \
+    "LR01-314", \
+    "LR05-203a1", \
+    "LR07-016f", \
+    "LR09-141m", \
+    "LR11-006", \
+    "LP97-114", \
+    "LR01-099", \
+    "LR04-315", \
+    "LR05-054a1", \
+    "LR07-016m", \
+    "LR07-227", \
+    "LR09-141", \
+    "LR10-031f", \
+    "LR10-031m", \
+    "LR10-102f", \
+    "LR11-006f", \
+    "LR02-264f1", \
+    "LR07-016", \
+    "LR07-200a1", \
+    "LR10-270m", \
+    "LR11-006m", \
+    "LR11-033m", \
+    "LR11-105", \
+    "LR11-105m", \
+    "LR11-112m"]}
+
+    pickOutFamilies( plates.PlateIV_3().broadFile(), ".", groups )
     pass
