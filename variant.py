@@ -12,6 +12,13 @@ class SQLizable :
                 fields.append("NULL")
         return fields
 
+class JointCall(SQLizable) :
+
+    def __init__(self, pat_name) :
+        self.pat_name = pat_name
+        self.fields = {}
+
+
 class BaseCall(SQLizable) :
     def __init__(self, call_splt, pat_name, variant_ix=1) :
         self.pat_name = pat_name

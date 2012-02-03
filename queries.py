@@ -9,6 +9,341 @@ import globes
 #(filename,ext) = os.path.splitext(tail)
 
 
+COVERAGE = 8
+#columsn to grab from DB
+vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
+         "filter","AF","granthamScore","scorePhastCons",
+         "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
+         "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+
+icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa"]
+
+gcols = ["geneSymbol","omim_disease"]
+
+#going in the output
+column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "filter", \
+                  "gene", "AF", \
+                  "functionGVS", "AA_Change", "AA_Pos", \
+                  "granthamScore", "scorePhastCons", "consScoreGERP", \
+                  "distanceToSplice", "omim", "clinicalAssociation", \
+                  "GT:DP:GQ", "#HomShares", "Hom Shares", \
+                  "#HetShares", "Het Shares"]
+
+vcols_string = ', '.join(["v.%s" % c for c in vcols])
+icols_string = ', '.join(["i.%s" % c for c in icols])
+gcols_string = ', '.join(["g.%s" % c for c in gcols])
+dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
+gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
+gvs = ' and '.join(gvs)
+
+
+def callString( calls_row ) :
+    GT = broad.encodeGT( int(calls_row[3]) )
+    dp_gq = [str(t) for t in calls_row[4:6]]
+    return ':'.join( [GT] + dp_gq )
+
+#returns 3 lists, noinfs, hets, and homs
+#each list is comprised of tuples (pat_id, pat_name, callInfo)
+def getPatients( conn, var_id, where_clause="",exclude=[] ) :
+    q = '''
+    select c.*, p.name, p.id
+    from Calls as c inner join Patients as p on c.pat_id = p.id
+    where p.valid = 1 and c.var_id = %d %s''' % (var_id, where_clause)
+    noinfs, homs, hets = [],[],[]
+    lookup = {0 : noinfs, \
+              1 : hets, \
+              2 : homs}
+    r = conn.iterateQuery( q )
+    for row in r :
+        call_row = row[:-2]
+        call_string = callString(call_row)
+        GT = row[3]
+        if int(row[-1]) not in exclude :
+            lookup[int(GT)].append( (call_row[1],row[-2],call_string) )
+
+    return (noinfs,hets,homs)
+
+def parentFind( parent1, parent2, child) :
+    conn = db.Conn("localhost")
+    query = '''
+    select t1.*
+    from (
+    select v.id, chrom, pos
+    from Calls as c inner join Variants as v on v.id = c.var_id
+    where (pat_id = %d or pat_id = %d) and GT = 1 and AF < .1
+    group by var_id
+    having count(pat_id) = 2) as t1
+    inner join
+    (select v.id, chrom, pos
+     from Calls as c inner join Variants as v on v.id = c.var_id
+     where pat_id = %d and GT = 2 and AF < .1) as t2 on t1.id = t2.id''' \
+    % (parent1, parent2, child)
+
+def intersect() :
+    conn = db.Conn("localhost")
+    conn2 = db.Conn("localhost")
+    cols = "g.id, v.id, i.id, v.chrom, v.pos, v.dbSNP, v.ref, v.mut, v.filter, g.geneSymbol, v.AF, i.functionGVS, i.polyPhen, i.ref_aa, i.mut_aa, i.codon_pos, i.codon_total, v.granthamScore, v.scorePhastCons, v.consScoreGERP, v.distanceToSplice, g.omim_disease"
+ 
+    query = '''
+    SELECT %s FROM Isoforms AS i
+    INNER JOIN (
+        SELECT var_id
+        FROM Calls
+        WHERE GT =1 AND ( pat_id =899 OR pat_id =1077  )
+        GROUP BY var_id
+        HAVING count( pat_id ) =2
+    ) AS t ON t.var_id = i.var_id
+    INNER JOIN Variants AS v ON v.id = i.var_id
+    INNER JOIN Genes AS g ON i.gene_id = g.id
+    WHERE TYPE = 1  AND ( functionGVS LIKE 'missense%%'
+                       OR functionGVS = 'nonsense'
+                       OR functionGVS LIKE 'stop%%'
+                       OR functionGVS LIKE 'frameshift%%' )
+
+    ORDER BY i.gene_id, i.id''' % cols
+
+    fh = open("intersect.txt",'wb')
+    fout = csv.writer( fh, \
+                    delimiter='\t', \
+                    quoting=csv.QUOTE_MINIMAL )
+
+    def writeOut( fout, buffer, var_count ) :
+        if var_count > 1 :
+            fout.writerows(buffer)
+
+    #print headers
+    fout.writerow( [t.split('.')[1] for t in cols.split(', ')][3:] + \
+                   ["Hom Count", "Hom Shares", "Het Count", "Het Shares"] )
+
+    prev_gid = -42
+    prev_vid = -42
+    var_count = 0
+    buffer = []
+    for i,row in enumerate(conn.query(query)) :
+        if i % 1000 == 0 :
+            print i
+        (gid,vid,iid) = row[0],row[1],row[2]
+
+        (noinfs, hets, homs) = getPatients( conn, vid, exclude=[899,1077] )
+        het_string = '; '.join([ht[1] for ht in hets])
+        hom_string = '; '.join([ht[1] for hm in homs])
+        output = row[3:]+(len(homs),hom_string,len(hets),het_string)
+
+        if gid != prev_gid :
+            writeOut( fout, buffer, var_count )
+            buffer = [output]
+            var_count = 1
+            prev_gid = gid
+            prev_vid = -42
+        else :
+            buffer.append( output )
+            if vid != prev_vid :
+                var_count += 1
+                prev_vid = vid
+    writeOut( fout, buffer, var_count )
+    fh.close()
+
+def makeColsReadable( cols ) :
+    return [c.split('.')[1] for c in cols]
+
+def formatQueryRow( row ) :
+    output = []
+    #basic var stuff
+    output.extend( row[1:6] )
+    #filter
+    output.append( row[8] )
+    #gene
+    output.append( row[-2] )
+    #AF
+    output.append( row[9] )
+    #functionGVS
+    output.append( row[-8] )
+    #ref/mut aa
+    output.append( "%s/%s" % (row[-4],row[-3]) )
+    #pos/tot
+    output.append( "%s/%s" % (row[-6],row[-5]) )
+    #grantham,phast,gerp,splice
+    output.extend( row[10:14] )
+    #omim 
+    output.append( row[-1] )
+    #clinicalAssociation
+    output.append( row[17] )
+    return output
+
+def familyReports() :
+    outdir = globes.OUT_DIR
+    conn = db.Conn("localhost")
+
+    conn2 = db.Conn("localhost")
+    print "connetions made"
+
+    #We queried for vcols, icols, gcols and want to print out the appropriate
+    #values given the column_headers we've chosen.  
+    #THis functions takes a row returned by the query and selects only the
+    #stuff we care to print
+    #Note this doesn't get us all the way.  This list will stil be missing
+    #GT:DP:GQ and all the share information
+    num_vcols = len(vcols)
+
+    #handles to the file names
+    fouts = {}
+    #buffers to accumulate writes to the fouts
+    fbuffers = {}
+
+    #plate_id = globes.plates["CIDR"]
+    #if we want to restrict attention to a certain plate of patients
+    #query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
+    #string = []
+    #for row in conn.iterateQuery( query ) :
+        #string.append("id=%d" % row[0])
+    #string = ' or '.join(string)
+    string = '1 = 1'
+    query = '''select name from Patients where %s''' % string
+
+    #open files for each patient, one for hets, one for homs
+    #print the column headers for each file
+    #also initialize the buffer space
+    for r in conn.iterateQuery( query ) :
+        patient = broad.sanitizePatientName( r[0] )
+        fouts[patient] = {}
+        fbuffers[patient] = {}
+        for gt in ["hets","homs"] :
+            filename = '%s/%s_%s.tsv' % (outdir,patient,gt)
+            fouts[patient][gt] = filename
+
+            f = open(filename, 'wb')
+            fout = csv.writer( f,\
+                               delimiter='\t', \
+                               quoting=csv.QUOTE_MINIMAL )
+            #fouts[patient][gt].writerow( column_headers )
+            fout.writerow( column_headers )
+            f.close()
+
+            fbuffers[patient][gt] = []
+
+    #what are the interesting variants
+    query = '''select %s, %s, %s
+           from Variants as v inner join Isoforms as i on v.id = i.var_id
+                              inner join Genes as g on g.id = i.gene_id
+           where (%s)  and v.AF < 0.1
+           order by AF''' % (vcols_string, icols_string, gcols_string, gvs)
+    
+    #query = '''select %s, %s, %s
+               #from Variants as v inner join Isoforms as i on v.id = i.var_id
+               #inner join Genes as g on g.id = i.gene_id
+               #inner join (select distinct var_id
+        #from Calls
+        #where pat_id = 547 and
+        #((PL_AB >= .10)  or (PL_BB >= .10))
+        #and DP >= 8 and var_id not in
+        #(select distinct var_id
+                #from Calls
+                    #where pat_id = 455 and DP >= 8 and PL_AA <= .005)
+            #) as t on t.var_id = v.id
+        #where (%s) and v.AF < 0.1''' % (vcols_string, icols_string, gcols_string, gvs)
+
+    print query
+
+    #write the buffers out to the respective files
+    def flush() :
+        for pat in fbuffers :
+            for gt in ["homs","hets"] :
+                f = open( fouts[pat][gt], 'a')
+                fout = csv.writer( f,\
+                                   delimiter='\t', \
+                                   quoting=csv.QUOTE_MINIMAL )
+                fout.writerows( fbuffers[pat][gt] )
+                f.close()
+                #fouts[pat][gt].writerows( fbuffers[pat][gt] )
+                fbuffers[pat][gt] = []
+
+
+    for varix,r in enumerate(conn.query( query )) :
+        #do a buffer flush
+        if varix % 10000 == 0 : 
+            flush()
+            print varix
+
+
+        var_id = r[0]
+        isIndel = int(r[6]) == 2
+        if isIndel :
+            where = ""
+        else :
+   #        only look at patients meeting these call reqs
+            where = " and c.DP >= %d" % COVERAGE
+        (noinfs,hets,homs) = getPatients( conn2, var_id, where )
+        if len(hets) == len(homs) == 0 : continue
+
+        hom_pats = [p[1] for p in homs]
+        num_homs = len(hom_pats)
+        hom_string = '; '.join(hom_pats)
+
+        het_pats = [p[1] for p in hets]
+        het_string = '; '.join(het_pats)
+        num_hets = len(het_pats)
+
+        output_row = formatQueryRow( r )
+
+        for ix,(pat_id,pat,call) in enumerate(homs) :
+            pat = broad.sanitizePatientName( pat )
+            hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
+            new_hom_string = '; '.join(hom_shares)
+            fbuffers[pat]["homs"].append( output_row + \
+                                         [call, num_homs-1, new_hom_string, \
+                                          num_hets, het_string] )
+
+        for ix,(pat_id,pat,call) in enumerate(hets) :
+            pat = broad.sanitizePatientName( pat )
+            het_shares = het_pats[:ix] + het_pats[ix+1:]
+            new_het_string = '; '.join(het_shares)
+            fbuffers[pat]["hets"].append( output_row + \
+                                         [call, num_homs, hom_string, \
+                                          num_hets-1, new_het_string] )
+            #fouts[pat]["hets"].writerow( output_row + \
+                                         #[call, num_homs, hom_string, \
+                                          #num_hets-1, new_het_string] )
+
+    flush()
+
+def updateAF(conn) :
+    query = "select count(*) from Patients where valid = 1"
+    num_pats = conn.queryScalar( query, int )
+    query = '''update Variants, (select var_id, sum(GT)/%d as newAF
+                                 from Calls as c inner join Patients as p
+                                      on c.pat_id = p.id
+                                 where p.valid = 1 and DP >= %d
+                                 group by var_id) as t
+               set AF = t.newAF
+               where id = t.var_id''' % (2*num_pats, COVERAGE)
+    conn.put( query )
+
+if __name__ == '__main__' :
+    intersect()
+
+    #conn = db.Conn("localhost", dry_run=False)
+    #familyReports()
+    #updateAF(conn)
+    
+    #print genQ1(params)
+    #printNewColsDict()
+    
+    #conn = db.Conn()
+    #(noinfs,hets,homs) = getPatients( conn, 1 )
+    #print homs
+
+    #makeReport()
+
+
+    #delete from Isoforms where var_id in (select id from Variants where type = 2);# 53994 row(s) affected.
+
+
+    #delete from Calls where var_id in (select id from Variants where type = 2);# 991508 row(s) affected.
+
+
+############################################################################
+###        Very Old Stuff
+############################################################################
 #f = open( configname )
 #params = json.loads( f.read() )
 #f.close()
@@ -27,8 +362,8 @@ import globes
                     #or ss_functionGVS = 'splice-5'
                     #or (ss_functionGVS is null and effect = 'NON_SYNONYMOUS_CODING'))'''}
 
-COVERAGE = 8
 
+#delete from Variants where type = 2# 35200 row(s) affected.
 q0 = "delete from TempIntVars"
 
 def printNewColsDict() :
@@ -175,115 +510,6 @@ var_cols = ["Var ID", \
             "Ref AA", \
             "Mut AA"]
 iso_cols = []
-
-def callString( calls_row ) :
-    GT = broad.encodeGT( int(calls_row[3]) )
-    dp_gq = [str(t) for t in calls_row[4:6]]
-
-    return ':'.join( [GT] + dp_gq )
-
-def getPatients( conn, var_id, where_clause="",exclude=[] ) :
-    q = '''
-    select c.*, p.name, p.id
-    from Calls as c inner join Patients as p on c.pat_id = p.id
-    where p.valid = 1 and c.var_id = %d %s''' % (var_id, where_clause)
-    noinfs, homs, hets = [],[],[]
-    lookup = {0 : noinfs, \
-              1 : hets, \
-              2 : homs}
-    r = conn.iterateQuery( q )
-    for row in r :
-        call_row = row[:-2]
-        call_string = callString(call_row)
-        GT = row[3]
-        if int(row[-1]) not in exclude :
-            lookup[int(GT)].append( (call_row[1],row[-2],call_string) )
-
-    return (noinfs,hets,homs)
-
-def parentFind( parent1, parent2, child) :
-    conn = db.Conn("localhost")
-    query = '''
-    select t1.*
-    from (
-    select v.id, chrom, pos
-    from Calls as c inner join Variants as v on v.id = c.var_id
-    where (pat_id = %d or pat_id = %d) and GT = 1 and AF < .1
-    group by var_id
-    having count(pat_id) = 2) as t1
-    inner join
-    (select v.id, chrom, pos
-     from Calls as c inner join Variants as v on v.id = c.var_id
-     where pat_id = %d and GT = 2 and AF < .1) as t2 on t1.id = t2.id''' \
-    % (parent1, parent2, child)
-
-def intersect() :
-    conn = db.Conn("localhost")
-    conn2 = db.Conn("localhost")
-    cols = "g.id, v.id, i.id, v.chrom, v.pos, v.dbSNP, v.ref, v.mut, v.filter, g.geneSymbol, v.AF, i.functionGVS, i.polyPhen, i.ref_aa, i.mut_aa, i.codon_pos, i.codon_total, v.granthamScore, v.scorePhastCons, v.consScoreGERP, v.distanceToSplice, g.omim_disease"
- 
-    query = '''
-    SELECT %s FROM Isoforms AS i
-    INNER JOIN (
-        SELECT var_id
-        FROM Calls
-        WHERE GT =1 AND ( pat_id =899 OR pat_id =1077  )
-        GROUP BY var_id
-        HAVING count( pat_id ) =2
-    ) AS t ON t.var_id = i.var_id
-    INNER JOIN Variants AS v ON v.id = i.var_id
-    INNER JOIN Genes AS g ON i.gene_id = g.id
-    WHERE TYPE = 1  AND ( functionGVS LIKE 'missense%%'
-                       OR functionGVS = 'nonsense'
-                       OR functionGVS LIKE 'stop%%'
-                       OR functionGVS LIKE 'frameshift%%' )
-
-    ORDER BY i.gene_id, i.id''' % cols
-
-    fh = open("intersect.txt",'wb')
-    fout = csv.writer( fh, \
-                    delimiter='\t', \
-                    quoting=csv.QUOTE_MINIMAL )
-
-    def writeOut( fout, buffer, var_count ) :
-        if var_count > 1 :
-            fout.writerows(buffer)
-
-    #print headers
-    fout.writerow( [t.split('.')[1] for t in cols.split(', ')][3:] + \
-                   ["Hom Count", "Hom Shares", "Het Count", "Het Shares"] )
-
-    prev_gid = -42
-    prev_vid = -42
-    var_count = 0
-    buffer = []
-    for i,row in enumerate(conn.query(query)) :
-        if i % 1000 == 0 :
-            print i
-        (gid,vid,iid) = row[0],row[1],row[2]
-
-        (noinfs, hets, homs) = getPatients( conn, vid, exclude=[899,1077] )
-        het_string = '; '.join([ht[1] for ht in hets])
-        hom_string = '; '.join([ht[1] for hm in homs])
-        output = row[3:]+(len(homs),hom_string,len(hets),het_string)
-
-        if gid != prev_gid :
-            writeOut( fout, buffer, var_count )
-            buffer = [output]
-            var_count = 1
-            prev_gid = gid
-            prev_vid = -42
-        else :
-            buffer.append( output )
-            if vid != prev_vid :
-                var_count += 1
-                prev_vid = vid
-    writeOut( fout, buffer, var_count )
-    fh.close()
-
-def makeColsReadable( cols ) :
-    return [c.split('.')[1] for c in cols]
-
 def makeReport(params) :
     try :
         conn = db.Conn()
@@ -328,226 +554,4 @@ def makeReport(params) :
         return returnname
     except Exception, (e) :
         print "<br /><br />%s" % str(e)
-
-def familyReports() :
-    outdir = globes.OUT_DIR
-    conn = db.Conn("localhost")
-
-    conn2 = db.Conn("localhost")
-    print "connetions made"
-
-    #columsn to grab from DB
-    vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
-             "filter","AF","granthamScore","scorePhastCons",
-             "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
-             "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
-
-    icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa"]
-
-    gcols = ["geneSymbol","omim_disease"]
-
-    #going in the output
-    column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "filter", \
-                      "gene", "AF", \
-                      "functionGVS", "AA_Change", "AA_Pos", \
-                      "granthamScore", "scorePhastCons", "consScoreGERP", \
-                      "distanceToSplice", "omim", "clinicalAssociation", \
-                      "GT:DP:GQ", "#HomShares", "Hom Shares", \
-                      "#HetShares", "Het Shares"]
-
-    #We queried for vcols, icols, gcols and want to print out the appropriate
-    #values given the column_headers we've chosen.  
-    #THis functions takes a row returned by the query and selects only the
-    #stuff we care to print
-    #Note this doesn't get us all the way.  This list will stil be missing
-    #GT:DP:GQ and all the share information
-    num_vcols = len(vcols)
-    def formatQueryRow( row ) :
-        output = []
-        #basic var stuff
-        output.extend( row[1:6] )
-        #filter
-        output.append( row[8] )
-        #gene
-        output.append( row[-2] )
-        #AF
-        output.append( row[9] )
-        #functionGVS
-        output.append( row[-8] )
-        #ref/mut aa
-        output.append( "%s/%s" % (row[-4],row[-3]) )
-        #pos/tot
-        output.append( "%s/%s" % (row[-6],row[-5]) )
-        #grantham,phast,gerp,splice
-        output.extend( row[10:14] )
-        #omim 
-        output.append( row[-1] )
-        #clinicalAssociation
-        output.append( row[17] )
-        return output
-
-
-    #handles to the file names
-    fouts = {}
-    #buffers to accumulate writes to the fouts
-    fbuffers = {}
-
-    #plate_id = globes.plates["CIDR"]
-    #if we want to restrict attention to a certain plate of patients
-    #query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
-    #string = []
-    #for row in conn.iterateQuery( query ) :
-        #string.append("id=%d" % row[0])
-    #string = ' or '.join(string)
-    string = '1 = 1'
-    query = '''select name from Patients where %s''' % string
-
-    #open files for each patient, one for hets, one for homs
-    #print the column headers for each file
-    #also initialize the buffer space
-    for r in conn.iterateQuery( query ) :
-        patient = broad.sanitizePatientName( r[0] )
-        fouts[patient] = {}
-        fbuffers[patient] = {}
-        for gt in ["hets","homs"] :
-            filename = '%s/%s_%s.tsv' % (outdir,patient,gt)
-            fouts[patient][gt] = filename
-
-            f = open(filename, 'wb')
-            fout = csv.writer( f,\
-                               delimiter='\t', \
-                               quoting=csv.QUOTE_MINIMAL )
-            #fouts[patient][gt].writerow( column_headers )
-            fout.writerow( column_headers )
-            f.close()
-
-            fbuffers[patient][gt] = []
-
-    #what are the interesting variants
-    vcols_string = ', '.join(["v.%s" % c for c in vcols])
-    icols_string = ', '.join(["i.%s" % c for c in icols])
-    gcols_string = ', '.join(["g.%s" % c for c in gcols])
-    dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
-    gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
-    gvs = ' and '.join(gvs)
-    query = '''select %s, %s, %s
-           from Variants as v inner join Isoforms as i on v.id = i.var_id
-                              inner join Genes as g on g.id = i.gene_id
-           where (%s)  and v.AF < 0.1
-           order by AF''' % (vcols_string, icols_string, gcols_string, gvs)
-    
-    #query = '''select %s, %s, %s
-               #from Variants as v inner join Isoforms as i on v.id = i.var_id
-               #inner join Genes as g on g.id = i.gene_id
-               #inner join (select distinct var_id
-        #from Calls
-        #where pat_id = 547 and
-        #((PL_AB >= .10)  or (PL_BB >= .10))
-        #and DP >= 8 and var_id not in
-        #(select distinct var_id
-                #from Calls
-                    #where pat_id = 455 and DP >= 8 and PL_AA <= .005)
-            #) as t on t.var_id = v.id
-        #where (%s) and v.AF < 0.1''' % (vcols_string, icols_string, gcols_string, gvs)
-
-    print query
-
-    #write the buffers out to the respective files
-    def flush() :
-        for pat in fbuffers :
-            for gt in ["homs","hets"] :
-                f = open( fouts[pat][gt], 'a')
-                fout = csv.writer( f,\
-                                   delimiter='\t', \
-                                   quoting=csv.QUOTE_MINIMAL )
-                fout.writerows( fbuffers[pat][gt] )
-                f.close()
-                #fouts[pat][gt].writerows( fbuffers[pat][gt] )
-                fbuffers[pat][gt] = []
-
-
-    for varix,r in enumerate(conn.query( query )) :
-        #do a buffer flush
-        if varix % 10000 == 0 : 
-            flush()
-            print varix
-
-
-        var_id = r[0]
-        isIndel = int(r[6]) == 2
-        if isIndel :
-            where = ""
-        else :
-   #        only look at patients meeting these call reqs
-            where = " and c.DP >= %d" % COVERAGE
-        (noinfs,hets,homs) = getPatients( conn2, var_id, where )
-        if len(hets) == len(homs) == 0 : continue
-
-        hom_pats = [p[1] for p in homs]
-        num_homs = len(hom_pats)
-        hom_string = '; '.join(hom_pats)
-
-        het_pats = [p[1] for p in hets]
-        het_string = '; '.join(het_pats)
-        num_hets = len(het_pats)
-
-        output_row = formatQueryRow( r )
-
-        for ix,(pat_id,pat,call) in enumerate(homs) :
-            pat = broad.sanitizePatientName( pat )
-            hom_shares = hom_pats[:ix] + hom_pats[ix+1:]
-            new_hom_string = '; '.join(hom_shares)
-            fbuffers[pat]["homs"].append( output_row + \
-                                         [call, num_homs-1, new_hom_string, \
-                                          num_hets, het_string] )
-
-        for ix,(pat_id,pat,call) in enumerate(hets) :
-            pat = broad.sanitizePatientName( pat )
-            het_shares = het_pats[:ix] + het_pats[ix+1:]
-            new_het_string = '; '.join(het_shares)
-            fbuffers[pat]["hets"].append( output_row + \
-                                         [call, num_homs, hom_string, \
-                                          num_hets-1, new_het_string] )
-            #fouts[pat]["hets"].writerow( output_row + \
-                                         #[call, num_homs, hom_string, \
-                                          #num_hets-1, new_het_string] )
-
-    flush()
-
-def updateAF(conn) :
-    query = "select count(*) from Patients where valid = 1"
-    num_pats = conn.queryScalar( query, int )
-    query = '''update Variants, (select var_id, sum(GT)/%d as newAF
-                                 from Calls as c inner join Patients as p
-                                      on c.pat_id = p.id
-                                 where p.valid = 1 and DP >= %d
-                                 group by var_id) as t
-               set AF = t.newAF
-               where id = t.var_id''' % (2*num_pats, COVERAGE)
-    conn.put( query )
-
-if __name__ == '__main__' :
-    intersect()
-
-    #conn = db.Conn("localhost", dry_run=False)
-    #familyReports()
-    #updateAF(conn)
-    
-    #print genQ1(params)
-    #printNewColsDict()
-    
-    #conn = db.Conn()
-    #(noinfs,hets,homs) = getPatients( conn, 1 )
-    #print homs
-
-    #makeReport()
-
-
-    #delete from Isoforms where var_id in (select id from Variants where type = 2);# 53994 row(s) affected.
-
-
-    #delete from Calls where var_id in (select id from Variants where type = 2);# 991508 row(s) affected.
-
-
-    #delete from Variants where type = 2# 35200 row(s) affected.
 

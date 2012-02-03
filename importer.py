@@ -5,18 +5,18 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = False 
+dry_run = True
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(PlateV_1(),'indel')]
+plates_and_switches = [(Plate_JSM_HCD_1577_2_1(),'snp')]
 
 #Run with python importer.py
 
@@ -83,6 +83,7 @@ def insertPlate( conn, plate, switch ) :
     print "    updated", updated_count
     print "    Isoforms", iso_count
     print "    All Iso" , iso
+
 #method needed to construct a Collimator
 def comparator(a,b) :
     return globes.compareVariants( a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3] )

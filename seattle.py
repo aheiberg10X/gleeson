@@ -19,7 +19,7 @@ for i,col in enumerate(cols) :
 
 #TODO: column sanity check
 class SeattleSource(Source) :
-    def __init__(self, file, switch, fast_forward=0) :
+    def __init__(self, file, switch, fast_forward=1) :
         self.file = file
         self.switch = switch
         self.indexOf = indexOf

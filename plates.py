@@ -1,5 +1,6 @@
 import globes
 
+# id should match class name
 ids =    { "Pilot" :          0, \
            "PlateI" :         1, \
            "PlateII" :        2, \
@@ -15,7 +16,8 @@ ids =    { "Pilot" :          0, \
            "PlateV_1" :      12, \
            "PlateV_2" :      13, \
            "PlateV_3" :      14, \
-           "PlateV_4" :      15}
+           "PlateV_4" :      15, \
+           "Plate_JSM_HCD_1577_2_1" : 16}
 
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
@@ -201,4 +203,15 @@ class PlateV_4(Plate) :
         self.indelfile = "Complete_Gleeson_368_122211_batch_4.unannotated.vcf_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_snps.vcf.225879594853.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_indels.vcf.225891223327.txt"
+
+class Plate_JSM_HCD_1577_2_1(Plate) :
+    def __init__(self) :
+        self.pat_name = "HCD-1577-2-1"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.broadfile = ""
+        self.snpfile = "HCD-1577-2-1_SNV_result.txt.filtered.sorted"
+        self.indelfile = ""
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HCD-1577-2-1_SNV_result.txt.filtered.228224114054.txt"
+        self.seattle_indel_file = ""
 

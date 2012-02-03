@@ -51,7 +51,6 @@ class VCFSource(Source) :
         fields = ["chrom","pos","ref","mut"]
         return [it[self.indexOf[f]] for f in fields]
 
-    
     def integrator( self, target, splts ) :
         if len(splts) != 1 : assert "len isn't right"
         for splt in splts :
@@ -92,6 +91,9 @@ class VCFSource(Source) :
             #ref and alt are always given for the forward strand
             fields['strand'] = True
 
+        #TODO
+        #This is abusing that fact that VCFSource goes first in the collimator
+        #o/w will overwrite what has been put in target
         return variant.Variant( fields, base_calls )
 
 #######################################################################

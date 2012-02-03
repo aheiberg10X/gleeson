@@ -11,6 +11,19 @@ OUT_DIR = "%s/output" % ROOT_DIR
 def tritonStop( splt ) :
     return "Nodes" in splt[0]
 
+def toBaseN( num, n, digits=[] ) :
+    d = num / n
+    remainder = num % n
+    digits.append( remainder )
+
+    if d < n :
+        digits.append( d )
+        digits.reverse()
+        return int(''.join(map(str,digits)))
+    else :
+        return toBaseN( d, n, digits )
+
+
 def dontStop( splt ) : return False
 def assertSane( splt ) : return (True,"good to go")
 #turn a filename into a line iterator, returning line splits
@@ -64,7 +77,8 @@ def chromNum( chrom ) :
     else :
         try : return int(chrom)
         except ValueError :
-            print "chromNum can't cast %s to int" % chrom
+            print "chromNum can't cast %s to int, maan" % chrom
+            return 25
 
 def compareHelper( a,b ) :
     if a == '*' or b == '*' : return 0
@@ -131,5 +145,7 @@ if __name__ == '__main__' :
 #
    #print areOverlapping(s1,e1,s2,e2)
 
-    print compareVariants( 1,23,'a','t',1,\
-                           1,23,'a','t',1 )
+    #print compareVariants( 1,23,'a','t',1,\
+                           #1,23,'a','t',1 )
+
+    print toBaseN( 16, 5 )
