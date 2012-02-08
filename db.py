@@ -7,7 +7,32 @@ endOfIteration = -1
 
 #makes MySQLdb.Warning raise an Exception, rather than printing to stdout
 #this lets us log
-#warnings.simplefilter("error", MySQLdb.Warning)
+warnings.simplefilter("error", MySQLdb.Warning)
+
+# decorator to wrap put and get, catching and refining exceptions and warnings 
+def refine(func) :
+    def inner(*args, **kwargs) :
+        try :
+            return func(*args, **kwargs)
+        except Exception, (e) :
+            message = e[1]
+            query = args[1]
+            if "integrity" in message.lower() :
+                exc = SQLDuplicate(message,query)
+            elif "warning" in message.lower() :
+                exc = SQLWarning(message,query)
+            else :
+                exc = SQLError(message,query)
+
+            if type(exc) == SQLWarning :
+                string = "Warning: %s \n Query: %s\n\n\n" % \
+                         (exc.error, exc.query)
+                #self.fwarning.write( string )
+                print string
+            else :
+                raise exc
+
+    return inner
 
 class Conn :
     #if dry_run : print out PUT queries without executing
@@ -34,25 +59,17 @@ class Conn :
 
     #there are two classes of database interactions:
     #GETs (queries/reads) and PUTs (updates/inserts/deletes/writes)
+    @refine
     def get(self, query ) :
         self.cur.execute(query)
 
+    @refine
     def put( self, query ) :
-        try :
-            if self.dry_run :
-                print query
-                pass
-            else :
-                self.cur.execute( query )
-        except Exception, (e) :
-            exc = refineException( repr(e), query )
-            if type(exc) == SQLWarning :
-                string = "Warning: %s \n Query: %s\n\n\n" % (exc.error, exc.query)
-                self.fwarning.write( string )
-                print string
-
-            else :
-                raise exc
+        if self.dry_run :
+            print query
+            pass
+        else :
+            self.cur.execute( query )
 
     def getColumns(self,table) :
         rs = self.query("SHOW COLUMNS FROM %s" % table)
@@ -146,16 +163,6 @@ class Conn :
 ###############      Exception Handling   ####################################
 ##############################################################################
 
-# If an Exception is caught doing a SQL operation, we refine it to figure out
-# what is actually going wrong
-def refineException( message, query ) :
-    if "integrity" in message.lower() :
-        return SQLDuplicate(message,query)
-    elif "warning" in message.lower() :
-        return SQLWarning(message,query)
-    else :
-        return SQLError(message,query)
-
 # the general, unrefined Error.  Can print the error message and the query that
 # caused it
 class SQLError(Exception) :
@@ -164,7 +171,7 @@ class SQLError(Exception) :
         self.query = query
     def __str__(self) :
         return "\nError: %s\n----------------\nQuery: %s\n" \
-                % (repr(self.error), self.query)
+                % (str(self.error), self.query)
 
 #If we are doing a duplicate insertion
 class SQLDuplicate(SQLError) :
@@ -173,18 +180,6 @@ class SQLDuplicate(SQLError) :
 #for warnings
 class SQLWarning(SQLError) :
     pass
-
-#the db modules internal functions can throw some variation of SQLError
-#this decorator lets external functions easily catch these errors
-def catch(func) :
-    def inner(*args, **kwargs) :
-        try :
-            return func(*args, **kwargs)
-        except SQLError, (mse):
-            print mse
-            assert False
-    return inner
-
 
 if __name__=='__main__' :
     dbc = Conn()

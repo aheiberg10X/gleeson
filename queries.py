@@ -37,18 +37,22 @@ gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
 gvs = ' and '.join(gvs)
 
 
-def callString( calls_row ) :
-    GT = broad.encodeGT( int(calls_row[3]) )
-    dp_gq = [str(t) for t in calls_row[4:6]]
-    return ':'.join( [GT] + dp_gq )
+def callString( calls_row, table ) :
+
+    if table == 'Calls' :
+        GT = broad.encodeGT( int(calls_row[3]) )
+        dp_gq = [str(t) for t in calls_row[4:6]]
+        return ':'.join( [GT] + dp_gq )
+    elif table == 'JointCalls' :
+        pass
 
 #returns 3 lists, noinfs, hets, and homs
 #each list is comprised of tuples (pat_id, pat_name, callInfo)
-def getPatients( conn, var_id, where_clause="",exclude=[] ) :
+def getPatients( conn, var_id, where_clause="", exclude=[], table="Calls" ) :
     q = '''
     select c.*, p.name, p.id
-    from Calls as c inner join Patients as p on c.pat_id = p.id
-    where p.valid = 1 and c.var_id = %d %s''' % (var_id, where_clause)
+    from %s as c inner join Patients as p on c.pat_id = p.id
+    where p.valid = 1 and c.var_id = %d %s''' % (table, var_id, where_clause)
     noinfs, homs, hets = [],[],[]
     lookup = {0 : noinfs, \
               1 : hets, \
@@ -56,7 +60,7 @@ def getPatients( conn, var_id, where_clause="",exclude=[] ) :
     r = conn.iterateQuery( q )
     for row in r :
         call_row = row[:-2]
-        call_string = callString(call_row)
+        call_string = callString(call_row, table)
         GT = row[3]
         if int(row[-1]) not in exclude :
             lookup[int(GT)].append( (call_row[1],row[-2],call_string) )
@@ -319,7 +323,8 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    intersect()
+    print gvs
+    #intersect()
 
     #conn = db.Conn("localhost", dry_run=False)
     #familyReports()

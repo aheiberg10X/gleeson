@@ -11,7 +11,11 @@ OUT_DIR = "%s/output" % ROOT_DIR
 def tritonStop( splt ) :
     return "Nodes" in splt[0]
 
-def toBaseN( num, n, digits=[] ) :
+#TODO
+#very weird behavior if give digits default of []
+#it somehow uses the last returned value of digits as the new starting point
+#instead
+def toBaseN( num, n, digits ) :
     d = num / n
     remainder = num % n
     digits.append( remainder )

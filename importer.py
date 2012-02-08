@@ -30,11 +30,17 @@ conn = db.Conn("localhost",dry_run=dry_run)
 # X_cols_tograb is the data we can fetch directly from the Variant object
 # the other columns are things like primary and foreign keys that link 
 # the rows together
-variant_cols = conn.getColumns("Variants")
-call_cols = conn.getColumns("Calls")
-call_cols_tograb = call_cols[3:]
-iso_cols = conn.getColumns("Isoforms")
-iso_cols_tograb = iso_cols[2:]
+#TODO this is getting hacky...
+#variant_cols, call_call_cols, call_cols_tograb, iso_cols, iso_cols_tograb = 0,0,0,0,0
+
+def setColumns(table="Calls") :
+    global variant_cols, call_table, call_cols, call_cols_tograb, iso_cols, iso_cols_tograb
+    variant_cols = conn.getColumns("Variants")
+    call_table = table
+    call_cols = conn.getColumns(call_table)
+    call_cols_tograb = call_cols[3:]
+    iso_cols = conn.getColumns("Isoforms")
+    iso_cols_tograb = iso_cols[2:]
 
 #make patient name->id lookup
 results = conn.query( "select id,name from Patients" )
@@ -73,7 +79,7 @@ def insertPlate( conn, plate, switch ) :
         #vid = False
         if not vid :
             inserted_count += 1
-            hold1,hold2 = insertVariant( conn, var, plate_id,0,0 )
+            insertVariant( conn, var, plate_id)
         else :
             updated_count += 1
             addToCalls( conn, vid, var, plate_id )
@@ -120,7 +126,7 @@ def variantToDatabase( conn, variant ) :
         addToCalls( conn, vid, variant )
 
 #We have a brand new variant, put it into the db
-def insertVariant(conn, variant, plate_id, count,isoforms) :
+def insertVariant(conn, variant, plate_id, switch ) :
     variant_dbix = conn.getNextID("Variants")
     values = variant.getFields( variant_cols )
     #pos = variant.getPosition()[1]
@@ -136,7 +142,6 @@ def insertVariant(conn, variant, plate_id, count,isoforms) :
     prevIso = -1
     #insert the isoforms
     for iso in variant.isoforms :
-        isoforms = isoforms +1;
         isoCur = iso.getFields( iso_cols_tograb )
         if( isoCur != prevIso):
             prevIso = isoCur
@@ -144,7 +149,6 @@ def insertVariant(conn, variant, plate_id, count,isoforms) :
             #print iso
             values = [variant_dbix] + iso.getFields( iso_cols_tograb )
             conn.insert( "Isoforms", values, iso_cols[1:] )
-            count = count +1
         else: 
             prevIso = isoCur
 
@@ -153,12 +157,13 @@ def insertVariant(conn, variant, plate_id, count,isoforms) :
         pat_dbix = patients_dbix[call.pat_name]
         values = [variant_dbix, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
-        conn.insert( 'Calls', values, call_cols) #, skip_dupes=True )
-    return count, isoforms
+        conn.insert( call_table, values, call_cols) #, skip_dupes=True )
+
 # This variant (identified by vid) has already been added to the system
 # By definition so have the isoforms
 # The calls, however, are novel
-def addToCalls(conn, vid, variant, plate_id) :
+def addToCalls(conn, vid, variant, plate_id ) :
+    global call_cols_tograb, call_cols, call_table
     #Do we want to integrate quality score here?  Doing a weighted average
     #by the number of calls?
     for call in variant.base_calls :
@@ -166,10 +171,9 @@ def addToCalls(conn, vid, variant, plate_id) :
         pat_dbix = patients_dbix[call.pat_name]
         values = [vid, pat_dbix, plate_id] + \
                  call.getFields( call_cols_tograb )
-        conn.insert( 'Calls', values, call_cols, skip_dupes=True )
+        conn.insert( call_table, values, call_cols, skip_dupes=True )
 
 #Add the patient names to the Patients table
-@db.catch
 def populatePatients( conn, patient_names ) :
     patient_dbix = conn.getNextID("Patients");
     for patient in patient_names :
@@ -202,6 +206,7 @@ def geneIDFromName( conn, gene_name ) :
     return gid
 
 if __name__ == '__main__' :
+    setColumns()
     for plate,switch in plates_and_switches :
         insertPlate( conn, plate, switch )
 
@@ -247,7 +252,6 @@ where plate = %d''' % plate_id
 #############################################################################
 
 #Hold over from when we were maintaining a Genes table.  Not used currently
-@db.catch
 def makeEmptyGene(conn,col,value) :
     nid = conn.getNextID("Genes")
     conn.insert( "Genes", [nid,value], ["id",col] )

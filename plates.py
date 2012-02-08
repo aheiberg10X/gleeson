@@ -17,7 +17,13 @@ ids =    { "Pilot" :          0, \
            "PlateV_2" :      13, \
            "PlateV_3" :      14, \
            "PlateV_4" :      15, \
-           "Plate_JSM_HCD_1577_2_1" : 16}
+           "Plate_JSM_HCD_1577_2_1" : 16, \
+           "Plate_JSM_HME_1563_2_1" : 17, \
+           "Plate_JSM_HME_1565_2_4" : 18, \
+           "Plate_JSM_HME_1573_2_1" : 19, \
+           "Plate_JSM_HME_1574_2_2" : 20, \
+           "Plate_JSM_HME_1620_2_2" : 21, \
+           "Plate_frazer2" : 22}
 
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
@@ -83,6 +89,7 @@ class PlateIII(Plate) :
     def __init__(self) :
         self.folder_name = "PlateIII"
         Plate.__init__(self)
+        self.broadfile = "Gleeson_B3_110908_105_Samples.vcf"
         self.snpfile = "plateIII_snps.vcf"
         self.indelfile = "plateIII_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation131.plate3_broad_hg19_snps.tar.gz.219684944227.txt"
@@ -206,12 +213,58 @@ class PlateV_4(Plate) :
 
 class Plate_JSM_HCD_1577_2_1(Plate) :
     def __init__(self) :
-        self.pat_name = "HCD-1577-2-1"
+        self.pat_name = "HCD-1577-2-1 brain"
         self.folder_name = "preliminary"
         Plate.__init__(self)
-        self.broadfile = ""
         self.snpfile = "HCD-1577-2-1_SNV_result.txt.filtered.sorted"
-        self.indelfile = ""
-        self.seattle_snp_file = "SeattleSeqAnnotation134.HCD-1577-2-1_SNV_result.txt.filtered.228224114054.txt"
-        self.seattle_indel_file = ""
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HCD-1577-2-1_SNV_result.txt.filtered.228224114054.txt.sorted"
+
+class Plate_JSM_HME_1563_2_1(Plate) :
+    def __init__(self) :
+        self.pat_name = "HME-1563-2-1 brain"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.snpfile = "HME-1563-2-1_SNV_result.txt.filtered.sorted"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1563-2-1_SNV_result.txt.filtered.sorted.228553699300.txt"
+
+class Plate_JSM_HME_1565_2_4(Plate) :
+    def __init__(self) :
+        self.pat_name = "HME-1565-2-4 brain"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.snpfile = "HME-1565-2-4_SNV_result.txt.filtered.sorted"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1565-2-4_SNV_result.txt.filtered.sorted.228554359976.txt"
+
+class Plate_JSM_HME_1573_2_1(Plate) :
+    def __init__(self) :
+        self.pat_name = "HME-1573-2-1 brain"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.snpfile = "HME-1573-2-1_SNV_result.txt.filtered.sorted"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1573-2-1_SNV_result.txt.filtered.sorted.228554466106.txt"
+
+class Plate_JSM_HME_1574_2_2(Plate) :
+    def __init__(self) :
+        self.pat_name = "HME-1574-2-2 brain"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.snpfile = "HME-1574-2-2_SNV_result.txt.filtered.sorted"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1574-2-2_SNV_result.txt.filtered.sorted.228554659298.txt"
+
+class Plate_JSM_HME_1620_2_2(Plate) :
+    def __init__(self) :
+        self.pat_name = "HME-1620-2-2 brain"
+        self.folder_name = "preliminary"
+        Plate.__init__(self)
+        self.snpfile = "HME-1620-2-2_SNV_result.txt.filtered.sorted"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1620-2-2_SNV_result.txt.filtered.sorted.228648614210.txt"
+class Plate_frazer2(Plate) :
+    def __init__(self) :
+        self.folder_name = "frazer2"
+        Plate.__init__(self)
+        self.broadfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf"
+        self.snpfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf"
+        self.indelfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf"
+        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf.225875884690.txt"
+        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf.225888255282.txt"
 

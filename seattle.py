@@ -3,6 +3,7 @@ import broad
 import db
 from variant import Isoform
 from collimator import Source
+import plates
 
 #######################################################################
 ##############    SeattleSeq   ########################################
@@ -17,13 +18,50 @@ indexOf = {}
 for i,col in enumerate(cols) :
     indexOf[col] = i
 
+def headerCheck( header_splt ) :
+    b = cols == header_splt
+    if not b :
+        return (False,"%s \n\ndo not match expected: \n\n%s" \
+               % (header_splt,cols))
+    else :
+        return (True,"good to go")
+
+#iterate() helper
+def stopper( splt ) :
+    return len(splt) == 1
+
+def skipper( splt ) :
+    return "GL" in splt[indexOf["chromosome"]]
+
+def sortHelper( splt ) :
+    return (globes.chromNum(splt[1]), int(splt[2]) )
+
+def sortFile( filename ) :
+    fin = open(filename)
+    header = fin.readline()
+    fout = open( "%s.sorted" % filename, 'w' )
+    fout.write(header)
+
+    sorted_splts = sorted( globes.splitIterator( fin, \
+                                                 stopIter=stopper ), \
+                           key = sortHelper )
+    fout.write( "\n".join( ['\t'.join(splt) for splt in sorted_splts] ) )
+
+    fout.close()
+    fin.close()
+
 #TODO: column sanity check
 class SeattleSource(Source) :
     def __init__(self, file, switch, fast_forward=1) :
         self.file = file
         self.switch = switch
         self.indexOf = indexOf
-        self.iterator = self.iterate(fast_forward)  
+        self.iterator = globes.splitIterator( self.file, \
+                                          burn=1, \
+                                          header_line_num=0, \
+                                          headerSanityCheck=headerCheck, \
+                                          stopIter=stopper, \
+                                          skipLine=skipper)
         self.allow_absent = False
         self.group_repeats = True
 
@@ -32,33 +70,6 @@ class SeattleSource(Source) :
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
                      "distanceToSplice", "AfricanHapMapFreq", \
                      "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
-    
-    #iterate() helper
-    def headerCheck( self, header_splt ) :
-        b = cols == header_splt
-        if not b :
-            return (False,"%s \n\ndo not match expected: \n\n%s" \
-                   % (header_splt,cols))
-        else :
-            return (True,"good to go")
-
-    #iterate() helper
-    def stopper( self, splt ) :
-        return len(splt) == 1
-
-    def iterate(self, fast_forward = 1) :
-        count = 0
-        #burn was 1
-        for row in  globes.splitIterator( self.file, \
-                                          burn=fast_forward, \
-                                          header_line_num=0, \
-                                          headerSanityCheck=self.headerCheck, \
-                                          stopIter=self.stopper ) :
-            #if count < fast_forward :
-                #count += 1
-                #continue
-            #else : yield row
-            yield row
 
     def getPosition( self, out_splt ) :
         if self.switch == 'snp' :
@@ -79,8 +90,9 @@ class SeattleSource(Source) :
                     if   a1 == ref2 : mut2 = a2
                     elif a2 == ref2 : mut2 = a1
                     else : 
-                        print out_splt
-                        assert "Have a problem" == "with figuring out mut2"
+                        #print out_splt
+                        mut2 = 'N'
+                        #assert "Have a problem" == "with figuring out mut2"
                 elif len(sp) == 1 :
                     mut2 = sp[0]
                 else :
@@ -182,16 +194,16 @@ class SeattleSource(Source) :
 
 
 if __name__ == '__main__' :
-    s = "none    19    54721150    T    T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T    T/G    NA    NM_006864    intron    unknown 0   none    NA  NA  unknown NA  0.005   0.716   T   520,3199,4088,35675,35676,35677,35678,48058,50207,53265 LILRB3  NA  NA  NA  no  NA  NA  NA  unknown 36  none    NA"
-    out_splt = s.split("    ")
+    #s = "none    19    54721150    T    T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,K,T,K,T,T,K,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,K,T,T,T,T,T,K,T,T,T    T/G    NA    NM_006864    intron    unknown 0   none    NA  NA  unknown NA  0.005   0.716   T   520,3199,4088,35675,35676,35677,35678,48058,50207,53265 LILRB3  NA  NA  NA  no  NA  NA  NA  unknown 36  none    NA"
+    #out_splt = s.split("    ")
 
-    print out_splt
+    #print out_splt
 
-    ss = SeattleSource('derp','snp')
-    print ss.getPosition( out_splt )
-    #indelList = indel.inputINDELS( globes.INDEL_FILE )
-    #parseIndels( 5 )
-    #separateOutputToFamilies()
+    #ss = SeattleSource('derp','snp')
+    #print ss.getPosition( out_splt )
+
+    sortFile( plates.Plate_JSM_HCD_1577_2_1().seattleFile('snp') )
+
     pass
 
 
