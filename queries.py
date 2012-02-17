@@ -10,20 +10,23 @@ import globes
 
 
 COVERAGE = 8
-#columsn to grab from DB
+
+#all reports generally need the same columns
+#these are they, broken up by table
 vcols = ["id","chrom","pos","dbSNP","ref","mut","type","qual",
          "filter","AF","granthamScore","scorePhastCons",
          "consScoreGERP","distanceToSplice","AfricanHapMapFreq",
          "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
 
-icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa"]
+icols = ["functionGVS","polyPhen","codon_pos","codon_total","ref_aa","mut_aa","accession"]
 
 gcols = ["geneSymbol","omim_disease"]
 
-#going in the output
+#going in the output, to format a query row to match this ordering
+#modify formatQueryRow
 column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "filter", \
-                  "gene", "AF", \
-                  "functionGVS", "AA_Change", "AA_Pos", \
+                  "gene", "accession", "AF", \
+                  "functionGVS", "polyPhen", "AA_Change", "AA_Pos", \
                   "granthamScore", "scorePhastCons", "consScoreGERP", \
                   "distanceToSplice", "omim", "clinicalAssociation", \
                   "GT:DP:GQ", "#HomShares", "Hom Shares", \
@@ -36,15 +39,54 @@ dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymou
 gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
 gvs = ' and '.join(gvs)
 
+# input: a query row, where SELECT was vcols+icols+gcols
+# return: the values corresponding to those of column_headers
+#    We queried for vcols, icols, gcols and want to print out the appropriate
+#    values given the column_headers we've chosen.  
+#    THis functions takes a row returned by the query and selects only the
+#    stuff we care to print
+#    Note this doesn't get us all the way.  This list will stil be missing
+# GT:DP:GQ and all the share information
 
+#offset lets us SELECT $offset arbitrary columns before the usual
+#vcols+gcols+icols
+def formatQueryRow( row, offset=0 ) :
+    output = []
+    #basic var stuff
+    output.extend( row[offset+1:offset+6] )
+    #filter
+    output.append( row[offset+8] )
+    #gene
+    output.append( row[-2] )
+    #accession
+    output.append( row[-3] )
+    #AF
+    output.append( row[offset+9] )
+    #functionGVS
+    output.append( row[-9] )
+    #polyPhen
+    output.append( row[-8] )
+    #ref/mut aa
+    output.append( "%s/%s" % (row[-5],row[-4]) )
+    #pos/tot
+    output.append( "%s/%s" % (row[-7],row[-6]) )
+    #grantham,phast,gerp,splice
+    output.extend( row[offset+10:offset+14] )
+    #omim 
+    output.append( row[-1] )
+    #clinicalAssociation
+    output.append( row[offset+17] )
+    return output
+
+#take some information about a row (coming from either Calls or JointCalls)
+#and turn it into a string
 def callString( calls_row, table ) :
-
     if table == 'Calls' :
         GT = broad.encodeGT( int(calls_row[3]) )
         dp_gq = [str(t) for t in calls_row[4:6]]
         return ':'.join( [GT] + dp_gq )
     elif table == 'JointCalls' :
-        pass
+        return ", ".join( [str(t) for t in calls_row] )
 
 #returns 3 lists, noinfs, hets, and homs
 #each list is comprised of tuples (pat_id, pat_name, callInfo)
@@ -53,20 +95,33 @@ def getPatients( conn, var_id, where_clause="", exclude=[], table="Calls" ) :
     select c.*, p.name, p.id
     from %s as c inner join Patients as p on c.pat_id = p.id
     where p.valid = 1 and c.var_id = %d %s''' % (table, var_id, where_clause)
-    noinfs, homs, hets = [],[],[]
-    lookup = {0 : noinfs, \
-              1 : hets, \
-              2 : homs}
+    if table == 'Calls' :
+        noinfs, homs, hets = [],[],[]
+        lookup = {0 : noinfs, \
+                  1 : hets, \
+                  2 : homs}
+    elif table == 'JointCalls' :
+        lookup = {}
+        #genotype codes corresponding to:
+        #AA_AA,AA_AB,AA_BB,AB_AA,AB_AB,AB_BB,BB_AA,BB_AB,BB_BB
+        for gt in [0,1,2,10,11,12,20,21,22] :
+            lookup[gt] = []
+
     r = conn.iterateQuery( q )
     for row in r :
         call_row = row[:-2]
         call_string = callString(call_row, table)
         GT = row[3]
         if int(row[-1]) not in exclude :
-            lookup[int(GT)].append( (call_row[1],row[-2],call_string) )
+            lookup[int(GT)].append( [call_row[1],row[-2],call_string] )
 
-    return (noinfs,hets,homs)
+    #TODO
+    #here instead we'll return the values of lookup, sorted by the key (GT)
+    return sorted( lookup.items(), key = lambda x : x[0] )
 
+    #return (noinfs,hets,homs)
+
+#find variants where child is hom and both parents hets
 def parentFind( parent1, parent2, child) :
     conn = db.Conn("localhost")
     query = '''
@@ -83,6 +138,7 @@ def parentFind( parent1, parent2, child) :
      where pat_id = %d and GT = 2 and AF < .1) as t2 on t1.id = t2.id''' \
     % (parent1, parent2, child)
 
+#an old report for Eric, find shared Calls between two pats
 def intersect() :
     conn = db.Conn("localhost")
     conn2 = db.Conn("localhost")
@@ -147,33 +203,13 @@ def intersect() :
     writeOut( fout, buffer, var_count )
     fh.close()
 
+#strip off the <table_alias> from <table_alias>.<column_name>
 def makeColsReadable( cols ) :
     return [c.split('.')[1] for c in cols]
 
-def formatQueryRow( row ) :
-    output = []
-    #basic var stuff
-    output.extend( row[1:6] )
-    #filter
-    output.append( row[8] )
-    #gene
-    output.append( row[-2] )
-    #AF
-    output.append( row[9] )
-    #functionGVS
-    output.append( row[-8] )
-    #ref/mut aa
-    output.append( "%s/%s" % (row[-4],row[-3]) )
-    #pos/tot
-    output.append( "%s/%s" % (row[-6],row[-5]) )
-    #grantham,phast,gerp,splice
-    output.extend( row[10:14] )
-    #omim 
-    output.append( row[-1] )
-    #clinicalAssociation
-    output.append( row[17] )
-    return output
-
+#make a hom and het report for each patient
+#run this after a new plate gets loaded (and you have updatedAF)
+#files goes to output/
 def familyReports() :
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
@@ -181,12 +217,6 @@ def familyReports() :
     conn2 = db.Conn("localhost")
     print "connetions made"
 
-    #We queried for vcols, icols, gcols and want to print out the appropriate
-    #values given the column_headers we've chosen.  
-    #THis functions takes a row returned by the query and selects only the
-    #stuff we care to print
-    #Note this doesn't get us all the way.  This list will stil be missing
-    #GT:DP:GQ and all the share information
     num_vcols = len(vcols)
 
     #handles to the file names
@@ -194,15 +224,7 @@ def familyReports() :
     #buffers to accumulate writes to the fouts
     fbuffers = {}
 
-    #plate_id = globes.plates["CIDR"]
-    #if we want to restrict attention to a certain plate of patients
-    #query = "select distinct(pat_id) from Calls where plate = %d" % plate_id
-    #string = []
-    #for row in conn.iterateQuery( query ) :
-        #string.append("id=%d" % row[0])
-    #string = ' or '.join(string)
-    string = '1 = 1'
-    query = '''select name from Patients where %s''' % string
+    query = '''select name from Patient'''
 
     #open files for each patient, one for hets, one for homs
     #print the column headers for each file
@@ -231,20 +253,6 @@ def familyReports() :
                               inner join Genes as g on g.id = i.gene_id
            where (%s)  and v.AF < 0.1
            order by AF''' % (vcols_string, icols_string, gcols_string, gvs)
-    
-    #query = '''select %s, %s, %s
-               #from Variants as v inner join Isoforms as i on v.id = i.var_id
-               #inner join Genes as g on g.id = i.gene_id
-               #inner join (select distinct var_id
-        #from Calls
-        #where pat_id = 547 and
-        #((PL_AB >= .10)  or (PL_BB >= .10))
-        #and DP >= 8 and var_id not in
-        #(select distinct var_id
-                #from Calls
-                    #where pat_id = 455 and DP >= 8 and PL_AA <= .005)
-            #) as t on t.var_id = v.id
-        #where (%s) and v.AF < 0.1''' % (vcols_string, icols_string, gcols_string, gvs)
 
     print query
 
@@ -264,10 +272,9 @@ def familyReports() :
 
     for varix,r in enumerate(conn.query( query )) :
         #do a buffer flush
-        if varix % 10000 == 0 : 
+        if varix % 10000 == 0 :
             flush()
             print varix
-
 
         var_id = r[0]
         isIndel = int(r[6]) == 2
@@ -276,7 +283,8 @@ def familyReports() :
         else :
    #        only look at patients meeting these call reqs
             where = " and c.DP >= %d" % COVERAGE
-        (noinfs,hets,homs) = getPatients( conn2, var_id, where )
+        (noinfs,hets,homs) = [t[1] for t in getPatients( conn2, var_id, where_clause=where )]
+        
         if len(hets) == len(homs) == 0 : continue
 
         hom_pats = [p[1] for p in homs]
@@ -310,6 +318,7 @@ def familyReports() :
 
     flush()
 
+#once a new VCF has been loaded, AF will have to be updated
 def updateAF(conn) :
     query = "select count(*) from Patients where valid = 1"
     num_pats = conn.queryScalar( query, int )
@@ -323,11 +332,13 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    print gvs
+    #print gvs
     #intersect()
 
     #conn = db.Conn("localhost", dry_run=False)
-    #familyReports()
+    #(noinfs, hets, homs) = getPatients( conn, 123 )
+    #print hets
+    familyReports()
     #updateAF(conn)
     
     #print genQ1(params)

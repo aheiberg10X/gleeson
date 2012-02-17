@@ -23,7 +23,8 @@ ids =    { "Pilot" :          0, \
            "Plate_JSM_HME_1573_2_1" : 19, \
            "Plate_JSM_HME_1574_2_2" : 20, \
            "Plate_JSM_HME_1620_2_2" : 21, \
-           "Plate_frazer2" : 22}
+           "Plate_frazer2" : 22, \
+           "Plate_nadia" : 23 }
 
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
@@ -202,7 +203,7 @@ class PlateV_3(Plate) :
         self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf.225888255282.txt"
 
 class PlateV_4(Plate) :
-    def __init__(self) :
+    def __init__(self) : 
         self.folder_name = "PlateV"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_368_122211_batch_4.unannotated.vcf"
@@ -236,7 +237,7 @@ class Plate_JSM_HME_1565_2_4(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1565-2-4_SNV_result.txt.filtered.sorted.228554359976.txt"
 
 class Plate_JSM_HME_1573_2_1(Plate) :
-    def __init__(self) :
+    def __init__(self) : 
         self.pat_name = "HME-1573-2-1 brain"
         self.folder_name = "preliminary"
         Plate.__init__(self)
@@ -262,9 +263,18 @@ class Plate_frazer2(Plate) :
     def __init__(self) :
         self.folder_name = "frazer2"
         Plate.__init__(self)
-        self.broadfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf"
-        self.snpfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf"
-        self.indelfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf"
-        self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf.225875884690.txt"
-        self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_3.unannotated.vcf_indels.vcf.225888255282.txt"
+        self.broadfile =""
+        self.snpfile = "from_frazer_snps.vcf"
+        self.indelfile = "from_frazer_indels.vcf"
+        self.seattle_snp_file = "frazer2_snps_seattle.txt"
+        self.seattle_indel_file = "frazer2_indels_seattle.txt"
+class Plate_nadia(Plate) :
+    def __init__(self) :
+        self.folder_name = "nadia"
+        Plate.__init__(self)
+        self.broadfile =""
+        self.snpfile = "nadia_all_snps.vcf"
+        self.indelfile = "nadia_all_indels.vcf"
+        self.seattle_snp_file = "nadia_snps_seattle.txt"
+        self.seattle_indel_file = "nadia_indels_seattle.txt"
 

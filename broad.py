@@ -1,9 +1,9 @@
 import re
-import os 
+import os
 import variant
 
 import globes
-from collimator import Source
+from collimator import CollimatorSource
 import plates
 
 COLUMN_MAP  =   {"chrom" :  0,
@@ -26,7 +26,7 @@ CALL_MAP = {"GT" : 0,
             "PL" : 4}
 
 # This class wraps a vcf file for Collimator consumption
-class VCFSource(Source) :
+class VCFSource(CollimatorSource) :
     def __init__(self, vcf_file, fast_forward=0) :
         self.indexOf = COLUMN_MAP
         globes.printColumnWarning( vcf_file, self.indexOf )
@@ -35,17 +35,7 @@ class VCFSource(Source) :
 
         self.allow_absent = False
         self.group_repeats = False
-        self.iterator = self.iterate(fast_forward)
-
-    def iterate(self, fast_forward = 0) :
-        count = 0
-        #burn was 0
-        for row in globes.splitIterator( self.fin, burn=fast_forward ) :
-            #if count < fast_forward :
-                #count += 1
-                #continue
-            #else : yield row
-            yield row
+        self.iterator = globes.splitIterator( self.fin, burn=fast_forward )
 
     def eqkey(self, it) :
         fields = ["chrom","pos","ref","mut"]
@@ -54,7 +44,6 @@ class VCFSource(Source) :
     def integrator( self, target, splts ) :
         if len(splts) != 1 : assert "len isn't right"
         for splt in splts :
-            ##TODO generalize this to make it vendor independent, call start column is feature of VCF, not broad???
             calls = splt[ CALL_START: ]
             base_calls = []
             for pat_ix,c in enumerate(calls) :

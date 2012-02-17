@@ -2,7 +2,7 @@ import globes
 import broad
 import db
 from variant import Isoform
-from collimator import Source
+from collimator import CollimatorSource
 import plates
 
 #######################################################################
@@ -50,8 +50,7 @@ def sortFile( filename ) :
     fout.close()
     fin.close()
 
-#TODO: column sanity check
-class SeattleSource(Source) :
+class SeattleSource(CollimatorSource) :
     def __init__(self, file, switch, fast_forward=1) :
         self.file = file
         self.switch = switch
@@ -69,15 +68,18 @@ class SeattleSource(Source) :
         self.cols = ["accession", "functionGVS", "polyPhen", \
                      "granthamScore", "scorePhastCons", "consScoreGERP", \
                      "distanceToSplice", "AfricanHapMapFreq", \
-                     "EuropeanHapMapFreq", "AsianHapMapFreq","clinicalAssociation"]
+                     "EuropeanHapMapFreq", "AsianHapMapFreq", \
+                     "clinicalAssociation"]
 
     def getPosition( self, out_splt ) :
         if self.switch == 'snp' :
             #if it was called with parsed input, there will be only one thing in
             #the sampleGenotype column, rather than info for everyone
             if False : #len( out_splt[self.indexOf["sampleGenotype"]] ) == 1 :
-                keys = ["chromosome","position","referenceBase","sampleGenotype"]
-                (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] for k in keys]
+                keys = ["chromosome","position", \
+                        "referenceBase","sampleGenotype"]
+                (chrom2,pos2,ref2,mut2) = [out_splt[self.indexOf[k]] \
+                                           for k in keys]
 
             #otherwise it is easier to use sampleAlleles
             else :

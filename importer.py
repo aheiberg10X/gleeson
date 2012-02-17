@@ -1,11 +1,11 @@
-from collimator import Collimator, Source
+from collimator import Collimator, CollimatorSource
 from variant import Variant
 import globes
 from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1
+from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1,Plate_frazer2,Plate_nadia
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
@@ -16,7 +16,7 @@ dry_run = True
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(Plate_JSM_HCD_1577_2_1(),'snp')]
+plates_and_switches = [(Plate_nadia(),'indel')]
 
 #Run with python importer.py
 
@@ -26,15 +26,15 @@ plates_and_switches = [(Plate_JSM_HCD_1577_2_1(),'snp')]
 
 conn = db.Conn("localhost",dry_run=dry_run)
 
-# X_cols are the columns of the database table we want to fill
+# X_cols are the columns of the database table we want to fill.
+#  i.e used in the INSERT statements we will be issuing
 # X_cols_tograb is the data we can fetch directly from the Variant object
-# the other columns are things like primary and foreign keys that link 
-# the rows together
-#TODO this is getting hacky...
-#variant_cols, call_call_cols, call_cols_tograb, iso_cols, iso_cols_tograb = 0,0,0,0,0
-
+#   i.e basically everything but the id's that make up the primary and 
+#   foregin keys linking the tables together. We'll have to supply them
+#   serparately
 def setColumns(table="Calls") :
-    global variant_cols, call_table, call_cols, call_cols_tograb, iso_cols, iso_cols_tograb
+    global variant_cols, call_table, call_cols, \
+           call_cols_tograb, iso_cols, iso_cols_tograb
     variant_cols = conn.getColumns("Variants")
     call_table = table
     call_cols = conn.getColumns(call_table)
@@ -50,7 +50,8 @@ for (ID,name) in results :
 
 ############## /Globals  ###########################################
 
-
+#what this is all here for
+#update the database to reflect the info found in a new plate
 def insertPlate( conn, plate, switch ) :
     inserted_count = 0
     updated_count = 0
@@ -62,10 +63,8 @@ def insertPlate( conn, plate, switch ) :
     plate_id = plate.getPlateID()
 
     # Construct the Sources for a Collimator to work on
-    ff = 0
-    vcfSource = broad.VCFSource( plate.varFile(switch), fast_forward = ff )
-    ff = 1
-    seattleSource = SeattleSource( plate.seattleFile(switch), switch, fast_forward = ff )
+    vcfSource = broad.VCFSource( plate.varFile(switch) )
+    seattleSource = SeattleSource( plate.seattleFile(switch), switch )
     sources = [vcfSource, seattleSource]
 
     populatePatients( conn, vcfSource.patients )
@@ -79,7 +78,7 @@ def insertPlate( conn, plate, switch ) :
         #vid = False
         if not vid :
             inserted_count += 1
-            insertVariant( conn, var, plate_id)
+            insertVariant( conn, var, plate_id, switch)
         else :
             updated_count += 1
             addToCalls( conn, vid, var, plate_id )
@@ -91,10 +90,12 @@ def insertPlate( conn, plate, switch ) :
     print "    All Iso" , iso
 
 #method needed to construct a Collimator
+#how to compare the two eqkeys defined by the Sources
 def comparator(a,b) :
     return globes.compareVariants( a[0],a[1],a[2],a[3],b[0],b[1],b[2],b[3] )
 
 #method needed to construct a Collimator
+#creates a blank target that the two sources fill with data
 def targetCreator() :
     return Variant([],[])
 
@@ -109,21 +110,6 @@ def getVariantID( var_tuple ) :
             % (var_tuple[0],var_tuple[1],var_tuple[2],var_tuple[3])
 
     return conn.queryScalar( query, int )
-
-#deprecated.....
-def variantToDatabase( conn, variant ) :
-    global inserted_count, updated_count
-    keys = ["chrom","pos","ref","mut"]
-    values = [variant.fields[k] for k in keys]
-    #print "adsfasfasfdasdfasdfasdf"
-    #print values
-    vid = getVariantID( values )
-    if not vid :
-        inserted_count += 1
-        insertVariant( conn, variant )
-    else :
-        updated_count += 1
-        addToCalls( conn, vid, variant )
 
 #We have a brand new variant, put it into the db
 def insertVariant(conn, variant, plate_id, switch ) :
@@ -290,7 +276,7 @@ def insertMissingVariants(conn) :
         else :
             assert False
 
-    dbSource = Source( it, eqkey, integrator, allow_absent = False )
+    dbSource = CollimatorSource( it, eqkey, integrator, allow_absent = False )
 
     c = Collimator( [vcfSource,seattleSource,dbSource], comparator, targetCreator, absentHandler = absentHandler )
     for i,v in enumerate(c) :

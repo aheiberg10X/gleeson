@@ -1,6 +1,6 @@
 
 #A Source is something that the Collimator can operate on
-class Source :
+class CollimatorSource :
     #iterator: is something we can call next on, will provide the data
     #          For example, iterating the lines of a file, or rows of a db
     #eqkey: is a function that takes an item from iterator
