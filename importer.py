@@ -5,18 +5,19 @@ from seattle import SeattleSource
 import db
 from math import log
 import broad
-from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1,Plate_frazer2,Plate_nadia
+import plates
+#from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1,Plate_frazer2,Plate_nadia
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = True
+dry_run = False
 
 #Can specify what data is to be inserted.  It is a list of (plate,switch) 
 #tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(Plate_nadia(),'indel')]
+plates_and_switches = [(plates.frazer3(),'indel')]
 
 #Run with python importer.py
 
@@ -26,9 +27,9 @@ plates_and_switches = [(Plate_nadia(),'indel')]
 
 conn = db.Conn("localhost",dry_run=dry_run)
 
-# X_cols are the columns of the database table we want to fill.
+# *_cols are the columns of the database table we want to fill.
 #  i.e used in the INSERT statements we will be issuing
-# X_cols_tograb is the data we can fetch directly from the Variant object
+# *_cols_tograb is the data we can fetch directly from the Variant object
 #   i.e basically everything but the id's that make up the primary and 
 #   foregin keys linking the tables together. We'll have to supply them
 #   serparately
@@ -192,6 +193,9 @@ def geneIDFromName( conn, gene_name ) :
     return gid
 
 if __name__ == '__main__' :
+    #TODO
+    #get argv[1], and turn it into the correct Plate class
+    #run on both 'snp' and 'indel'
     setColumns()
     for plate,switch in plates_and_switches :
         insertPlate( conn, plate, switch )
