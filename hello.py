@@ -1,20 +1,14 @@
 #!/usr/bin/python2.4
-import md5
+
 import cgi
-#import explanations
 import sys
 sys.path.append('/home/Gleeson/database/src')
-print "Content-Type: text/html"     # HTML is following
-print                               # blank line, end of headers
 
 import queries
 import db
+from web_utils import passIsValid, printHeader
 
-def passIsValid( passwd ) :
-    m = md5.new()
-    m.update(passwd)
-    hashed = m.hexdigest()
-    return hashed == "3712907b986216d86a7598e1912cc405"
+printHeader()
 
 LOGIN_FAIL = "incorrect password"
 
@@ -22,7 +16,10 @@ fields = cgi.FieldStorage()
 
 if 'passwd' in fields :
     if passIsValid( fields['passwd'].value ) :
-        print '<a href="../../../upload_plate_form/form.html">Upload a New Plate</a>'
+        print '<ul>'
+        print '<li><a href="../../../forms/create_plate_form.html">Create a New Plate</a></li>'
+        print '<li><a href="../../../forms/upload_plate_form.html">Upload a New Plate</a></li>'
+        print '</ul>'
     else :
         print LOGIN_FAIL
 

@@ -287,7 +287,6 @@ class Plate_nadia(Plate) :
         self.seattle_snp_file = "nadia_snps_seattle.txt"
         self.seattle_indel_file = "nadia_indels_seattle.txt"
 
-
 class frazer3(Plate) :
     def __init__(self) :
         self.folder_name = "frazer3"
@@ -296,4 +295,13 @@ class frazer3(Plate) :
         self.indelfile = "from_frazer_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation134.frazer3_snps.vcf.tar.gz.230368586074.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation134.from_frazer_indels.vcf.230369948975.txt"
+
+class a(Plate) :
+    def __init__(self) :
+        self.folder_name = "a"
+        Plate.__init__(self)
+        self.snpfile = "b"
+        self.indelfile = "a"
+        self.seattle_snp_file = "t"
+        self.seattle_indel_file = "i"
 

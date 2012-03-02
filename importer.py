@@ -1,3 +1,4 @@
+import sys
 from collimator import Collimator, CollimatorSource
 from variant import Variant
 import globes
@@ -14,10 +15,6 @@ import plates
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
 dry_run = False
-
-#Can specify what data is to be inserted.  It is a list of (plate,switch) 
-#tuples.  Modify plates.py to add a new plate object.
-plates_and_switches = [(plates.frazer3(),'indel')]
 
 #Run with python importer.py
 
@@ -192,13 +189,17 @@ def geneIDFromName( conn, gene_name ) :
 
     return gid
 
-if __name__ == '__main__' :
-    #TODO
-    #get argv[1], and turn it into the correct Plate class
-    #run on both 'snp' and 'indel'
+def main(plate_name) :
     setColumns()
-    for plate,switch in plates_and_switches :
-        insertPlate( conn, plate, switch )
+    plate = eval("plates.%s()" % plate_name)
+    insertPlate( conn, plate, 'snp' )
+    insertPlate( conn, plate, 'indel' )
+
+if __name__ == '__main__' :
+    if sys.argv[1] :
+        main( sys.argv[1] )
+    else :
+        print "pppplllliibibhghgt"
 
 
 ###############################################################################

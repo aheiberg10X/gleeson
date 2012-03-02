@@ -224,7 +224,7 @@ def familyReports() :
     #buffers to accumulate writes to the fouts
     fbuffers = {}
 
-    query = '''select name from Patient'''
+    query = '''select name from Patients'''
 
     #open files for each patient, one for hets, one for homs
     #print the column headers for each file
