@@ -117,7 +117,7 @@ def getPatients( conn, var_id, where_clause="", exclude=[], table="Calls" ) :
 
     #TODO
     #here instead we'll return the values of lookup, sorted by the key (GT)
-    return sorted( lookup.items(), key = lambda x : x[0] )
+    return lookup #sorted( lookup.items(), key = lambda x : x[0] )
 
     #return (noinfs,hets,homs)
 
@@ -207,10 +207,55 @@ def intersect() :
 def makeColsReadable( cols ) :
     return [c.split('.')[1] for c in cols]
 
+
+#var_query : a query on the variants,isoforms, and genes table
+#            the columns selected out must be vcols+icols+gcols
+#Each variant returned by the query is formatted and output,
+#along with a rollup of the het and hom pats
+#The returned patients can be filtered by call_where, which is supplied
+#to getPatients().  eg where DP >= 8 and ...
+#the report will be named outfile_name
+#call_detail = True will report the call info alongside the patient name
+def makeReport( var_query, call_where, outfile_name, call_detail=False ) :
+    fout = open( '/home/Gleeson/database/src/html/reports/%s.tsv' % outfile_name, 'w')
+    csvout = csv.writer( fout, delimiter='\t' )
+    csvout.writerow( column_headers )
+
+    conn = db.Conn("localhost")
+    conn2 = db.Conn("localhost")
+
+    #TODO
+    #check query select statement for correct selection
+    for varix,r in enumerate(conn.query( var_query )) :
+        output_row = formatQueryRow( r )
+        #Report is not per patient, call info column no meaning here
+        output_row.append("-")
+        lookup = getPatients(conn2, r[0], " and (%s)" % call_where)
+        hets = lookup[1]
+        homs = lookup[2]
+        if call_detail :
+            hom_pats = [p[1]+p[2] for p in homs]
+            het_pats = [p[1]+p[2] for p in hets]
+        else :
+            hom_pats = [p[1] for p in homs]
+            het_pats = [p[1] for p in hets]
+
+        num_homs = len(hom_pats)
+        hom_string = '; '.join(hom_pats)
+
+        het_string = '; '.join(het_pats)
+        num_hets = len(het_pats)
+
+        output_row.extend( [num_homs,hom_string,num_hets,het_string] )
+        csvout.writerow( output_row )
+
+    fout.close()
+
 #make a hom and het report for each patient
 #run this after a new plate gets loaded (and you have updatedAF)
 #files goes to output/
 def familyReports() :
+    return "changed getPatients(), things will break"
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
 
@@ -332,13 +377,13 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    #print gvs
+    print vcols_string,icols_string,gcols_string
     #intersect()
 
     #conn = db.Conn("localhost", dry_run=False)
     #(noinfs, hets, homs) = getPatients( conn, 123 )
     #print hets
-    familyReports()
+    #familyReports()
     #updateAF(conn)
     
     #print genQ1(params)
@@ -526,48 +571,48 @@ var_cols = ["Var ID", \
             "Ref AA", \
             "Mut AA"]
 iso_cols = []
-def makeReport(params) :
-    try :
-        conn = db.Conn()
-        r = conn.cur.execute( q0 )
-        q1 = genQ1(params)
-        q2 = genQ2(params)
-        print "<br /><br />Q1: %s" % q1
-        print "<br /><br />Q2: %s" % q2
-        
-        r = conn.cur.execute( q1 )
-        r = conn.iterateQuery( q2)
-        reportname = '../../html/reports/%s.tsv' % params["filename"]
-        returnname = '../../reports/%s.tsv' % params["filename"]
-        freport = csv.writer( open(reportname,'wb'), \
-                    delimiter='\t', \
-                    quoting=csv.QUOTE_MINIMAL )
-        prev_int_id = -1
-        prev_var_id = -1
-
-        #this is duplicating call)_restrictions in genQ1... can do better
-        where_clause = ' and c.DP >= %s and c.GQ >= %s' % (params['call_depth'], params['call_qual'])
-        freport.writerow( makeColsReadable(dcols.values()) + ['Hom Shares','Het Shares'])
-        for row in r :
-            var_id = row[2]
-            (noinfs,hets,homs) = ['; '.join([str(t[1]) for t in p]) for p in getPatients( conn, var_id, where_clause )]
-            freport.writerow( list(row) + [homs, hets] )
-
-
-            ###OLD PRETTY(IER) PRINTING CODE
-            #int_id, int_name = row[:2]
-            #var_id = row[2]
-            ##print int_id, var_id
-            #if int_id != prev_int_id :
-                #freport.writerow( [] )
-                #freport.writerow( [int_id,int_name] )
-                #freport.writerow( ['',''] + makeColsReadable(dcols.values())[2:] + ['Hom Shares','Het Shares'])
-                #prev_int_id = int_id
+#def makeReport(params) :
+    #try :
+        #conn = db.Conn()
+        #r = conn.cur.execute( q0 )
+        #q1 = genQ1(params)
+        #q2 = genQ2(params)
+        #print "<br /><br />Q1: %s" % q1
+        #print "<br /><br />Q2: %s" % q2
+       # 
+        #r = conn.cur.execute( q1 )
+        #r = conn.iterateQuery( q2)
+        #reportname = '../../html/reports/%s.tsv' % params["filename"]
+        #returnname = '../../reports/%s.tsv' % params["filename"]
+        #freport = csv.writer( open(reportname,'wb'), \
+                    #delimiter='\t', \
+                    #quoting=csv.QUOTE_MINIMAL )
+        #prev_int_id = -1
+        #prev_var_id = -1
 #
-            ##if var_id != prev_var_id :
-            #freport.writerow( ['',''] + list(row[2:]) + [homs, hets]  )
-            #prev_var_id = var_id
-        return returnname
-    except Exception, (e) :
-        print "<br /><br />%s" % str(e)
-
+        ##this is duplicating call)_restrictions in genQ1... can do better
+        #where_clause = ' and c.DP >= %s and c.GQ >= %s' % (params['call_depth'], params['call_qual'])
+        #freport.writerow( makeColsReadable(dcols.values()) + ['Hom Shares','Het Shares'])
+        #for row in r :
+            #var_id = row[2]
+            #(noinfs,hets,homs) = ['; '.join([str(t[1]) for t in p]) for p in getPatients( conn, var_id, where_clause )]
+            #freport.writerow( list(row) + [homs, hets] )
+#
+#
+            ####OLD PRETTY(IER) PRINTING CODE
+            ##int_id, int_name = row[:2]
+            ##var_id = row[2]
+            ###print int_id, var_id
+            ##if int_id != prev_int_id :
+                ##freport.writerow( [] )
+                ##freport.writerow( [int_id,int_name] )
+                ##freport.writerow( ['',''] + makeColsReadable(dcols.values())[2:] + ['Hom Shares','Het Shares'])
+                ##prev_int_id = int_id
+##
+            ###if var_id != prev_var_id :
+            ##freport.writerow( ['',''] + list(row[2:]) + [homs, hets]  )
+            ##prev_var_id = var_id
+        #return returnname
+    #except Exception, (e) :
+        #print "<br /><br />%s" % str(e)
+############

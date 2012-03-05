@@ -19,6 +19,8 @@ if 'passwd' in fields :
         print '<ul>'
         print '<li><a href="../../../forms/create_plate_form.html">Create a New Plate</a></li>'
         print '<li><a href="../../../forms/upload_plate_form.html">Upload a New Plate</a></li>'
+        print '<li><a href="../../../forms/custom_query_form.html">Custom Report</a></li>'
+        print '<li><a href="../../../forms/parent_child_form.html">Parent/Child Report</a></li>'
         print '</ul>'
     else :
         print LOGIN_FAIL
