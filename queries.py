@@ -91,15 +91,19 @@ def callString( calls_row, table ) :
 #returns 3 lists, noinfs, hets, and homs
 #each list is comprised of tuples (pat_id, pat_name, callInfo)
 def getPatients( conn, var_id, where_clause="", exclude=[], table="Calls" ) :
+
     q = '''
     select c.*, p.name, p.id
     from %s as c inner join Patients as p on c.pat_id = p.id
     where p.valid = 1 and c.var_id = %d %s''' % (table, var_id, where_clause)
+
     if table == 'Calls' :
         noinfs, homs, hets = [],[],[]
         lookup = {0 : noinfs, \
                   1 : hets, \
                   2 : homs}
+
+    #quick extension for a project with Jeong-ho, Sangwoo, and Vineet
     elif table == 'JointCalls' :
         lookup = {}
         #genotype codes corresponding to:
@@ -115,11 +119,7 @@ def getPatients( conn, var_id, where_clause="", exclude=[], table="Calls" ) :
         if int(row[-1]) not in exclude :
             lookup[int(GT)].append( [call_row[1],row[-2],call_string] )
 
-    #TODO
-    #here instead we'll return the values of lookup, sorted by the key (GT)
-    return lookup #sorted( lookup.items(), key = lambda x : x[0] )
-
-    #return (noinfs,hets,homs)
+    return lookup
 
 #find variants where child is hom and both parents hets
 def parentFind( parent1, parent2, child) :
@@ -255,7 +255,7 @@ def makeReport( var_query, call_where, outfile_name, call_detail=False ) :
 #run this after a new plate gets loaded (and you have updatedAF)
 #files goes to output/
 def familyReports() :
-    return "changed getPatients(), things will break"
+    #print "changed getPatients(), things will break"
     outdir = globes.OUT_DIR
     conn = db.Conn("localhost")
 
@@ -328,8 +328,9 @@ def familyReports() :
         else :
    #        only look at patients meeting these call reqs
             where = " and c.DP >= %d" % COVERAGE
-        (noinfs,hets,homs) = [t[1] for t in getPatients( conn2, var_id, where_clause=where )]
-        
+        lookup = getPatients( conn2, var_id, where_clause=where )
+        (noinfs,hets,homs) = [lookup[gt] for gt in [0,1,2]]
+
         if len(hets) == len(homs) == 0 : continue
 
         hom_pats = [p[1] for p in homs]
@@ -377,13 +378,14 @@ def updateAF(conn) :
     conn.put( query )
 
 if __name__ == '__main__' :
-    print vcols_string,icols_string,gcols_string
+    #print vcols_string,icols_string,gcols_string
     #intersect()
 
     #conn = db.Conn("localhost", dry_run=False)
     #(noinfs, hets, homs) = getPatients( conn, 123 )
     #print hets
-    #familyReports()
+    print "hwerew"
+    familyReports()
     #updateAF(conn)
     
     #print genQ1(params)

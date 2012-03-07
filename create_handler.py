@@ -18,6 +18,6 @@ names = ["plate_name","snp_vcf_file","indel_vcf_file","snp_seattle_file","indel_
 values = [fields[name].value for name in names]
 try :
     addPlateMacro( *values )
-    printToServer( "plate created successfully. TODO a link to upload" )
+    printToServer( 'Plate created successfully. Go <a href="../upload_plate_form.html">here</a> to add it to the database' )
 except Exception, (e) :
     printToServer( str(e) )

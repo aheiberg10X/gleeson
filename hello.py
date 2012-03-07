@@ -6,22 +6,33 @@ sys.path.append('/home/Gleeson/database/src')
 
 import queries
 import db
-from web_utils import passIsValid, printHeader
+from web_utils import *
 
 printHeader()
 
 LOGIN_FAIL = "incorrect password"
 
 fields = cgi.FieldStorage()
+passwd = fields['passwd'].value
 
 if 'passwd' in fields :
-    if passIsValid( fields['passwd'].value ) :
-        print '<ul>'
-        print '<li><a href="../../../forms/create_plate_form.html">Create a New Plate</a></li>'
-        print '<li><a href="../../../forms/upload_plate_form.html">Upload a New Plate</a></li>'
-        print '<li><a href="../../../forms/custom_query_form.html">Custom Report</a></li>'
-        print '<li><a href="../../../forms/parent_child_form.html">Parent/Child Report</a></li>'
-        print '</ul>'
+    if passIsValid( passwd ) :
+        links = []
+        links.append( authenticLink ( passwd, \
+                                     "create_plate_form.html", \
+                                     "Create a New Plate" ) )
+        links.append( authenticLink( passwd, \
+                                     "upload_plate_form.html", \
+                                     "Upload a New Plate" ) )
+        links.append( authenticLink( passwd, \
+                                     "custom_query_form.html", \
+                                     "Custom Report" ) )
+        links.append( authenticLink( passwd, \
+                                     "parent_child_form.html", \
+                                     "Parent/Child Report" ) )
+
+        print listify( links )
+
     else :
         print LOGIN_FAIL
 
