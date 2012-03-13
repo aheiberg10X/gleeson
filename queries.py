@@ -1,4 +1,5 @@
 import db
+import re
 import csv
 import sys
 import os.path
@@ -35,6 +36,7 @@ column_headers = ["chrom", "pos", "dbSNP", "ref", "mut", "filter", \
 vcols_string = ', '.join(["v.%s" % c for c in vcols])
 icols_string = ', '.join(["i.%s" % c for c in icols])
 gcols_string = ', '.join(["g.%s" % c for c in gcols])
+select_string = "%s, %s, %s" % (vcols_string, icols_string, gcols_string)
 dont_want = ["intron","near-gene-5","intergenic","near-gene-3","coding-synonymous","coding-notMod3"]
 gvs = ["functionGVS <> '%s'" % dw for dw in dont_want]
 gvs = ' and '.join(gvs)
@@ -224,8 +226,13 @@ def makeReport( var_query, call_where, outfile_name, call_detail=False ) :
     conn = db.Conn("localhost")
     conn2 = db.Conn("localhost")
 
-    #TODO
-    #check query select statement for correct selection
+    #check the select statement of the incoming query for correct columns
+    no_white = re.compile(r'\s+')
+    input_query = no_white.sub( "", var_query ).lower()
+    target = no_white.sub( "", "select %s" % select_string ).lower()
+    if not input_query.startswith( target ) :
+        raise Exception("The entered query does not start with 'SELECT %s'" % select_string)
+
     for varix,r in enumerate(conn.query( var_query )) :
         output_row = formatQueryRow( r )
         #Report is not per patient, call info column no meaning here

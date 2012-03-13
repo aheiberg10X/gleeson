@@ -17,10 +17,12 @@ LOGIN_FAIL = "incorrect password"
 fields = cgi.FieldStorage()
 try :
     passwd = fields["passwd"].value
-    content_file = fields["content_file"].value
-    content = open( "/home/Gleeson/database/src/html/forms/%s" % content_file ).read()
 
     if passIsValid( passwd ) :
+        content_file = fields["content_file"].value
+        fin = open( "/home/Gleeson/database/src/html/forms/%s" % content_file )
+        content = fin.read()
+        fin.close()
         printToServer( content )
     else :
         printToServer( LOGIN_FAIL )
