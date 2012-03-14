@@ -84,9 +84,10 @@ SINGLE_PARENT_SHARED_HOM_QUERY = '''
 # we are interogating to have parents that have a higher generation
 # code than our affected patient
 #
-PATIENT_QUERY = ''' Select name, id
+PATIENT_QUERY = ''' Select id,name,family,disease,generation,affected
         FROM Patients
-        where name LIKE "%-$$famid$$-%"
+        where family = $$famid$$"
+        and valid = 1
         '''
 
 
@@ -146,7 +147,11 @@ def getHomVarInfo(conn, affected, parents) :
 def getPatientData(conn, familyid) :
     myquery = PATIENT_QUERY
     myquery = myquery.replace("$$famid$$", familyid)
-    allpatients = []
+    #parents assumed to be unaffected
+    parents = []
+    affecteds = []
+    unaffecteds = []
+    #allpatients = []
     for row in conn.query(myquery) :
         allpatients.append(row)
     allpatients = sorted(allpatients)

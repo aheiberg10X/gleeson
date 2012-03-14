@@ -20,9 +20,15 @@ try :
 
     if passIsValid( passwd ) :
         content_file = fields["content_file"].value
-        fin = open( "/home/Gleeson/database/src/html/forms/%s" % content_file )
-        content = fin.read()
-        fin.close()
+        doExec = bool(int(fields["doExec"].value))
+        if doExec :
+            exec( "import %s" % content_file )
+            printToServer( exec( "%s.main()" % content_file ) )
+        else :
+            fin = open( "/home/Gleeson/database/src/html/forms/%s" % \
+                        content_file )
+            content = fin.read()
+            fin.close()
         printToServer( content )
     else :
         printToServer( LOGIN_FAIL )
