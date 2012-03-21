@@ -32,7 +32,7 @@ class VCFSource(CollimatorSource) :
         globes.printColumnWarning( vcf_file, self.indexOf )
         self.fin = open( vcf_file, "rb" )
         self.patients = getPatients( self.fin )
-
+        print "after getPatients"
         self.allow_absent = False
         self.group_repeats = False
         self.iterator = globes.splitIterator( self.fin, burn=fast_forward )

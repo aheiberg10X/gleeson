@@ -387,11 +387,11 @@ def updateAF(conn) :
 if __name__ == '__main__' :
     #print vcols_string,icols_string,gcols_string
     #intersect()
-
+#
     #conn = db.Conn("localhost", dry_run=False)
     #(noinfs, hets, homs) = getPatients( conn, 123 )
     #print hets
-    print "hwerew"
+    #print "hwerew"
     familyReports()
     #updateAF(conn)
     

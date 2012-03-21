@@ -17,11 +17,8 @@ try :
     sys.stdout = open("debug/custom_out.txt",'w')
     sys.stderr = open("debug/custom_err.txt",'w')
 
-    try :
-        makeReport( values[0], values[1], values[2] )
-        printToServer( '<a href="../reports/%s.tsv">report generated</a>' % values[2] )
-    except Exception, (e) :
-        printToServer( str(e) )
+    makeReport( values[0], values[1], values[2] )
+    printToServer( '<a href="../reports/%s.tsv">report generated</a>' % values[2] )
 
 except KeyError, (e) :
     printToServer( "You most likely left %s blank." % str(e) )

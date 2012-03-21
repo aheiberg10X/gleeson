@@ -13,6 +13,11 @@ fields = cgi.FieldStorage()
 sys.stdout = open("debug/upload_out.txt",'w')
 sys.stderr = open("debug/upload_err.txt",'w')
 
-from importer import main
-main(fields["plate_name"].value)
+try :
+    from importer import main
+    main(fields["plate_name"].value)
 
+    printToServer("You're upload has finished and the allele frequencies have been updated.")
+
+except Exception, (e) :
+    printToServer( str(e) )

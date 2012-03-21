@@ -20,10 +20,18 @@ try :
 
     if passIsValid( passwd ) :
         content_file = fields["content_file"].value
+        print content_file
         doExec = bool(int(fields["doExec"].value))
         if doExec :
-            exec( "import %s" % content_file )
-            printToServer( exec( "%s.main()" % content_file ) )
+            try :
+                #TODO
+                # more well formedness checking here
+                module = content_file.split('.')[0]
+                exec( "import %s" % module )
+                content = eval( "%s.main()" % module )
+                print content
+            except ImportError, (e) :
+                printToServer( str(e) )
         else :
             fin = open( "/home/Gleeson/database/src/html/forms/%s" % \
                         content_file )

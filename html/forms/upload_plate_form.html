@@ -9,14 +9,15 @@
 </head>
 <body id="main_body" >
 	
-	<img id="top" src="top.png" alt="">
 	<div id="form_container">
 	
         <h1><a>Upload a Plate</a></h1>
 		<form id="form_358523" class="appnitro"  method="post" action="../cgi-bin/upload_handler.py">
 		<div class="form_description">
 			<h2>Upload a New Plate</h2>
-			<p>Upload the newly created plate</p>
+            <p>Upload the newly created plate</p>
+            <p>This can take a long time, use the link below to monitor progress</p>
+            <p>DO NOT CLICK THIS LIGHTLY.  IF THIS ERRORS OUT PARTWAY THROUGH IT IS DIFFICULT TO GET BACK TO A CONSISTENT STATE.</p>
 		</div>						
 		<ul >
 			<li id="li_1" >
@@ -30,8 +31,10 @@
 				<input id="saveForm" class="button_text" type="submit" name="upload" value="Upload" />
 		    </li>		
         </ul>
-	</form>
-	<img id="bottom" src="bottom.png" alt="">
+    </form>
+    
+    <a href="../upload_progress.html">Progress</a>
+    <a href="../upload_error.html">Errors</a>
     </div>
 	</body>
 </html>

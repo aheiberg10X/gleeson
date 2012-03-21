@@ -295,3 +295,22 @@ class frazer3(Plate) :
         self.indelfile = "from_frazer_indels.vcf"
         self.seattle_snp_file = "SeattleSeqAnnotation134.frazer3_snps.vcf.tar.gz.230368586074.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation134.from_frazer_indels.vcf.230369948975.txt"
+
+class fullgenome(Plate) :
+    def __init__(self) :
+        self.folder_name = "fullgenome"
+        Plate.__init__(self)
+        self.snpfile = "PG0000503_snps.vcf"
+        self.indelfile = "PG0000503_indels.vcf"
+        self.seattle_snp_file = "PG0000503_snps_seattle.txt"
+        self.seattle_indel_file = "PG0000503_indels_seattle.txt"
+
+class PlateIV_4(Plate) :
+    def __init__(self) :
+        self.folder_name = "PlateIV_4"
+        Plate.__init__(self)
+        self.snpfile = "plateIV_missed_snps.vcf"
+        self.indelfile = "plateIV_missed_indels.vcf"
+        self.seattle_snp_file = "plateIV_missed_snps_seattle.txt"
+        self.seattle_indel_file = "plateIV_missed_indels_seattle.txt"
+

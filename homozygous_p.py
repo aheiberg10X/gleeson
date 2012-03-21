@@ -12,6 +12,7 @@ import cgi
 import sys
 sys.path.append('/home/Gleeson/database/src')
 from web_utils import printHeader, printToServer
+import queries
 
 printHeader()
 
@@ -34,7 +35,7 @@ TWO_PARENT_SHARED_HOM_QUERY = '''
     (
         SELECT var_id
         FROM Calls
-        WHERE pat_id IN ($$P1$$,$$P2$$)
+        WHERE pat_id IN (%%s,%%s)
         AND GT = 1
         GROUP BY var_id
         HAVING COUNT( pat_id ) =2
@@ -47,7 +48,7 @@ TWO_PARENT_SHARED_HOM_QUERY = '''
         INNER JOIN Variants AS v ON c.var_id = v.id
         WHERE AF < .03
         AND (
-            pat_id = $$A$$
+            pat_id = %%s
             AND GT = 2
             )
     ) AS t2 ON t1.var_id = t2.var_id
@@ -85,8 +86,8 @@ SINGLE_PARENT_SHARED_HOM_QUERY = '''
 # code than our affected patient
 #
 PATIENT_QUERY = ''' Select id,name,family,disease,generation,affected
-        FROM Patients
-        where family = $$famid$$"
+        FROM TempPatients
+        where family = $$famid$$
         and valid = 1
         '''
 
@@ -147,17 +148,39 @@ def getHomVarInfo(conn, affected, parents) :
 def getPatientData(conn, familyid) :
     myquery = PATIENT_QUERY
     myquery = myquery.replace("$$famid$$", familyid)
+    generation_gap = '''
+    select max(generation), min(generation)
+    from TempPatients
+    where family = %s''' % familyid
+
+    (maxgen, mingen) = conn.query( generation_gap )[0]
+    print maxgen, mingen
+    if int(maxgen) - int(mingen) > 1 :
+        print "whowhowhwow multigeneration thing going on"
+
     #parents assumed to be unaffected
     parents = []
     affecteds = []
     unaffecteds = []
     #allpatients = []
     for row in conn.query(myquery) :
-        allpatients.append(row)
-    allpatients = sorted(allpatients)
-    affected = allpatients[-1]
-    parents = allpatients[:-1]
-    return affected, parents
+        print row
+        eyed,name,family,disease,generation,affected = row
+        affected = int(affected)
+        print affected
+        if affected == 1 and generation == maxgen :
+            affecteds.append( eyed )
+        elif affected == 0 and generation == mingen :
+            parents.append( eyed )
+
+    #sanity check
+    if len(affecteds) != 1 :
+        raise Exception("There are %d != 1 affecteds for family %s." % \
+                        (len(affecteds), familyid))
+    elif len(parents) != 2 :
+        raise Exception("There are %d != 2 parents for family %s" % \
+                        (len(parents), familyid))
+    return affecteds, parents
 # END getPatientData
 
 ######################################################################
@@ -225,30 +248,35 @@ def main(familyid) :
     conn = db.Conn("localhost")
 
     # Get Affected and Parents
-    (affected, parents) = getPatientData(conn, familyid)
+    (affecteds, parents) = getPatientData(conn, familyid)
+    q = TWO_PARENT_SHARED_HOM_QUERY % (parents[0], parents[1], affecteds[0])
+    queries.makeReport( q, "1=1", "cp_report.csv" )
+    #
+    
+    
     #print affected, parents
-    print "Patients:",affected[1], parents[0][1], parents[1][1]
-
-    # Find the PatientFile
-    patientfile = getPatientFile( affected[0], "homs" )
-
-    # Make the OutputFile
-    outfile = "./reports/%s_homanalysis.csv" % familyid
-
-    # Get Het Information
-    if len(parents) == 2 :
-        variantdata = getHomVarInfo(conn, affected[1], [parents[0][1], parents[1][1]])
-        print variantdata[1:10]
-
-        print "Matches VariantData:",len(variantdata)
-        twoParentAnalysis( variantdata, patientfile, outfile )
-    elif len(parents) == 1 :
-        variantdata = getHomVarInfo(conn, affected[1], [parents[0][1]] )
-
-        print "Matches Variantdata:",len(variantdata)
-        #twoParentAnalysis( hetdata_p1, hetdata_a, patientfile, outfile )
-    else :
-        sys.err("This family doesnt work for this query")
+    #print "Patients:",affected[1], parents[0][1], parents[1][1]
+#
+    ## Find the PatientFile
+    #patientfile = getPatientFile( affected[0], "homs" )
+#
+    ## Make the OutputFile
+    #outfile = "./reports/%s_homanalysis.csv" % familyid
+#
+    ## Get Het Information
+    #if len(parents) == 2 :
+        #variantdata = getHomVarInfo(conn, affected[1], [parents[0][1], parents[1][1]])
+        #print variantdata[1:10]
+#
+        #print "Matches VariantData:",len(variantdata)
+        #twoParentAnalysis( variantdata, patientfile, outfile )
+    #elif len(parents) == 1 :
+        #variantdata = getHomVarInfo(conn, affected[1], [parents[0][1]] )
+#
+        #print "Matches Variantdata:",len(variantdata)
+        ##twoParentAnalysis( hetdata_p1, hetdata_a, patientfile, outfile )
+    #else :
+        #sys.err("This family doesnt work for this query")
 
 # END MAIN
 

@@ -7,22 +7,23 @@ import db
 from math import log
 import broad
 import plates
-#from plates import Pilot, PlateI, PlateII, PlateIII, CIDR, Frazer_ali2, Frazer_aligned, FrazerII, PlateIV, PlateIV_1, PlateIV_2, PlateIV_3, PlateV_1, PlateV_2, PlateV_3, PlateV_4, Plate_JSM_HCD_1577_2_1,Plate_frazer2,Plate_nadia
+from queries import updateAF
 
 ##########  CONFIGURE ########################################
 # dry_run = True means everything expect the execution of any database update
 # queries get run.  The queries that would have been run are printed instead
 # Good for ensuring no errors get thrown half way through inserting and for 
 # checking that the insert queries make sense (columns are lining up, etc)
-dry_run = False
+#dry_run = True 
 
+dry_run = False 
+conn = db.Conn("localhost",dry_run=dry_run)
 #Run with python importer.py
 
 ############ /CONFIGURE  ####################################3
 
 ############# GLOBALS ########################################
 
-conn = db.Conn("localhost",dry_run=dry_run)
 
 # *_cols are the columns of the database table we want to fill.
 #  i.e used in the INSERT statements we will be issuing
@@ -51,6 +52,8 @@ for (ID,name) in results :
 #what this is all here for
 #update the database to reflect the info found in a new plate
 def insertPlate( conn, plate, switch ) :
+
+    print "start of insert plate"
     inserted_count = 0
     updated_count = 0
     iso_count = 0
@@ -80,7 +83,7 @@ def insertPlate( conn, plate, switch ) :
         else :
             updated_count += 1
             addToCalls( conn, vid, var, plate_id )
-    
+
     print "Plate: %d" % plate_id
     print "    inserted", inserted_count
     print "    updated", updated_count
@@ -194,6 +197,8 @@ def main(plate_name) :
     plate = eval("plates.%s()" % plate_name)
     insertPlate( conn, plate, 'snp' )
     insertPlate( conn, plate, 'indel' )
+    updateAF( conn )
+
 
 if __name__ == '__main__' :
     if sys.argv[1] :

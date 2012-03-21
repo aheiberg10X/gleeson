@@ -37,7 +37,12 @@ if 'passwd' in fields :
                                           "List Patients", \
                                           doExec=1) )
 
-        print listify( links )
+        print "<h2>View</h2>"
+        print listify( view_links )
+        print "<h2>Report</h2>"
+        print listify( report_links )
+        print "<h2>Upload</h2>"
+        print listify( upload_links )
 
     else :
         print LOGIN_FAIL
