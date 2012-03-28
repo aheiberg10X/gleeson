@@ -23,19 +23,33 @@ if 'passwd' in fields :
         upload_links.append( authenticLink ( passwd, \
                                      "create_plate_form.html", \
                                      "Create a New Plate" ) )
+
         upload_links.append( authenticLink( passwd, \
                                      "upload_plate_form.html", \
                                      "Upload a New Plate" ) )
+
+        upload_links.append( authenticLink( passwd, \
+                                            "delete_plate_form.html", \
+                                            "Delete a plate" ) )
+
         report_links.append( authenticLink( passwd, \
                                      "custom_query_form.html", \
                                      "Custom Report" ) )
+
         report_links.append( authenticLink( passwd, \
                                      "parent_child_form.html", \
                                      "Parent/Child Report" ) )
+
         view_links.append( authenticLink( passwd, \
                                           "list_patients.py", \
                                           "List Patients", \
                                           doExec=1) )
+
+        view_links.append( authenticLink( passwd, \
+                                          "list_plates.py", \
+                                          "List Plates", \
+                                          doExec=1) )
+
 
         print "<h2>View</h2>"
         print listify( view_links )

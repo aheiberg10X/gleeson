@@ -7,32 +7,6 @@ for line in fin.readlines() :
     (name,eyed) = line.split(":")
     ids[name] = int(eyed)
 
-#ids =    { "Pilot" :          0, \
-           #"PlateI" :         1, \
-           #"PlateII" :        2, \
-           #"PlateIII" :       3, \
-           #"CIDR" :           4, \
-           #"Frazer_ali2" :    5, \
-           #"Frazer_aligned" : 6, \
-           #"FrazerII" :       7, \
-           #"PlateIV" :        8, \
-           #"PlateIV_1" :      9, \
-           #"PlateIV_2" :     10, \
-           #"PlateIV_3" :     11, \
-           #"PlateV_1" :      12, \
-           #"PlateV_2" :      13, \
-           #"PlateV_3" :      14, \
-           #"PlateV_4" :      15, \
-           #"Plate_JSM_HCD_1577_2_1" : 16, \
-           #"Plate_JSM_HME_1563_2_1" : 17, \
-           #"Plate_JSM_HME_1565_2_4" : 18, \
-           #"Plate_JSM_HME_1573_2_1" : 19, \
-           #"Plate_JSM_HME_1574_2_2" : 20, \
-           #"Plate_JSM_HME_1620_2_2" : 21, \
-           #"Plate_frazer2" : 22, \
-           #"Plate_nadia" :   23, \
-           #"Plate_frazer3" : 24}
-
 # A class to abstract the notion of a plate
 # Each plate must specify 5 things:
 #   A folder_name (the same as the folder you put all the data in.  
@@ -181,7 +155,7 @@ class PlateIV_3(Plate) :
 
 class PlateV_1(Plate) :
     def __init__(self) :
-        self.folder_name = "PlateV"
+        self.folder_name = "PlateV_1"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_368_122211_batch_1.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_368_122211_batch_1.unannotated.vcf_snps.vcf"
@@ -191,7 +165,7 @@ class PlateV_1(Plate) :
 
 class PlateV_2(Plate) :
     def __init__(self) :
-        self.folder_name = "PlateV"
+        self.folder_name = "PlateV_2"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_368_122211_batch_2.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_368_122211_batch_2.unannotated.vcf_snps.vcf"
@@ -201,7 +175,7 @@ class PlateV_2(Plate) :
 
 class PlateV_3(Plate) :
     def __init__(self) :
-        self.folder_name = "PlateV"
+        self.folder_name = "PlateV_3"
         Plate.__init__(self)
         self.broadfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf"
         self.snpfile = "Complete_Gleeson_368_122211_batch_3.unannotated.vcf_snps.vcf"
@@ -219,22 +193,6 @@ class PlateV_4(Plate) :
         self.seattle_snp_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_snps.vcf.225879594853.txt"
         self.seattle_indel_file = "SeattleSeqAnnotation134.Complete_Gleeson_368_122211_batch_4.unannotated.vcf_indels.vcf.225891223327.txt"
 
-class Plate_JSM_HCD_1577_2_1(Plate) :
-    def __init__(self) :
-        self.pat_name = "HCD-1577-2-1 brain"
-        self.folder_name = "preliminary"
-        Plate.__init__(self)
-        self.snpfile = "HCD-1577-2-1_SNV_result.txt.filtered.sorted"
-        self.seattle_snp_file = "SeattleSeqAnnotation134.HCD-1577-2-1_SNV_result.txt.filtered.228224114054.txt.sorted"
-
-class Plate_JSM_HME_1563_2_1(Plate) :
-    def __init__(self) :
-        self.pat_name = "HME-1563-2-1 brain"
-        self.folder_name = "preliminary"
-        Plate.__init__(self)
-        self.snpfile = "HME-1563-2-1_SNV_result.txt.filtered.sorted"
-        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1563-2-1_SNV_result.txt.filtered.sorted.228553699300.txt"
-
 class Plate_JSM_HME_1565_2_4(Plate) :
     def __init__(self) :
         self.pat_name = "HME-1565-2-4 brain"
@@ -242,14 +200,6 @@ class Plate_JSM_HME_1565_2_4(Plate) :
         Plate.__init__(self)
         self.snpfile = "HME-1565-2-4_SNV_result.txt.filtered.sorted"
         self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1565-2-4_SNV_result.txt.filtered.sorted.228554359976.txt"
-
-class Plate_JSM_HME_1573_2_1(Plate) :
-    def __init__(self) : 
-        self.pat_name = "HME-1573-2-1 brain"
-        self.folder_name = "preliminary"
-        Plate.__init__(self)
-        self.snpfile = "HME-1573-2-1_SNV_result.txt.filtered.sorted"
-        self.seattle_snp_file = "SeattleSeqAnnotation134.HME-1573-2-1_SNV_result.txt.filtered.sorted.228554466106.txt"
 
 class Plate_JSM_HME_1574_2_2(Plate) :
     def __init__(self) :
@@ -281,7 +231,6 @@ class Plate_nadia(Plate) :
     def __init__(self) :
         self.folder_name = "nadia"
         Plate.__init__(self)
-        self.broadfile =""
         self.snpfile = "nadia_all_snps.vcf"
         self.indelfile = "nadia_all_indels.vcf"
         self.seattle_snp_file = "nadia_snps_seattle.txt"

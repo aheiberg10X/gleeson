@@ -384,31 +384,73 @@ def updateAF(conn) :
                where id = t.var_id''' % (2*num_pats, COVERAGE)
     conn.put( query )
 
+#plate_id is an int
+def deletePlate( conn, plate_id ) :
+    #fin = open( "plate_ids.txt", 'r' )
+    #found = False
+    #for line in fin.readlines() :
+        #splt = line.strip().split(":")
+        #eyed = int(splt[1])
+        #if plate_id == eyed :
+            #found = True
+    #fin.close()
+    #if not found :
+        #raise Exception("There is no plate with id=%d according to plate_ids.txt" % plate_id)
+
+    output = []
+    #delete all Calls that are old
+    query = '''
+    delete from Calls
+    where plate = %d''' % plate_id
+    conn.put( query )
+    output.append("Calls with plate_id = %d deleted" % plate_id)
+
+    #delete any stranded variants
+    query = '''
+    delete v
+    from Variants as v left join Calls as c on v.id = c.var_id
+    where c.var_id is null
+    '''
+    conn.put( query )
+    output.append("Variants stranded by Call deletion removed")
+
+    query = '''
+    delete i
+    from Isoforms as i left join Variants as v on v.id = i.var_id
+    where v.id is null'''
+    conn.put( query )
+    output.append("Isoforms stranded by Variant deletion removed")
+
+
+    #delete any stranded patients
+    #not doing this right now, because main use is to update SeattleSeq info
+    query = '''delete p
+    FROM Patients AS p
+    LEFT JOIN (
+        SELECT DISTINCT pat_id
+        FROM Calls
+    ) AS t ON t.pat_id = p.id
+    WHERE pat_id IS NULL
+    '''
+    #conn.put( query )
+    #output.append("Patients stranded by Calls deletion removed")
+
+    return output
+
+#
 if __name__ == '__main__' :
+
+    conn = db.Conn("localhost", dry_run=False)
+    deletePlate( conn, 19 )
+
     #print vcols_string,icols_string,gcols_string
     #intersect()
 #
-    #conn = db.Conn("localhost", dry_run=False)
     #(noinfs, hets, homs) = getPatients( conn, 123 )
-    #print hets
-    #print "hwerew"
-    familyReports()
+    #familyReports()
     #updateAF(conn)
-    
-    #print genQ1(params)
-    #printNewColsDict()
-    
-    #conn = db.Conn()
-    #(noinfs,hets,homs) = getPatients( conn, 1 )
-    #print homs
-
-    #makeReport()
 
 
-    #delete from Isoforms where var_id in (select id from Variants where type = 2);# 53994 row(s) affected.
-
-
-    #delete from Calls where var_id in (select id from Variants where type = 2);# 991508 row(s) affected.
 
 
 ############################################################################
@@ -433,7 +475,6 @@ if __name__ == '__main__' :
                     #or (ss_functionGVS is null and effect = 'NON_SYNONYMOUS_CODING'))'''}
 
 
-#delete from Variants where type = 2# 35200 row(s) affected.
 q0 = "delete from TempIntVars"
 
 def printNewColsDict() :

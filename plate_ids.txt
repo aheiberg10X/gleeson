@@ -14,10 +14,7 @@ PlateV_1:12
 PlateV_2:13
 PlateV_3:14
 PlateV_4:15
-Plate_JSM_HCD_1577_2_1:16
-Plate_JSM_HME_1563_2_1:17
 Plate_JSM_HME_1565_2_4:18
-Plate_JSM_HME_1573_2_1:19
 Plate_JSM_HME_1574_2_2:20
 Plate_JSM_HME_1620_2_2:21
 Plate_frazer2:22

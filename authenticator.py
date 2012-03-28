@@ -20,7 +20,8 @@ try :
 
     if passIsValid( passwd ) :
         content_file = fields["content_file"].value
-        print content_file
+
+        #is the content_file a python script or plain HTML?
         doExec = bool(int(fields["doExec"].value))
         if doExec :
             try :
@@ -29,19 +30,26 @@ try :
                 module = content_file.split('.')[0]
                 exec( "import %s" % module )
                 content = eval( "%s.main()" % module )
-                print content
+
             except ImportError, (e) :
                 printToServer( str(e) )
+
+            except Exception, (e) :
+                printToServer( "Something wrong with main() in %s\n\n %s" % \
+                               (module, str(e)) )
         else :
             fin = open( "/home/Gleeson/database/src/html/forms/%s" % \
                         content_file )
             content = fin.read()
             fin.close()
+
         printToServer( content )
+
     else :
         printToServer( LOGIN_FAIL )
 
 except KeyError :
     printToServer( "You got here from somewhere strange.  Try accessing from gleesonentry.ucsd.edu" )
 
-
+except Exception, (e) :
+    printToServer( str(e) )

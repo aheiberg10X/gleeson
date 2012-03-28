@@ -216,8 +216,8 @@ def removeCalls() :
 
     #delete all Calls that are old
     query = '''
-delete Calls
-where plate = %d''' % plate_id
+    delete Calls
+    where plate = %d''' % plate_id
 
     #delete any stranded variants
     query = '''

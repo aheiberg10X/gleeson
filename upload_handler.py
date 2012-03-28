@@ -3,7 +3,7 @@
 import cgi
 import sys
 sys.path.append('/home/Gleeson/database/src')
-from web_utils import printHeader
+from web_utils import printHeader, printToServer
 from plate_macros import addPlateMacro
 
 printHeader()
